@@ -17,3 +17,7 @@ INSERT INTO up_tutortoday_subject (NAME) VALUES
     ('astronomy'),
     ('chemistry'),
     ('geography');
+
+INSERT INTO up_tutortoday_education_format (NAME) VALUES
+    ('online'),
+    ('offline');

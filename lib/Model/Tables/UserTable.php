@@ -67,6 +67,15 @@ class UserTable extends DataManager
                     'validation' => [__CLASS__, 'validateMiddleName']
                 ]
             ))->configureTitle(Loc::getMessage('USER_ENTITY_MIDDLE_NAME_FIELD')),
+            (new IntegerField('EDUCATION_FORMAT_ID',
+                []
+            ))->configureTitle(Loc::getMessage('USER_ENTITY_EDUCATION_FORMAT_ID_FIELD'))
+                ->configureRequired(true),
+            (new Reference(
+                'EDUCATION_FORMAT',
+                EducationFormatTable::class,
+                Join::on('this.EDUCATION_FORMAT_ID', 'ref.ID')
+            )),
             (new IntegerField('ROLE_ID',
                 []
             ))->configureTitle(Loc::getMessage('USER_ENTITY_ROLE_ID_FIELD'))
