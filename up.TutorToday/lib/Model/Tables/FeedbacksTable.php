@@ -53,6 +53,11 @@ class FeedbacksTable extends DataManager
                 []
             ))->configureTitle(Loc::getMessage('FEEDBACKS_ENTITY_TUTOR_ID_FIELD'))
                 ->configureRequired(true),
+            (new Reference(
+                'TUTOR',
+                UserTable::class,
+                Join::on('this.TUTOR_ID', 'ref.ID')
+            )),
             (new StringField('TITLE',
                 [
                     'validation' => [__CLASS__, 'validateTitle']

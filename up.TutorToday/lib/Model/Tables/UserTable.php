@@ -71,9 +71,19 @@ class UserTable extends DataManager
                 []
             ))->configureTitle(Loc::getMessage('USER_ENTITY_ROLE_ID_FIELD'))
                 ->configureRequired(true),
+            (new Reference(
+                'ROLE',
+                RolesTable::class,
+                Join::on('this.ROLE_ID', 'ref.ID')
+            )),
             (new IntegerField('SUBJECT_ID',
                 []
             ))->configureTitle(Loc::getMessage('USER_ENTITY_SUBJECT_ID_FIELD')),
+            (new Reference(
+                'SUBJECT',
+                SubjectTable::class,
+                Join::on('this.SUBJECT_ID', 'ref.ID')
+            )),
         ];
     }
 

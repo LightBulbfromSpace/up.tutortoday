@@ -27,12 +27,13 @@ CREATE TABLE IF NOT EXISTS up_tutortoday_subject (
 );
 
 CREATE TABLE IF NOT EXISTS up_tutortoday_contacts (
-    TUTOR_ID bigint auto_increment not null,
+    ID bigint auto_increment not null,
+    TUTOR_ID bigint not null,
     PHONE_NUMBER varchar(16),
     EMAIL varchar(320),
     VK_PROFILE varchar(100),
     TELEGRAM_USERNAME varchar(32),
-    PRIMARY KEY (TUTOR_ID)
+    PRIMARY KEY (ID)
 );
 
 CREATE TABLE IF NOT EXISTS up_tutortoday_feedbacks (

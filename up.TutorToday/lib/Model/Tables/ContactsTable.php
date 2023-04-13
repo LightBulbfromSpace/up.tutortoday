@@ -14,6 +14,7 @@ Loc::loadMessages(__FILE__);
  *
  * Fields:
  * <ul>
+ * <li> ID int mandatory
  * <li> TUTOR_ID int mandatory
  * <li> PHONE_NUMBER string(16) optional
  * <li> EMAIL string(320) optional
@@ -44,11 +45,20 @@ class ContactsTable extends DataManager
     public static function getMap()
     {
         return [
+            (new IntegerField('ID',
+                []
+            ))->configureTitle(Loc::getMessage('CONTACTS_ENTITY_ID_FIELD'))
+                ->configurePrimary(true)
+                ->configureAutocomplete(true),
             (new IntegerField('TUTOR_ID',
                 []
             ))->configureTitle(Loc::getMessage('CONTACTS_ENTITY_TUTOR_ID_FIELD'))
-                ->configurePrimary(true)
-                ->configureAutocomplete(true),
+                ->configureRequired(true),
+            (new Reference(
+                'TUTOR',
+                UserTable::class,
+                Join::on('this.TUTOR_ID', 'ref.ID')
+            )),
             (new StringField('PHONE_NUMBER',
                 [
                     'validation' => [__CLASS__, 'validatePhoneNumber']
