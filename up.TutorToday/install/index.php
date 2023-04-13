@@ -33,7 +33,6 @@ class up_tasks extends CModule
         global $DB;
 
         $DB->RunSQLBatch($_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.TutorToday/install/db/install.sql');
-        $DB->RunSQLBatch($_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.TutorToday/install/db/install_data.sql');
 
         ModuleManager::registerModule($this->MODULE_ID);
     }

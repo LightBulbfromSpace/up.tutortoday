@@ -3,7 +3,7 @@
 use Bitrix\Main\ModuleManager;
 use Bitrix\Main\Config\Option;
 
-function __tasksMigrate(int $nextVersion, callable $callback)
+function __tutortodayMigrate(int $nextVersion, callable $callback)
 {
     global $DB;
     $moduleId = 'up.TutorToday';
@@ -25,3 +25,11 @@ function __tasksMigrate(int $nextVersion, callable $callback)
         Option::set($moduleId, '~database_schema_version', $nextVersion);
     }
 }
+
+__tutortodayMigrate(2, function($updater, $DB)
+{
+    if ($updater->CanUpdateDatabase())
+    {
+        $DB->RunSQLBatch($_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tasks/install/db/install_data.sql');
+    }
+});
