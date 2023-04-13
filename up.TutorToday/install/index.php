@@ -6,7 +6,7 @@ use Bitrix\Main\ModuleManager;
 
 Loc::loadMessages(__FILE__);
 
-class up_tasks extends CModule
+class up_TutorToday extends CModule
 {
     public $MODULE_ID = 'up.TutorToday';
     public $MODULE_VERSION;
@@ -24,8 +24,8 @@ class up_tasks extends CModule
             $this->MODULE_VERSION_DATE = $arModuleVersion['VERSION_DATE'];
         }
 
-        $this->MODULE_NAME = Loc::getMessage('UP_TASKS_MODULE_NAME');
-        $this->MODULE_DESCRIPTION = Loc::getMessage('UP_TASKS_MODULE_DESCRIPTION');
+        $this->MODULE_NAME = Loc::getMessage('UP_TUTORTODAY_MODULE_NAME');
+        $this->MODULE_DESCRIPTION = Loc::getMessage('UP_TUTORTODAY_MODULE_DESCRIPTION');
     }
 
     public function installDB(): void
@@ -113,7 +113,7 @@ class up_tasks extends CModule
         $this->installEvents();
 
         $APPLICATION->IncludeAdminFile(
-            Loc::getMessage('UP_TASKS_INSTALL_TITLE'),
+            Loc::getMessage('UP_TUTORTODAY_INSTALL_TITLE'),
             $_SERVER['DOCUMENT_ROOT'] . '/local/modules/' . $this->MODULE_ID . '/install/step.php'
         );
     }
@@ -129,7 +129,7 @@ class up_tasks extends CModule
         $step = (int)$step;
         if ($step < 2) {
             $APPLICATION->IncludeAdminFile(
-                Loc::getMessage('UP_TASKS_UNINSTALL_TITLE'),
+                Loc::getMessage('UP_TUTORTODAY_UNINSTALL_TITLE'),
                 $_SERVER['DOCUMENT_ROOT'] . '/local/modules/' . $this->MODULE_ID . '/install/unstep1.php'
             );
         } elseif ($step === 2) {
@@ -138,7 +138,7 @@ class up_tasks extends CModule
             $this->uninstallEvents();
 
             $APPLICATION->IncludeAdminFile(
-                Loc::getMessage('UP_TASKS_UNINSTALL_TITLE'),
+                Loc::getMessage('UP_TUTORTODAY_UNINSTALL_TITLE'),
                 $_SERVER['DOCUMENT_ROOT'] . '/local/modules/' . $this->MODULE_ID . '/install/unstep2.php'
             );
         }
