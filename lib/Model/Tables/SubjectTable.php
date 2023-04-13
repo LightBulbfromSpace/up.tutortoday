@@ -63,7 +63,7 @@ class SubjectTable extends DataManager
     public static function validateName()
     {
         return [
-            new LengthValidator(null, 63),
+            new LengthValidator(null, 100),
         ];
     }
 }

@@ -102,7 +102,7 @@ class ContactsTable extends DataManager
     public static function validateEmail()
     {
         return [
-            new LengthValidator(null, 320),
+            new LengthValidator(null, 255),
         ];
     }
 

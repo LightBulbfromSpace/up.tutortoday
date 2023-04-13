@@ -64,10 +64,8 @@ class FeedbacksTable extends DataManager
                 ]
             ))->configureTitle(Loc::getMessage('FEEDBACKS_ENTITY_TITLE_FIELD'))
                 ->configureRequired(true),
-            (new StringField('DESCRIPTION',
-                [
-                    'validation' => [__CLASS__, 'validateDescription']
-                ]
+            (new TextField('DESCRIPTION',
+                []
             ))->configureTitle(Loc::getMessage('FEEDBACKS_ENTITY_DESCRIPTION_FIELD')),
             (new IntegerField('STARS_NUMBER',
                 []
@@ -84,18 +82,6 @@ class FeedbacksTable extends DataManager
     {
         return [
             new LengthValidator(null, 100),
-        ];
-    }
-
-    /**
-     * Returns validators for DESCRIPTION field.
-     *
-     * @return array
-     */
-    public static function validateDescription()
-    {
-        return [
-            new LengthValidator(null, 500),
         ];
     }
 }

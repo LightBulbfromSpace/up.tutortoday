@@ -95,7 +95,7 @@ class UserTable extends DataManager
     public static function validateName()
     {
         return [
-            new LengthValidator(null, 63),
+            new LengthValidator(null, 100),
         ];
     }
 
@@ -107,7 +107,7 @@ class UserTable extends DataManager
     public static function validateSurname()
     {
         return [
-            new LengthValidator(null, 63),
+            new LengthValidator(null, 100),
         ];
     }
 
@@ -119,7 +119,7 @@ class UserTable extends DataManager
     public static function validateMiddleName()
     {
         return [
-            new LengthValidator(null, 63),
+            new LengthValidator(null, 100),
         ];
     }
 }
