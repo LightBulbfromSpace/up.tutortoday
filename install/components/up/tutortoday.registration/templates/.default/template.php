@@ -6,7 +6,7 @@
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
 
-<div class="container">
+<div class="container-custom">
     <div class="field">
         <label class="label">Name</label>
         <div class="control">
@@ -24,14 +24,6 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         <div class="control">
             <input class="input" type="text" placeholder="Text input">
         </div>
-    </div>
-
-    <div class="field">
-        <label class="label">Login</label>
-        <div class="control">
-            <input class="input" type="text" placeholder="Enter login">
-        </div>
-        <p class="help">Login can contain characters, numbers and underscore</p>
     </div>
 
     <div class="field">
@@ -88,6 +80,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 </select>
             </div>
         </div>
+        <?=bitrix_sessid_post()?>
     </div>
 
     <div class="field is-grouped is-justify-content-center">
