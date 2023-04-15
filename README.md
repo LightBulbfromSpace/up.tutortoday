@@ -9,7 +9,7 @@ Set `Main template` as your primary site template
 
 ## Setup modern Bitrix routing
 
-Add `web.php` in `routing` section of `${doc_root}/bitrix/.settings.php` file:
+Add `routes.php` in `routing` section of `${doc_root}/bitrix/.settings.php` file:
 
 ```php
 'routing' => ['value' => [
@@ -39,11 +39,11 @@ Replace following lines in your `${doc_root}/.htaccess` file:
 You probably want to make following symlinks:
 
 ```
-local/components/up -> local/modules/up.TutorToday/install/components/up
-local/templates/TutorToday -> local/modules/up.TutorToday/install/templates/TutorToday
-local/routes/web.php -> local/modules/up.TutorToday/install/routes/web.php
-local/view/ -> local/modules/up.TutorToday/install/view
+local/components/up -> local/modules/up.tutortoday/install/components/up
+local/templates/tutortoday -> local/modules/up.tutortoday/install/templates/tutortoday
+local/routes/routes.php -> local/modules/up.tutortoday/install/routes/routes.php
+local/view/ -> local/modules/up.tutortoday/install/view
 ```
 
 ## Examples of TutorToday
-To set up demonstrative content, run `install_data_example.sql` in `up.TutorToday/install/db/`
+To set up demonstrative content, run `install_data_example.sql` in `up.tutortoday/install/db/`
