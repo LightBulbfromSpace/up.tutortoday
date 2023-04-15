@@ -22,7 +22,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         <?=bitrix_sessid_post()?>
         <div class="field is-grouped is-justify-content-center">
             <p class="control">
-                <button class="button is-success">
+                <button class="button is-success" type="submit">
                     Login
                 </button>
                 <a class="button is-success" href="/registration/">

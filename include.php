@@ -23,7 +23,7 @@ function db(): Connection
     return Application::getConnection();
 }
 
-if (file_exists(__DIR__ . '/module_updater.php'))
+if (file_exists(MODULE_ROOT . '/module_updater.php'))
 {
-    include (__DIR__ . '/module_updater.php');
+    include (MODULE_ROOT . '/module_updater.php');
 }

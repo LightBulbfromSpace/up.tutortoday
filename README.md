@@ -1,8 +1,7 @@
 # Bitrix module up.TutorToday
 
 Clone repository to `${doc_root}/local/modules`\
-Move directory `up.TutorToday` from `${doc_root}/local/modules/team2` to `${doc_root}/local/modules`\
-Delete directory `team2`
+Rename directory from `team2` to `up.tutortoday`
 
 Install module using admin panel
 
@@ -14,7 +13,7 @@ Add `web.php` in `routing` section of `${doc_root}/bitrix/.settings.php` file:
 
 ```php
 'routing' => ['value' => [
-	'config' => ['web.php']
+	'config' => ['routes.php']
 ]],
 ```
 
