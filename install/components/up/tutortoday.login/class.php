@@ -1,6 +1,7 @@
 <?php
 
 use Bitrix\Main\Localization\Loc;
+use Up\Tutortoday\Services\ErrorService;
 
 Loc::loadMessages(__FILE__);
 
@@ -14,7 +15,11 @@ class TutorTodayLoginComponent extends CBitrixComponent {
 
     public function prepareTemplateParams($arParams)
     {
-        $this->arResult['err'] = $arParams['err'];
+        $this->arResult['isErr'] = $arParams['err'] != null;
+        if ($this->arResult['isErr'])
+        {
+            $this->arResult['errText'] = ErrorService::getErrorTextByGetCode($arParams['err']);
+        }
     }
 
     protected function prepareLocalization()

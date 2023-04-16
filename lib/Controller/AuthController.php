@@ -17,7 +17,7 @@ class AuthController extends Controller
         $post = getPostList();
         if ($post['email'] == null || $post['password'] == null)
         {
-            LocalRedirect("/login/?err=empty");
+            LocalRedirect("/login/?err=empty_field");
         }
         $user = UserService::ValidateUser($post['email'], $post['password']);
         if ($user === null)
@@ -51,7 +51,7 @@ class AuthController extends Controller
 
         if (UserService::ValidateUser($post['email'], $post['password1']) !== null)
         {
-            LocalRedirect('/registration/?err=exists');
+            LocalRedirect('/registration/?err=user_exists');
         }
 
         if (!Validator::validateNameField($post['name']) ||
@@ -83,7 +83,6 @@ class AuthController extends Controller
         {
             LocalRedirect('/registration/?err=unexpected_error');
         }
-        var_dump($userID);
         LocalRedirect("/profile/$userID/");
     }
 }

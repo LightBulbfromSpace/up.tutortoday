@@ -14,7 +14,7 @@ class Validator
     {
         if (strlen($password) < 8 || strlen($password) > 100)
         {
-            return 'too_short';
+            return 'pass_too_short';
         }
         if ($repeat !== null && $password !== $repeat)
         {

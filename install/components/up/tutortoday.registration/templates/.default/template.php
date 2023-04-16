@@ -7,6 +7,13 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
 
 <div class="container-custom">
+    <?php if ($arResult['isErr']): ?>
+        <article class="message is-danger">
+            <div class="message-body">
+                <?=$arResult['errText']?>
+            </div>
+        </article>
+    <?php endif; ?>
     <form method="post" action="/registration/">
         <div class="field">
             <label class="label">Name</label>
