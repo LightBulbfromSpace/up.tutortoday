@@ -1,5 +1,5 @@
 <?php
-namespace Bitrix\Tutortoday;
+namespace Up\Tutortoday\Model\Tables;
 
 use Bitrix\Main\Localization\Loc,
     Bitrix\Main\ORM\Data\DataManager,

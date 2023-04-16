@@ -1,11 +1,13 @@
 <?php
-namespace Bitrix\Tutortoday;
+namespace Up\Tutortoday\Model\Tables;
 
 use Bitrix\Main\Localization\Loc,
     Bitrix\Main\ORM\Data\DataManager,
     Bitrix\Main\ORM\Fields\IntegerField,
     Bitrix\Main\ORM\Fields\StringField,
     Bitrix\Main\ORM\Fields\Validators\LengthValidator;
+use Bitrix\Main\ORM\Fields\Relations\Reference;
+use Bitrix\Main\ORM\Query\Join;
 
 Loc::loadMessages(__FILE__);
 
@@ -50,14 +52,14 @@ class ContactsTable extends DataManager
             ))->configureTitle(Loc::getMessage('CONTACTS_ENTITY_ID_FIELD'))
                 ->configurePrimary(true)
                 ->configureAutocomplete(true),
-            (new IntegerField('TUTOR_ID',
+            (new IntegerField('USER_ID',
                 []
-            ))->configureTitle(Loc::getMessage('CONTACTS_ENTITY_TUTOR_ID_FIELD'))
+            ))->configureTitle(Loc::getMessage('CONTACTS_ENTITY_USER_ID_FIELD'))
                 ->configureRequired(true),
             (new Reference(
-                'TUTOR',
+                'USER',
                 UserTable::class,
-                Join::on('this.TUTOR_ID', 'ref.ID')
+                Join::on('this.USER_ID', 'ref.ID')
             )),
             (new StringField('PHONE_NUMBER',
                 [
@@ -90,7 +92,7 @@ class ContactsTable extends DataManager
     public static function validatePhoneNumber()
     {
         return [
-            new LengthValidator(null, 16),
+            new LengthValidator(null, 20),
         ];
     }
 

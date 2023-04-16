@@ -11,47 +11,54 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         <div class="field">
             <label class="label">Name</label>
             <div class="control">
-                <input class="input" type="text" placeholder="Text input">
+                <input class="input" type="text" placeholder="Text input" name="name" minlength="1" maxlength="100" required>
             </div>
         </div>
         <div class="field">
             <label class="label">Surname</label>
             <div class="control">
-                <input class="input" type="text" placeholder="Text input">
+                <input class="input" type="text" placeholder="Text input" name="surname" minlength="1" maxlength="100" required>
             </div>
         </div>
         <div class="field">
             <label class="label">Middle Name</label>
             <div class="control">
-                <input class="input" type="text" placeholder="Text input">
+                <input class="input" type="text" placeholder="Text input" name="middle_name" minlength="1" maxlength="100">
             </div>
         </div>
 
         <div class="field">
             <label class="label">Password</label>
             <div class="control">
-                <input class="input" type="password" placeholder="Enter password">
+                <input class="input" type="password" placeholder="Password input" name="password1" minlength="8" maxlength="100" required>
+            </div>
+        </div>
+
+        <div class="field">
+            <p class="help">Type your password once more</p>
+            <div class="control">
+                <input class="input" type="password" placeholder="Password input" name="password2" minlength="8" maxlength="100" required>
             </div>
         </div>
 
         <div class="field">
             <label class="label">Email</label>
             <div class="control">
-                <input class="input" type="email" placeholder="Email input">
+                <input class="input" type="email" placeholder="Email input" name="email" maxlength="255" required>
             </div>
         </div>
 
         <div class="field">
             <label class="label">Phone</label>
             <div class="control">
-                <input class="input" type="number" placeholder="Phone input">
+                <input class="input" type="text" placeholder="Phone input" name="phone" maxlength="20" required>
             </div>
         </div>
 
         <div class="field">
             <label class="label">City</label>
             <div class="control">
-                <input class="input" type="number" placeholder="City input">
+                <input class="input" type="text" placeholder="City input" name="city" maxlength="100">
             </div>
         </div>
 
@@ -59,9 +66,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <label class="label">Education format</label>
             <div class="control">
                 <div class="select">
-                    <select>
-                        <option>Online</option>
-                        <option>Offline</option>
+                    <select name="education_format">
+                        <option value="1">Online</option>
+                        <option value="2">Offline</option>
                     </select>
                 </div>
             </div>
@@ -71,13 +78,13 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <label class="label">Subject</label>
             <div class="control">
                 <div class="select">
-                    <select>
+                    <select name="subject">
                         <option selected></option>
-                        <option>Mathematics</option>
-                        <option>Russian language</option>
-                        <option>English language</option>
-                        <option>Literature</option>
-                        <option>Physics</option>
+                        <option value="1">Mathematics</option>
+                        <option value="2">Russian language</option>
+                        <option value="3">English language</option>
+                        <option value="4">Literature</option>
+                        <option value="5">Physics</option>
                     </select>
                 </div>
             </div>

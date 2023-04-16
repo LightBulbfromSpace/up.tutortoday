@@ -23,12 +23,12 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
     <form action="/login/" method="post">
         <div class="field">
             <p class="control">
-                <input class="input" type="email" placeholder="Email" required>
+                <input class="input" type="email" placeholder="Email" name="email" required>
             </p>
         </div>
         <div class="field">
             <p class="control">
-                <input class="input" type="password" placeholder="Password" required>
+                <input class="input" type="password" placeholder="Password" name="password" minlength="8" required>
             </p>
         </div>
         <?=bitrix_sessid_post()?>

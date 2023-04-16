@@ -33,3 +33,11 @@ __tutortodayMigrate(2, function($updater, $DB)
         $DB->RunSQLBatch($_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tasks/install/db/install_data.sql');
     }
 });
+
+__tutortodayMigrate(3, function($updater, $DB)
+{
+    if ($updater->CanUpdateDatabase())
+    {
+        $DB->RunSQLBatch($_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tasks/install/db/update_16_04_2023_add_password_column.sql');
+    }
+});

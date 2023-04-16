@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS up_tutortoday_user (
     ID int unsigned auto_increment not null,
+    PASSWORD varchar(100) not null,
     NAME varchar(100) not null,
     SURNAME varchar(100) not null,
     MIDDLE_NAME varchar(100),
@@ -32,9 +33,9 @@ CREATE TABLE IF NOT EXISTS up_tutortoday_subject (
 
 CREATE TABLE IF NOT EXISTS up_tutortoday_contacts (
     ID int unsigned auto_increment not null,
-    TUTOR_ID int unsigned not null,
-    PHONE_NUMBER varchar(16),
-    EMAIL varchar(255),
+    USER_ID int unsigned not null,
+    PHONE_NUMBER varchar(20) not null,
+    EMAIL varchar(255) not null,
     VK_PROFILE varchar(100),
     TELEGRAM_USERNAME varchar(32),
     PRIMARY KEY (ID)
