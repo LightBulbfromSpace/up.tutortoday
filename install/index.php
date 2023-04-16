@@ -6,9 +6,9 @@ use Bitrix\Main\ModuleManager;
 
 Loc::loadMessages(__FILE__);
 
-class up_TutorToday extends CModule
+class up_tutortoday extends CModule
 {
-    public $MODULE_ID = 'up.TutorToday';
+    public $MODULE_ID = 'up.tutortoday';
     public $MODULE_VERSION;
     public $MODULE_VERSION_DATE;
     public $MODULE_NAME;
@@ -32,7 +32,7 @@ class up_TutorToday extends CModule
     {
         global $DB;
 
-        $DB->RunSQLBatch($_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.TutorToday/install/db/install.sql');
+        $DB->RunSQLBatch($_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tutortoday/install/db/install.sql');
 
         ModuleManager::registerModule($this->MODULE_ID);
     }
@@ -41,7 +41,7 @@ class up_TutorToday extends CModule
     {
         global $DB;
 
-        $DB->RunSQLBatch($_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.TutorToday/install/db/uninstall.sql');
+        $DB->RunSQLBatch($_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tutortoday/install/db/uninstall.sql');
 
         ModuleManager::unRegisterModule($this->MODULE_ID);
     }
@@ -49,39 +49,39 @@ class up_TutorToday extends CModule
     public function installFiles(): void
     {
         CopyDirFiles(
-            $_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.TutorToday/install/components',
+            $_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tutortoday/install/components',
             $_SERVER['DOCUMENT_ROOT'] . '/local/components/',
             true,
             true
         );
 
         CopyDirFiles(
-            $_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.TutorToday/install/templates',
+            $_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tutortoday/install/templates',
             $_SERVER['DOCUMENT_ROOT'] . '/local/templates/',
             true,
             true
         );
 
         CopyDirFiles(
-            $_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.TutorToday/install/routes',
+            $_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tutortoday/install/routes',
             $_SERVER['DOCUMENT_ROOT'] . '/local/routes/',
             true,
             true
         );
         CopyDirFiles(
-            $_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.TutorToday/install/view',
+            $_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tutortoday/install/view',
             $_SERVER['DOCUMENT_ROOT'] . '/local/view/',
             true,
             true
         );
         CopyDirFiles(
-            $_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.TutorToday/install/view',
+            $_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tutortoday/install/view',
             $_SERVER['DOCUMENT_ROOT'] . '/local/view/',
             true,
             true
         );
         CopyDirFiles(
-            $_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.TutorToday/lang',
+            $_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tutortoday/lang',
             $_SERVER['DOCUMENT_ROOT'] . '/local/lang/',
             true,
             true

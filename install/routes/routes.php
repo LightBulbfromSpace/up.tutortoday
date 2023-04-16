@@ -2,7 +2,7 @@
 
 use Bitrix\Main\Routing\Controllers\PublicPageController;
 use Bitrix\Main\Routing\RoutingConfigurator;
-use Up\TutorToday\Controller\AuthController;
+use Up\Tutortoday\Controller\AuthController;
 
 return function (RoutingConfigurator $routes) {
     //TODO: add view-file

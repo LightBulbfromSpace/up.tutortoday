@@ -1,9 +1,9 @@
 <?php
 
-namespace Up\TutorToday\Controller;
+namespace Up\Tutortoday\Controller;
 
 use Bitrix\Main\Engine\Controller;
-use Up\TutorToday\Repositories\UserService;
+use Up\Tutortoday\Model\Services\UserService;
 
 class AuthController extends Controller
 {
@@ -14,10 +14,18 @@ class AuthController extends Controller
             return;
         }
         $post = getPostList();
+        if ($post['email'] == null || $post['password'] == null)
+        {
+            LocalRedirect("/login/?err=empty");
+        }
         $user = UserService::ValidateUser($post['email'], $post['password']);
         if ($user === null)
         {
-
+            LocalRedirect("/login/?err=auth");
+        }
+        else
+        {
+            LocalRedirect("/profile/{$user['ID']}/");
         }
     }
 

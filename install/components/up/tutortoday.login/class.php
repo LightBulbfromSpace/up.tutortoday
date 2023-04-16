@@ -8,7 +8,13 @@ class TutorTodayLoginComponent extends CBitrixComponent {
     public function executeComponent()
     {
         $this->prepareLocalization();
+        $this->prepareTemplateParams($this->arParams);
         $this->includeComponentTemplate();
+    }
+
+    public function prepareTemplateParams($arParams)
+    {
+        $this->arResult['err'] = $arParams['err'];
     }
 
     protected function prepareLocalization()

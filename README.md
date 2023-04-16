@@ -1,7 +1,6 @@
 # Bitrix module up.TutorToday
 
-Clone repository to `${doc_root}/local/modules`\
-Rename directory from `team2` to `up.tutortoday`
+Clone repository to `${doc_root}/local/modules/up.tutortoday`
 
 Install module using admin panel
 

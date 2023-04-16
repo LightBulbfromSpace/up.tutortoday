@@ -13,6 +13,11 @@ function request(): Request
     return Application::getInstance()->getContext()->getRequest();
 }
 
+function getGetParam(string $name)
+{
+    return \Bitrix\Main\Context::getCurrent()->getRequest()->getQuery($name);
+}
+
 function getPostList() : ParameterDictionary
 {
     return \Bitrix\Main\Context::getCurrent()->getRequest()->getPostList();

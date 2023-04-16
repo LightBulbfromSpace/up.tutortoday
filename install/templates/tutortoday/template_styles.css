@@ -1,0 +1,17 @@
+@import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
+
+.navbar-brand-custom {
+    display: flex;
+    flex-shrink: 0;
+    min-height: 3.25rem;
+    align-items: stretch;
+}
+
+.navbar-custom {
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+    min-height: 3.25rem;
+    position: relative;
+    z-index: 30;
+}

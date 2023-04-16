@@ -3,20 +3,32 @@
  * @var array $arResult
  */
 
-//\Bitrix\Main\UI\Extension::load('main.core');
-
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
 <div class="container-custom">
+    <?php if ($arResult['err'] == 'auth'): ?>
+        <article class="message is-danger">
+            <div class="message-body">
+                Invalid login or password
+            </div>
+        </article>
+    <?php endif; ?>
+    <?php if ($arResult['err'] == 'empty'): ?>
+        <article class="message is-danger">
+            <div class="message-body">
+                Login and password can't be empty
+            </div>
+        </article>
+    <?php endif; ?>
     <form action="/login/" method="post">
         <div class="field">
             <p class="control">
-                <input class="input" type="email" placeholder="Email">
+                <input class="input" type="email" placeholder="Email" required>
             </p>
         </div>
         <div class="field">
             <p class="control">
-                <input class="input" type="password" placeholder="Password">
+                <input class="input" type="password" placeholder="Password" required>
             </p>
         </div>
         <?=bitrix_sessid_post()?>

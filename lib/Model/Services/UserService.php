@@ -1,6 +1,6 @@
 <?php
 
-namespace Up\TutorToday\Services;
+namespace Up\Tutortoday\Model\Services;
 
 class UserService
 {
