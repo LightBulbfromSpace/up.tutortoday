@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS up_tutortoday_user (
     NAME varchar(100) not null,
     SURNAME varchar(100) not null,
     MIDDLE_NAME varchar(100),
+    DESCRIPTION text,
     CITY varchar(100),
     EDUCATION_FORMAT_ID int not null,
     ROLE_ID int not null,

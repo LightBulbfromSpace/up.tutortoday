@@ -54,7 +54,8 @@ class UserService
     public static function CreateUser(
         string $name,  string $surname, string $middleName,
         string $password, string $email, string $phone,
-        string $city, int $edFormat, int $subject
+        string $city, int $edFormat, int $subject,
+        string $description,
     ) : int|bool
     {
         $resultUser = UserTable::add([
@@ -66,6 +67,7 @@ class UserService
             'EDUCATION_FORMAT_ID' => $edFormat,
             'ROLE_ID' => 1,
             'SUBJECT_ID' => $subject === 0 ? null : $subject,
+            'DESCRIPTION' => $description,
         ]);
         if (!$resultUser->isSuccess())
         {

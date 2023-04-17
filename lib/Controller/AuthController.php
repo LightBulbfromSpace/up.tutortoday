@@ -78,6 +78,7 @@ class AuthController extends Controller
             $post['name'], $post['surname'], $post['middle_name'],
             $post['password1'], $post['email'], $post['phone'],
             $post['city'], (int)$post['education_format'], (int)$post['subject'],
+            $post['description'],
         );
         if ($userID === false)
         {

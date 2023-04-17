@@ -13,31 +13,24 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             </div>
         </article>
     <?php endif; ?>
-    <?php if ($arResult['err'] == 'empty'): ?>
-        <article class="message is-danger">
-            <div class="message-body">
-                Login and password can't be empty
-            </div>
-        </article>
-    <?php endif; ?>
     <form action="/login/" method="post">
         <div class="field">
             <p class="control">
-                <input class="input" type="email" placeholder="Email" name="email" required>
+                <input class="input-custom" type="email" placeholder="Email" name="email" required>
             </p>
         </div>
         <div class="field">
             <p class="control">
-                <input class="input" type="password" placeholder="Password" name="password" minlength="8" required>
+                <input class="input-custom" type="password" placeholder="Password" name="password" minlength="8" required>
             </p>
         </div>
         <?=bitrix_sessid_post()?>
         <div class="field is-grouped is-justify-content-center">
             <p class="control">
-                <button class="button is-success" type="submit">
+                <button class="button is-dark" type="submit">
                     Login
                 </button>
-                <a class="button is-success" href="/registration/">
+                <a class="button is-dark" href="/registration/">
                     Sign up
                 </a>
             </p>

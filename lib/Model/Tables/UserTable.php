@@ -5,6 +5,7 @@ use Bitrix\Main\Localization\Loc,
     Bitrix\Main\ORM\Data\DataManager,
     Bitrix\Main\ORM\Fields\IntegerField,
     Bitrix\Main\ORM\Fields\StringField,
+    Bitrix\Main\ORM\Fields\TextField,
     Bitrix\Main\ORM\Fields\Validators\LengthValidator;
 use Bitrix\Main\ORM\Fields\Relations\Reference;
 use Bitrix\Main\ORM\Query\Join;
@@ -75,6 +76,9 @@ class UserTable extends DataManager
                     'validation' => [__CLASS__, 'validateMiddleName']
                 ]
             ))->configureTitle(Loc::getMessage('USER_ENTITY_MIDDLE_NAME_FIELD')),
+            (new TextField('DESCRIPTION',
+                []
+            ))->configureTitle(Loc::getMessage('USER_ENTITY_DESCRIPTION_FIELD')),
             (new IntegerField('EDUCATION_FORMAT_ID',
                 []
             ))->configureTitle(Loc::getMessage('USER_ENTITY_EDUCATION_FORMAT_ID_FIELD'))
