@@ -2,8 +2,7 @@
 
 namespace Up\Tutortoday\Services;
 
-use Bitrix\Main\SystemException;
-use Up\Tutortoday\Model\Tables\RolesTable;
+use Up\Tutortoday\Model\Tables\UserSubjectTable;
 use Up\Tutortoday\Model\Tables\UserTable;
 use Up\Tutortoday\Model\Tables\ContactsTable;
 use Up\Tutortoday\Model\Validator;
@@ -31,6 +30,8 @@ class UserService
         {
             return null;
         }
+
+        //TODO: testing, refactoring
         $IDsForWhere = $userIDs[0];
         if (count($userIDs) > 1)
         {
@@ -53,10 +54,26 @@ class UserService
         return null;
     }
 
+    //TODO: refactoring of arguments
+
+    /**
+     * @param string $name
+     * @param string $surname
+     * @param string $middleName
+     * @param string $password
+     * @param string $email
+     * @param string $phone
+     * @param string $city
+     * @param int $edFormat
+     * @param int[] $subject
+     * @param string $description
+     * @return int|bool
+     * @throws \Exception
+     */
     public static function CreateUser(
         string $name,  string $surname, string $middleName,
         string $password, string $email, string $phone,
-        string $city, int $edFormat, int $subject,
+        string $city, int $edFormat, ?array $subjects,
         string $description,
     ) : int|bool
     {
@@ -68,7 +85,6 @@ class UserService
             'CITY' => $city,
             'EDUCATION_FORMAT_ID' => $edFormat,
             'ROLE_ID' => 1,
-            'SUBJECT_ID' => $subject === 0 ? null : $subject,
             'DESCRIPTION' => $description,
         ]);
         if (!$resultUser->isSuccess())
@@ -84,49 +100,46 @@ class UserService
         {
             return false;
         }
+
+        if ($subjects === null)
+        {
+            return $resultUser->getId();
+        }
+
+        foreach ($subjects as $subject)
+        {
+            var_dump($subject, $resultUser->getId());
+            $resultSubject = UserSubjectTable::add([
+                'USER_ID' => $resultUser->getId(),
+                'SUBJECT_ID' => $subject,
+            ]);
+            if (!$resultSubject->isSuccess())
+            {
+                return false;
+            }
+        }
         return $resultUser->getId();
     }
 
-    public static function getRoleIDbyName(string $name) : int|bool
-    {
-        try
-        {
-            $query = RolesTable::query()->where('NAME', $name);
-            $row = $query->fetchObject();
-        }
-        catch (SystemException $se)
-        {
-            return false;
-        }
-        return $row['ID'];
-    }
+
 
     public static function getUsersByPage(int $page = 1, string $role = 'Tutor')
     {
         $page--;
         $offset = $page * USERS_BY_PAGE;
 
-        $tutorRoleID = self::getRoleIDbyName($role);
-        if ($tutorRoleID === false)
+        $tutorRoleID = EducationService::getRoleIDbyName($role);
+        if ($tutorRoleID === null)
         {
             // TODO:Error handling
         }
 
-        try
-        {
-            $users = UserTable::query()->setSelect(['*'])
-                ->where('ROLE_ID', $tutorRoleID)
-                ->setOrder(['ID' => 'DESC'])
-                ->setOffset($offset)
-                ->setLimit(USERS_BY_PAGE)
-                ->fetchCollection();
-        }
-        catch (SystemException $se)
-        {
-            // TODO:Error handling
-            return false;
-        }
+        $users = UserTable::query()->setSelect(['*'])
+            ->where('ROLE_ID', $tutorRoleID)
+            ->setOrder(['ID' => 'DESC'])
+            ->setOffset($offset)
+            ->setLimit(USERS_BY_PAGE);
 
-        return $users;
+        return $users?->fetchCollection();
     }
 }

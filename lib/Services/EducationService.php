@@ -3,6 +3,7 @@
 namespace Up\Tutortoday\Services;
 
 use Up\Tutortoday\Model\Tables\EducationFormatTable;
+use Up\Tutortoday\Model\Tables\RolesTable;
 use Up\Tutortoday\Model\Tables\SubjectTable;
 
 class EducationService
@@ -24,6 +25,16 @@ class EducationService
             return null;
         }
         return $subject->fetchObject();
+    }
+
+    public static function getRoleIDbyName(string $name) : int|null
+    {
+        $role = RolesTable::query()->where('NAME', $name);
+        if ($role === null)
+        {
+            return null;
+        }
+        return $role->fetchObject()->getID();
     }
 
     public static function getEducationFormatByID(int $ID)
