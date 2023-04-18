@@ -1,6 +1,7 @@
 <?php
 
 use Bitrix\Main\Localization\Loc;
+use Up\Tutortoday\Services\EducationService;
 use Up\Tutortoday\Services\ErrorService;
 
 Loc::loadMessages(__FILE__);
@@ -9,17 +10,20 @@ class TutorTodayRegistrationComponent extends CBitrixComponent {
     public function executeComponent()
     {
         $this->prepareLocalization();
-        $this->prepareTemplateParams($this->arParams);
+        $this->prepareTemplateData($this->arParams);
         $this->includeComponentTemplate();
     }
 
-    public function prepareTemplateParams($arParams)
+    public function prepareTemplateData($arParams)
     {
         $this->arResult['isErr'] = $arParams['err'] != null;
         if ($this->arResult['isErr'])
         {
             $this->arResult['errText'] = ErrorService::getErrorTextByGetCode($arParams['err']);
         }
+
+        $this->arResult['edFormats'] = EducationService::getAllEdFormats();
+        $this->arResult['subjects'] = EducationService::getAllSubjects();
     }
 
     protected function prepareLocalization()

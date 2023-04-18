@@ -81,8 +81,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <div class="control">
                 <div class="select">
                     <select name="education_format">
-                        <option value="1">Online</option>
-                        <option value="2">Offline</option>
+                        <?php foreach ($arResult['edFormats'] as $edFormat): ?>
+                            <option value="<?=$edFormat->getID()?>"><?=$edFormat->getName()?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             </div>
@@ -94,16 +95,15 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <div class="select">
                     <select name="subject">
                         <option selected></option>
-                        <option value="1">Mathematics</option>
-                        <option value="2">Russian language</option>
-                        <option value="3">English language</option>
-                        <option value="4">Literature</option>
-                        <option value="5">Physics</option>
+                        <?php foreach ($arResult['subjects'] as $subject): ?>
+                            <option value="<?=$subject->getID()?>"><?=$subject->getName()?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             </div>
-            <?=bitrix_sessid_post()?>
         </div>
+
+        <?=bitrix_sessid_post()?>
 
         <div class="field is-grouped is-justify-content-center">
             <div class="control">
