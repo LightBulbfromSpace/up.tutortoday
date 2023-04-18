@@ -5,8 +5,6 @@
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetTitle(SITE_NAME);
 
-$APPLICATION->IncludeComponent('up:tutortoday.main', '',  [
-    'page' => getGetParam('page'),
-]);
+$APPLICATION->IncludeComponent('up:tutortoday.profile', '',  []);
 
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

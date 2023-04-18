@@ -5,7 +5,8 @@
 
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
-
+<script src="/local/components/up/tutortoday.registration/templates/.default/scripts.js"></script>
+<div id="overlay"></div>
 <div class="container-custom">
     <?php if ($arResult['isErr']): ?>
         <article class="message is-danger">
@@ -76,6 +77,35 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             </div>
         </div>
 
+        <div class="field is-grouped">
+            <label class="label"></label>
+            <div class="control">
+                <button class="button is-dark" type="button" onclick="showPopupForm()">Select subjects</button>
+            </div>
+        </div>
+
+        <div class="popup-form-custom">
+            <div class="box">
+                <div class="field">
+                    <label class="label">Subject</label>
+                    <div class="checkbox-container-custom">
+                        <?php foreach ($arResult['subjects'] as $subject): ?>
+                        <label class="checkbox checkbox-elem-custom">
+                            <input type="checkbox" class="field" value="<?=$subject->getID()?>" name="subjects[]">
+                            <?=$subject->getName()?>
+                        </label>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                <div class="field is-grouped">
+                    <label class="label"></label>
+                    <div class="control">
+                        <button class="button is-dark" type="button" onclick="closePopupForm()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="field">
             <label class="label">Education format</label>
             <div class="control">
@@ -83,20 +113,6 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <select name="education_format">
                         <?php foreach ($arResult['edFormats'] as $edFormat): ?>
                             <option value="<?=$edFormat->getID()?>"><?=$edFormat->getName()?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="field">
-            <label class="label">Subject</label>
-            <div class="control">
-                <div class="select">
-                    <select name="subject">
-                        <option selected></option>
-                        <?php foreach ($arResult['subjects'] as $subject): ?>
-                            <option value="<?=$subject->getID()?>"><?=$subject->getName()?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>

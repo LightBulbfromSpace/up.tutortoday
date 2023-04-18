@@ -16,6 +16,7 @@ return function (RoutingConfigurator $routes) {
         AuthController::LoginAction();
     });
     $routes->post('/registration/', function () {
+
         AuthController::RegistrationAction();
     });
 };

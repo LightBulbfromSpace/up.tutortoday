@@ -26,6 +26,7 @@ class AuthController extends Controller
         }
         else
         {
+            session()->set('userID', (int)$user['ID']);
             LocalRedirect("/profile/{$user['ID']}/");
         }
     }
@@ -77,13 +78,16 @@ class AuthController extends Controller
         $userID = UserService::CreateUser(
             $post['name'], $post['surname'], $post['middle_name'],
             $post['password1'], $post['email'], $post['phone'],
-            $post['city'], (int)$post['education_format'], (int)$post['subject'],
+            $post['city'], (int)$post['education_format'], $post['subjects'],
             $post['description'],
         );
         if ($userID === false)
         {
             LocalRedirect('/registration/?err=unexpected_error');
         }
+
+        session()->set('userID', (int)$userID);
+
         LocalRedirect("/profile/$userID/");
     }
 }

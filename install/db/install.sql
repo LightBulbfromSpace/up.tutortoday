@@ -8,9 +8,7 @@ CREATE TABLE IF NOT EXISTS up_tutortoday_user (
     CITY varchar(100),
     EDUCATION_FORMAT_ID int not null,
     ROLE_ID int not null,
-    SUBJECT_ID int,
     PRIMARY KEY (ID),
-    INDEX up_tutortoday_tutors_subjects (SUBJECT_ID),
     INDEX up_tutortoday_users_roles (ROLE_ID)
 );
 
@@ -48,5 +46,21 @@ CREATE TABLE IF NOT EXISTS up_tutortoday_feedbacks (
     TITLE varchar(100) not null,
     DESCRIPTION text,
     STARS_NUMBER int,
+    PRIMARY KEY (ID)
+);
+
+CREATE TABLE IF NOT EXISTS up_tutortoday_user_subject (
+    USER_ID int unsigned not null,
+    SUBJECT_ID int unsigned not null,
+    PRIMARY KEY (USER_ID, SUBJECT_ID)
+);
+
+CREATE TABLE IF NOT EXISTS up_tutortoday_profile_images (
+    ID int unsigned not null,
+    USER_ID int unsigned not null,
+    LINK varchar(255) not null,
+    WIDTH int unsigned not null,
+    HEIGHT int unsigned not null,
+    EXTENSION varchar(10) not null,
     PRIMARY KEY (ID)
 );

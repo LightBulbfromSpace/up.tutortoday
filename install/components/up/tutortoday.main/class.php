@@ -31,9 +31,6 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
 
     protected function prepareLocalization()
     {
-        $this->arResult['LOGIN_TITLE'] = Loc::getMessage('UP_TUTORTODAY_MODULE_LOGIN_TITLE');
-        $this->arResult['LOGIN_PLACEHOLDER'] = Loc::getMessage('UP_TUTORTODAY_MODULE_LOGIN_PLACEHOLDER');
-        $this->arResult['PASSWORD_PLACEHOLDER'] = Loc::getMessage('UP_TUTORTODAY_MODULE_PASSWORD_PLACEHOLDER');
     }
 
     protected function fetchTutors(int $page, array $filters = [])

@@ -26,7 +26,6 @@ Loc::loadMessages(__FILE__);
  * <li> CITY string(100) optional
  * <li> EDUCATION_FORMAT_ID int mandatory
  * <li> ROLE_ID int mandatory
- * <li> SUBJECT_ID int optional
  * </ul>
  *
  * @package Up\Tutortoday
@@ -105,14 +104,6 @@ class UserTable extends DataManager
                 'ROLE',
                 RolesTable::class,
                 Join::on('this.ROLE_ID', 'ref.ID')
-            )),
-            (new IntegerField('SUBJECT_ID',
-                []
-            ))->configureTitle(Loc::getMessage('USER_ENTITY_SUBJECT_ID_FIELD')),
-            (new Reference(
-                'SUBJECT',
-                SubjectTable::class,
-                Join::on('this.SUBJECT_ID', 'ref.ID')
             )),
         ];
     }

@@ -22,7 +22,7 @@ Loc::loadMessages(__FILE__);
  * @package Bitrix\Tutortoday
  **/
 
-class TutorSubjectTable extends DataManager
+class UserSubjectTable extends DataManager
 {
     /**
      * Returns DB table name for entity.
@@ -31,7 +31,7 @@ class TutorSubjectTable extends DataManager
      */
     public static function getTableName()
     {
-        return 'up_tutortoday_tutor_subject';
+        return 'up_tutortoday_user_subject';
     }
 
     /**
