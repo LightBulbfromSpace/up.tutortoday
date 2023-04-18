@@ -30,6 +30,6 @@ __tutortodayMigrate(2, function($updater, $DB)
 {
     if ($updater->CanUpdateDatabase())
     {
-        $DB->RunSQLBatch($_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tasks/install/db/install_data.sql');
+        $DB->RunSQLBatch($_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tutortoday/install/db/install_data.sql');
     }
 });
