@@ -16,13 +16,23 @@ class EducationService
     {
         return SubjectTable::query()->setSelect(['*'])->fetchCollection();
     }
-    public static function getSubjectByID(int $ID) : array|null
+    public static function getSubjectByID(int $ID)
     {
-        return null;
+        $subject = SubjectTable::query()->setSelect(['*'])->where('ID', $ID);
+        if ($subject === null)
+        {
+            return null;
+        }
+        return $subject->fetchObject();
     }
 
-    public static function getEducationFormatByID(int $ID) : array|null
+    public static function getEducationFormatByID(int $ID)
     {
-        return [];
+        $edFormat = EducationFormatTable::query()->setSelect(['*'])->where('ID', $ID);
+        if ($edFormat === null)
+        {
+            return null;
+        }
+        return $edFormat->fetchObject();
     }
 }
