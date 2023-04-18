@@ -18,14 +18,18 @@ Loc::loadMessages(__FILE__);
  * Fields:
  * <ul>
  * <li> ID int mandatory
- * <li> NAME string(63) mandatory
- * <li> SURNAME string(63) mandatory
- * <li> MIDDLE_NAME string(63) optional
+ * <li> PASSWORD string(100) mandatory
+ * <li> NAME string(100) mandatory
+ * <li> SURNAME string(100) mandatory
+ * <li> MIDDLE_NAME string(100) optional
+ * <li> DESCRIPTION text optional
+ * <li> CITY string(100) optional
+ * <li> EDUCATION_FORMAT_ID int mandatory
  * <li> ROLE_ID int mandatory
  * <li> SUBJECT_ID int optional
  * </ul>
  *
- * @package Bitrix\Tutortoday
+ * @package Up\Tutortoday
  **/
 
 class UserTable extends DataManager
@@ -79,6 +83,11 @@ class UserTable extends DataManager
             (new TextField('DESCRIPTION',
                 []
             ))->configureTitle(Loc::getMessage('USER_ENTITY_DESCRIPTION_FIELD')),
+            (new StringField('CITY',
+                [
+                    'validation' => [__CLASS__, 'validateCity']
+                ]
+            ))->configureTitle(Loc::getMessage('USER_ENTITY_CITY_FIELD')),
             (new IntegerField('EDUCATION_FORMAT_ID',
                 []
             ))->configureTitle(Loc::getMessage('USER_ENTITY_EDUCATION_FORMAT_ID_FIELD'))
@@ -150,6 +159,18 @@ class UserTable extends DataManager
      * @return array
      */
     public static function validateMiddleName()
+    {
+        return [
+            new LengthValidator(null, 100),
+        ];
+    }
+
+    /**
+     * Returns validators for CITY field.
+     *
+     * @return array
+     */
+    public static function validateCity()
     {
         return [
             new LengthValidator(null, 100),

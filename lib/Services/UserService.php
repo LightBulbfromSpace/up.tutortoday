@@ -2,6 +2,8 @@
 
 namespace Up\Tutortoday\Services;
 
+use Bitrix\Main\SystemException;
+use Up\Tutortoday\Model\Tables\RolesTable;
 use Up\Tutortoday\Model\Tables\UserTable;
 use Up\Tutortoday\Model\Tables\ContactsTable;
 use Up\Tutortoday\Model\Validator;
@@ -83,5 +85,48 @@ class UserService
             return false;
         }
         return $resultUser->getId();
+    }
+
+    public static function getRoleIDbyName(string $name) : int|bool
+    {
+        try
+        {
+            $query = RolesTable::query()->where('NAME', $name);
+            $row = $query->fetchObject();
+        }
+        catch (SystemException $se)
+        {
+            return false;
+        }
+        return $row['ID'];
+    }
+
+    public static function getUsersByPage(int $page = 1, string $role = 'Tutor')
+    {
+        $page--;
+        $offset = $page * USERS_BY_PAGE;
+
+        $tutorRoleID = self::getRoleIDbyName($role);
+        if ($tutorRoleID === false)
+        {
+            // TODO:Error handling
+        }
+
+        try
+        {
+            $users = UserTable::query()->setSelect(['*'])
+                ->where('ROLE_ID', $tutorRoleID)
+                ->setOrder(['ID' => 'DESC'])
+                ->setOffset($offset)
+                ->setLimit(USERS_BY_PAGE)
+                ->fetchCollection();
+        }
+        catch (SystemException $se)
+        {
+            // TODO:Error handling
+            return false;
+        }
+
+        return $users;
     }
 }

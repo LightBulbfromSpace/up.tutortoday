@@ -6,6 +6,7 @@ use Bitrix\Main\Request;
 use Bitrix\Main\Type\ParameterDictionary;
 
 const SITE_NAME = 'TutorToday';
+const USERS_BY_PAGE = 3;
 const MODULE_ROOT = __DIR__;
 
 function request(): Request
