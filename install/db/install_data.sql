@@ -21,3 +21,12 @@ INSERT INTO up_tutortoday_subject (NAME) VALUES
 INSERT INTO up_tutortoday_education_format (NAME) VALUES
     ('online'),
     ('offline');
+
+INSERT INTO up_tutortoday_weekdays (NAME) VALUES
+    ('Monday'),
+    ('Tuesday'),
+    ('Wednesday'),
+    ('Thursday'),
+    ('Friday'),
+    ('Saturday'),
+    ('Sunday');

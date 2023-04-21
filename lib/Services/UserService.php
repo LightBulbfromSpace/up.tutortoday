@@ -2,6 +2,7 @@
 
 namespace Up\Tutortoday\Services;
 
+use Up\Tutortoday\Model\Tables\FreeTimeTable;
 use Up\Tutortoday\Model\Tables\UserSubjectTable;
 use Up\Tutortoday\Model\Tables\UserTable;
 use Up\Tutortoday\Model\Tables\ContactsTable;
@@ -31,16 +32,9 @@ class UserService
             return null;
         }
 
-        //TODO: testing, refactoring
-        $IDsForWhere = $userIDs[0];
-        if (count($userIDs) > 1)
-        {
-            $IDsForWhere = implode(' OR ', $userIDs);
-        }
-
         $users = UserTable::query()
             ->setSelect(['*'])
-            ->where('ID', $IDsForWhere)
+            ->whereIn('ID', $userIDs)
             ->fetchCollection();
 
         foreach ($users as $user)
@@ -50,7 +44,6 @@ class UserService
                 return $user;
             }
         }
-
         return null;
     }
 
@@ -141,5 +134,43 @@ class UserService
             ->setLimit(USERS_BY_PAGE);
 
         return $users?->fetchCollection();
+    }
+
+    // Photo
+    // Full name
+    // Contacts (email, phone, telegram, vk)
+    // Education format
+    // City
+    // Role
+    // Subjects
+    // Description
+    // Feedbacks (in public part)
+    public static function getUserByID($userID)
+    {
+        $user = UserTable::query()->setSelect(['*', 'EDUCATION_FORMAT', 'ROLE'])->where('ID', $userID)->fetchObject();
+        if ($user === null) {
+            return false;
+        }
+        $contacts = ContactsTable::query()->setSelect(['*'])->where('USER_ID', $userID)->fetchCollection();
+        if ($contacts === null) {
+            return false;
+        }
+        $subjects = UserSubjectTable::query()->setSelect(['SUBJECT', 'PRICE'])->where('USER_ID', $userID)->fetchCollection();
+        $time = FreeTimeTable::query()->setSelect(['START', 'END', 'WEEKDAY'])->where('USER_ID', $userID)->fetchCollection();
+        $timeByWeekdays = [];
+
+        foreach ($time as $item)
+        {
+            $timeByWeekdays[$item['WEEKDAY']->getName()][] = ['start' => $item['START']->format('H:i'), 'end' => $item['END']->format('H:i')];
+        }
+
+        $photo = ImagesService::getProfileImage($userID);
+        return [
+            'photo' => $photo,
+            'mainData' => $user,
+            'contacts'=> $contacts,
+            'subjects' => $subjects,
+            'time' => $timeByWeekdays,
+        ];
     }
 }

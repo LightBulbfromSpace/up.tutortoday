@@ -51,7 +51,8 @@ class ProfileImagesTable extends DataManager
             (new IntegerField('ID',
                 []
             ))->configureTitle(Loc::getMessage('PROFILE_IMAGES_ENTITY_ID_FIELD'))
-                ->configurePrimary(true),
+                ->configurePrimary(true)
+                ->configureAutocomplete(true),
             (new IntegerField('USER_ID',
                 []
             ))->configureTitle(Loc::getMessage('PROFILE_IMAGES_ENTITY_USER_ID_FIELD'))

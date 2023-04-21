@@ -60,6 +60,9 @@ class UserSubjectTable extends DataManager
                 SubjectTable::class,
                 Join::on('this.SUBJECT_ID', 'ref.ID')
             )),
+            (new IntegerField('PRICE',
+                []
+            ))->configureTitle(Loc::getMessage('USER_SUBJECT_ENTITY_PRICE_FIELD')),
         ];
     }
 }
