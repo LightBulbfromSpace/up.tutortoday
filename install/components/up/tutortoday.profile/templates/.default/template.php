@@ -104,7 +104,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <label class="label">Days of week</label>
                 <div class="box-stretched-custom">
                     <?php foreach ($arResult['user']['time'] as $weekday => $times): ?>
-                        <?php var_dump(json_encode($times));?>
+<!--                        --><?php //var_dump(json_encode($times));?>
                         <button class="box" onclick="showTime('<?=$weekday?>', `<?=json_encode($times)?>`)"><?=$weekday?></button>
                     <?php endforeach; ?>
 <!--                    <button class="box" onclick="showTime('tuesday')">Tuesday</button>-->
