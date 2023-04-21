@@ -26,7 +26,7 @@ function __tutortodayMigrate(int $nextVersion, callable $callback)
     }
 }
 
-__tutortodayMigrate(2, function($updater, $DB)
+__tutortodayMigrate(3, function($updater, $DB)
 {
     if ($updater->CanUpdateDatabase())
     {

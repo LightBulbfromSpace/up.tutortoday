@@ -10,7 +10,7 @@ return function (RoutingConfigurator $routes) {
     $routes->get('/login/', new PublicPageController('/local/view/tutortoday/tutortoday-login.php'));
     $routes->get('/registration/', new PublicPageController('/local/view/tutortoday/tutortoday-registration.php'));
     $routes->get('/profile/{id}/', new PublicPageController('/local/view/tutortoday/tutortoday-profile.php'));
-
+	$routes->get('/filter/', new PublicPageController('/local/view/tutortoday/tutortoday-profile.php'));
 
     $routes->post('/login/', function () {
         AuthController::LoginAction();

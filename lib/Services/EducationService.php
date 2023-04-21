@@ -34,6 +34,7 @@ class EducationService
         {
             return null;
         }
+
         return $role->fetchObject()->getID();
     }
 
