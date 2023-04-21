@@ -156,13 +156,13 @@ class UserService
             return false;
         }
         $subjects = UserSubjectTable::query()->setSelect(['SUBJECT', 'PRICE'])->where('USER_ID', $userID)->fetchCollection();
-        $time = FreeTimeTable::query()->setSelect(['START', 'END', 'WEEKDAY'])->where('USER_ID', $userID)->fetchCollection();
-        $timeByWeekdays = [];
-
-        foreach ($time as $item)
-        {
-            $timeByWeekdays[$item['WEEKDAY']->getName()][] = ['start' => $item['START']->format('H:i'), 'end' => $item['END']->format('H:i')];
-        }
+//        $time = FreeTimeTable::query()->setSelect(['START', 'END', 'WEEKDAY', 'WEEKDAY_ID'])->where('USER_ID', $userID)->fetchCollection();
+//        $timeByWeekdays = [];
+//
+//        foreach ($time as $item)
+//        {
+//            $timeByWeekdays[$item['WEEKDAY']->getName()][] = ['start' => $item['START']->format('H:i'), 'end' => $item['END']->format('H:i')];
+//        }
 
         $photo = ImagesService::getProfileImage($userID);
         return [
@@ -170,7 +170,7 @@ class UserService
             'mainData' => $user,
             'contacts'=> $contacts,
             'subjects' => $subjects,
-            'time' => $timeByWeekdays,
+//            'time' => $timeByWeekdays,
         ];
     }
 }

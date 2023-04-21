@@ -3,6 +3,7 @@
 use Bitrix\Main\Routing\Controllers\PublicPageController;
 use Bitrix\Main\Routing\RoutingConfigurator;
 use Up\Tutortoday\Controller\AuthController;
+use Up\Tutortoday\Controller\ProfileController;
 
 return function (RoutingConfigurator $routes) {
     $routes->get('/', new PublicPageController('/local/view/tutortoday/tutortoday-main.php'));
@@ -15,7 +16,9 @@ return function (RoutingConfigurator $routes) {
         AuthController::LoginAction();
     });
     $routes->post('/registration/', function () {
-
         AuthController::RegistrationAction();
+    });
+    $routes->post('/profile/weekday/', function () {
+        return ProfileController::getUserTimeByDayID(getPostList());
     });
 };

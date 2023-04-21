@@ -14,6 +14,9 @@
 // Description
 
 // Feedbacks (in public part)
+
+\Bitrix\Main\UI\Extension::load('main.core');
+
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
 <script src="/local/components/up/tutortoday.profile/templates/.default/scripts.js"></script>
@@ -103,25 +106,63 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <div class="container-column-custom">
                 <label class="label">Days of week</label>
                 <div class="box-stretched-custom">
-                    <?php foreach ($arResult['user']['time'] as $weekday => $times): ?>
-<!--                        --><?php //var_dump(json_encode($times));?>
-                        <button class="box" onclick="showTime('<?=$weekday?>', `<?=json_encode($times)?>`)"><?=$weekday?></button>
+                    <?php foreach ($arResult['weekdays'] as $weekday): ?>
+                        <button class="box-button" id="weekday-<?=$weekday['ID']?>"><?=$weekday['NAME']?></button>
                     <?php endforeach; ?>
-<!--                    <button class="box" onclick="showTime('tuesday')">Tuesday</button>-->
-<!--                    <button class="box" onclick="showTime('wednesday')">Wednesday</button>-->
-<!--                    <button class="box" onclick="showTime('thursday')">Thursday</button>-->
-<!--                    <button class="box" onclick="showTime('friday')">Friday</button>-->
-<!--                    <button class="box" onclick="showTime('saturday')">Saturday</button>-->
-<!--                    <button class="box" onclick="showTime('sunday')">Sunday</button>-->
                 </div>
             </div>
             <div class="container-column-custom">
-                <label class="label">Free hours</label>
-                <div class="box-stretched-custom" id="">
-                    Free hours
+                <label class="label">Available time</label>
+                <div class="box-stretched-custom is-aligned-center" id="free-time-area">
+                    <div>No time selected</div>
                 </div>
-            </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+
+    let weekdays = [];
+    for (let i = 1; i < 8; i++) {
+        weekdays.push(BX('weekday-' + i))
+    }
+    for (let i = 0; i < 7; i++) {
+        BX.bind(weekdays[i], 'click', () => {
+            BX.ajax({
+                url: '/profile/weekday/',
+                data: {
+                    userID: <?=$arResult['user']['mainData']['ID']?>,
+                    weekdayID: i+1,
+                    sessid: BX.bitrix_sessid(),
+                },
+                method: 'POST',
+                dataType: 'json',
+                timeout: 10,
+                onsuccess: function (res) {
+                    console.log(res);
+                    if (res != null) {
+                        let area = document.getElementById('free-time-area')
+                        while (area.lastElementChild) {
+                            area.removeChild(area.lastElementChild);
+                        }
+
+                        if (res.length === 0) {
+                            let divElem = document.createElement('div');
+                            divElem.innerText = 'No time selected';
+                            area.appendChild(divElem);
+                        } else {
+                            res.forEach((interval) => {
+                                let divElem = document.createElement('div');
+                                divElem.innerText = interval['start'] + ' - ' + interval['end'];
+                                area.appendChild(divElem);
+                            });
+                        }
+                    }
+                },
+                onfailure: e => {
+                    console.error(e)
+                }
+            })
+        })
+    }
+</script>

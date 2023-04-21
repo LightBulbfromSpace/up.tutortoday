@@ -3,6 +3,7 @@
 use Bitrix\Main\Localization\Loc;
 use Up\Tutortoday\Controller\MainPageController;
 use Up\Tutortoday\Controller\ProfileController;
+use Up\Tutortoday\Services\DatetimeService;
 use Up\Tutortoday\Services\ErrorService;
 use Up\Tutortoday\Services\UserService;
 
@@ -15,6 +16,7 @@ class TutorTodayProfileComponent extends CBitrixComponent {
         $this->onPrepareComponentParams($this->arParams);
         //TODO: add filters
         $this->fetchUserInfo($this->arResult['ID']);
+        $this->fetchWeekdays();
         $this->prepareTemplateParams($this->arResult);
         $this->includeComponentTemplate();
     }
@@ -37,5 +39,10 @@ class TutorTodayProfileComponent extends CBitrixComponent {
     protected function fetchUserInfo(int $ID)
     {
         $this->arResult['user'] = UserService::getUserByID($ID);
+    }
+
+    protected function fetchWeekdays()
+    {
+        $this->arResult['weekdays'] = DatetimeService::getAllWeekdays();
     }
 }
