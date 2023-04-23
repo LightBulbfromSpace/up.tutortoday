@@ -73,3 +73,4 @@ Loc::loadMessages(__FILE__);
         </ul>
     </div>
 </nav>
+<div class="main-container">

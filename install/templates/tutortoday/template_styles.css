@@ -19,3 +19,16 @@
 .navbar {
     border-bottom: 2px solid #710303;
 }
+
+.main-container {
+    margin: 4rem 0;
+}
+
+.link {
+    color: #710303;
+}
+
+.footer-custom {
+    background-color: #fafafa;
+    padding: 2rem 6rem;
+}
