@@ -15,3 +15,7 @@
     position: relative;
     z-index: 30;
 }
+
+.navbar {
+    border-bottom: 2px solid #710303;
+}

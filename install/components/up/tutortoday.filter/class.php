@@ -32,10 +32,6 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
         return $arParams;
     }
 
-    protected function prepareLocalization()
-    {
-    }
-
     protected function fetchTutors(int $page, array $filters = [])
     {
         $maxPage = MainPageController::getNumberOfPages();
@@ -48,14 +44,4 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
 
         $this->arResult['tutors'] = MainPageController::getTutorsByPage($page, $filters);
     }
-
-	protected function showSubjectFilters()
-	{
-		$this->arResult['subjects'] = EducationService::getAllSubjects();
-	}
-
-	protected function showEducationFormatsFilters()
-	{
-		$this->arResult['Edformats'] = EducationService::getAllEdFormats();
-	}
 }

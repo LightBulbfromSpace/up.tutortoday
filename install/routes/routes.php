@@ -14,6 +14,7 @@ return function (RoutingConfigurator $routes) {
     $routes->get('/logout/', function (){
         AuthController::LogoutAction();
     });
+	$routes->get('/filter/', new PublicPageController('/local/view/tutortoday/tutortoday-profile.php'));
 
     $routes->post('/login/', function () {
         AuthController::LoginAction();
