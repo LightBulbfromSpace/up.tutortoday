@@ -19,7 +19,7 @@
 
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
-<script src="/local/components/up/tutortoday.profile/templates/.default/scripts.js"></script>
+<script type="text/javascript" src="/local/components/up/tutortoday.profile/templates/.default/scripts.js"></script>
 <div class="container-custom">
     <div class="container-narrow-custom">
         <div class="box">
@@ -31,37 +31,48 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             </div>
             <div class="box-invisible-custom">I'm a <?=$arResult['user']['mainData']['ROLE']['NAME']?></div>
             <div class="br"></div>
-            <?php foreach ($arResult['user']['contacts'] as $contact): ?>
-                <?php if ($contact['EMAIL'] != null): ?>
-                    <div class="box-dark-element-custom">
-                        <?=$contact['EMAIL']?>
-                    </div>
-                <?php endif; ?>
+            <label class="label">Email</label>
+            <?php if (count($arResult['user']['contacts']['email']) === 0): ?>
+                <div class="box-dark-element-custom">No email</div>
+            <?php endif; ?>
+            <?php foreach ($arResult['user']['contacts']['email'] as $contact): ?>
+                <div class="box-dark-element-custom">
+                    <?=$contact['EMAIL']?>
+                </div>
             <?php endforeach; ?>
-            <?php foreach ($arResult['user']['contacts'] as $contact): ?>
-                <?php if ($contact['PHONE_NUMBER'] != null): ?>
-                    <div class="box-dark-element-custom">
-                        <?=$contact['PHONE_NUMBER']?>
-                    </div>
-                <?php endif; ?>
+            <label class="label">Phone</label>
+            <?php if (count($arResult['user']['contacts']['phone']) === 0): ?>
+                <div class="box-dark-element-custom">No phone</div>
+            <?php endif; ?>
+            <?php foreach ($arResult['user']['contacts']['phone'] as $contact): ?>
+                <div class="box-dark-element-custom">
+                    <?=$contact['PHONE_NUMBER']?>
+                </div>
             <?php endforeach; ?>
-            <?php foreach ($arResult['user']['contacts'] as $contact): ?>
-                <?php if ($contact['VK_PROFILE'] != null): ?>
-                    <div class="box-dark-element-custom">
-                        <?=$contact['VK_PROFILE']?>
-                    </div>
-                <?php endif; ?>
+            <label class="label">VK</label>
+            <?php if (count($arResult['user']['contacts']['vk']) === 0): ?>
+                <div class="box-dark-element-custom">No VK profile</div>
+            <?php endif; ?>
+            <?php foreach ($arResult['user']['contacts']['vk'] as $contact): ?>
+                <div class="box-dark-element-custom">
+                    <?=$contact['VK_PROFILE']?>
+                </div>
             <?php endforeach; ?>
-            <?php foreach ($arResult['user']['contacts'] as $contact): ?>
-                <?php if ($contact['TELEGRAM_USERNAME'] != null): ?>
-                    <div class="box-dark-element-custom">
-                        <?=$contact['TELEGRAM_USERNAME']?>
-                    </div>
-                <?php endif; ?>
+            <label class="label">Telegram</label>
+            <?php if (count($arResult['user']['contacts']['telegram']) === 0): ?>
+                <div class="box-dark-element-custom">No telegram username</div>
+            <?php endif; ?>
+            <?php foreach ($arResult['user']['contacts']['telegram'] as $contact): ?>
+                <div class="box-dark-element-custom">
+                    <?=$contact['TELEGRAM_USERNAME']?>
+                </div>
             <?php endforeach; ?>
         </div>
     </div>
     <div class="container-large-custom">
+        <?php if($arResult['isOwner']): ?>
+        Is owner
+        <?php endif; ?>
         <label class="label">Description</label>
         <div class="box">
             <?php if($arResult['user']['mainData']['DESCRIPTION'] === ''): ?>
@@ -107,7 +118,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <label class="label">Days of week</label>
                 <div class="box-stretched-custom">
                     <?php foreach ($arResult['weekdays'] as $weekday): ?>
-                        <button class="box-button" id="weekday-<?=$weekday['ID']?>"><?=$weekday['NAME']?></button>
+                        <button class="box-button" onclick="getTime(<?=$arResult['user']['mainData']['ID']?>, <?=$weekday['ID']?>)" id="weekday-<?=$weekday['ID']?>"><?=$weekday['NAME']?></button>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -120,49 +131,10 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         </div>
     </div>
 </div>
-<script>
-
-    let weekdays = [];
-    for (let i = 1; i < 8; i++) {
-        weekdays.push(BX('weekday-' + i))
-    }
-    for (let i = 0; i < 7; i++) {
-        BX.bind(weekdays[i], 'click', () => {
-            BX.ajax({
-                url: '/profile/weekday/',
-                data: {
-                    userID: <?=$arResult['user']['mainData']['ID']?>,
-                    weekdayID: i+1,
-                    sessid: BX.bitrix_sessid(),
-                },
-                method: 'POST',
-                dataType: 'json',
-                timeout: 10,
-                onsuccess: function (res) {
-                    console.log(res);
-                    if (res != null) {
-                        let area = document.getElementById('free-time-area')
-                        while (area.lastElementChild) {
-                            area.removeChild(area.lastElementChild);
-                        }
-
-                        if (res.length === 0) {
-                            let divElem = document.createElement('div');
-                            divElem.innerText = 'No time selected';
-                            area.appendChild(divElem);
-                        } else {
-                            res.forEach((interval) => {
-                                let divElem = document.createElement('div');
-                                divElem.innerText = interval['start'] + ' - ' + interval['end'];
-                                area.appendChild(divElem);
-                            });
-                        }
-                    }
-                },
-                onfailure: e => {
-                    console.error(e)
-                }
-            })
-        })
-    }
-</script>
+<!--<script type="text/javascript" src="/local/components/up/tutortoday.profile/templates/.default/scripts.js">-->
+<!--   for (let i = 1; i < 8; i++) {-->
+<!--        BX.bind(BX('weekday-' + i), 'click', () => {-->
+<!--            getTime(--><?php ////=$arResult['user']['mainData']['ID']?><!--//, i)-->
+<!--//        })-->
+<!--//    }-->
+<!--//</script>-->

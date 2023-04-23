@@ -90,4 +90,10 @@ class AuthController extends Controller
 
         LocalRedirect("/profile/$userID/");
     }
+
+    public static function LogoutAction()
+    {
+        session()->clear();
+        LocalRedirect('/');
+    }
 }

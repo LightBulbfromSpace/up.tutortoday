@@ -31,10 +31,23 @@ function displayTime(res) {
             area.appendChild(divElem);
         } else {
             res.forEach((interval) => {
-                let divElem = document.createElement('div');
-                divElem.innerText = interval['start'] + ' - ' + interval['end'];
-                area.appendChild(divElem);
+                let time = document.createElement('div');
+                time.innerText = interval['start'] + ' - ' + interval['end'];
+                time.classList.add('box-dark-element-custom', 'width-100', 'is-justified-center')
+                let button = document.createElement('button');
+                button.innerText = '-';
+                button.classList.add('button-plus-minus', 'button-large-custom')
+                area.appendChild(time);
+                area.appendChild(button);
             });
         }
     }
+}
+
+function showTimepicker() {
+    document.getElementById('timepicker-form').style.display = 'flex';
+}
+
+function closeTimepicker() {
+    document.getElementById('timepicker-form').style.display = 'none';
 }

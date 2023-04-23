@@ -6,7 +6,10 @@ DROP TABLE IF EXISTS up_tutortoday_roles;
 
 DROP TABLE IF EXISTS up_tutortoday_subject;
 
-DROP TABLE IF EXISTS up_tutortoday_contacts;
+DROP TABLE IF EXISTS up_tutortoday_phones;
+DROP TABLE IF EXISTS up_tutortoday_email;
+DROP TABLE IF EXISTS up_tutortoday_vk;
+DROP TABLE IF EXISTS up_tutortoday_telegram;
 
 DROP TABLE IF EXISTS up_tutortoday_feedbacks;
 

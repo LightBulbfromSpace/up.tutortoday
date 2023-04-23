@@ -30,12 +30,30 @@ CREATE TABLE IF NOT EXISTS up_tutortoday_subject (
     PRIMARY KEY (ID)
 );
 
-CREATE TABLE IF NOT EXISTS up_tutortoday_contacts (
+CREATE TABLE IF NOT EXISTS up_tutortoday_phones (
     ID int unsigned auto_increment not null,
     USER_ID int unsigned not null,
     PHONE_NUMBER varchar(20),
+    PRIMARY KEY (ID)
+);
+
+CREATE TABLE IF NOT EXISTS up_tutortoday_email (
+    ID int unsigned auto_increment not null,
+    USER_ID int unsigned not null,
     EMAIL varchar(255),
+    PRIMARY KEY (ID)
+);
+
+CREATE TABLE IF NOT EXISTS up_tutortoday_vk (
+    ID int unsigned auto_increment not null,
+    USER_ID int unsigned not null,
     VK_PROFILE varchar(100),
+    PRIMARY KEY (ID)
+);
+
+CREATE TABLE IF NOT EXISTS up_tutortoday_telegram(
+    ID int unsigned auto_increment not null,
+    USER_ID int unsigned not null,
     TELEGRAM_USERNAME varchar(32),
     PRIMARY KEY (ID)
 );

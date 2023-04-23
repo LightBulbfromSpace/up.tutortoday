@@ -2,10 +2,14 @@
 
 namespace Up\Tutortoday\Services;
 
+use Bitrix\Main\UrlPreview\Parser\Vk;
+use Up\Tutortoday\Model\Tables\EmailTable;
 use Up\Tutortoday\Model\Tables\FreeTimeTable;
+use Up\Tutortoday\Model\Tables\PhonesTable;
+use Up\Tutortoday\Model\Tables\TelegramTable;
 use Up\Tutortoday\Model\Tables\UserSubjectTable;
 use Up\Tutortoday\Model\Tables\UserTable;
-use Up\Tutortoday\Model\Tables\ContactsTable;
+use Up\Tutortoday\Model\Tables\VkTable;
 use Up\Tutortoday\Model\Validator;
 
 class UserService
@@ -17,7 +21,7 @@ class UserService
             return null;
         }
 
-        $contactsArray = ContactsTable::query()
+        $contactsArray = EmailTable::query()
             ->setSelect(['*'])
             ->where('EMAIL', $email)
             ->fetchCollection();
@@ -84,10 +88,18 @@ class UserService
         {
             return false;
         }
-        $resultContacts = ContactsTable::add([
+        $resultContacts = PhonesTable::add([
+            'USER_ID' => $resultUser->getId(),
+            'PHONE_NUMBER' => $phone,
+        ]);
+        if (!$resultContacts->isSuccess())
+        {
+            return false;
+        }
+
+        $resultContacts = EmailTable::add([
             'USER_ID' => $resultUser->getId(),
             'EMAIL' => $email,
-            'PHONE_NUMBER' => $phone,
         ]);
         if (!$resultContacts->isSuccess())
         {
@@ -151,10 +163,23 @@ class UserService
         if ($user === null) {
             return false;
         }
-        $contacts = ContactsTable::query()->setSelect(['*'])->where('USER_ID', $userID)->fetchCollection();
-        if ($contacts === null) {
+        $phones = PhonesTable::query()->setSelect(['PHONE_NUMBER'])->where('USER_ID', $userID)->fetchCollection();
+        if ($phones === null) {
             return false;
         }
+        $emails = EmailTable::query()->setSelect(['EMAIL'])->where('USER_ID', $userID)->fetchCollection();
+        if ($emails === null) {
+            return false;
+        }
+        $VKs = VkTable::query()->setSelect(['VK_PROFILE'])->where('USER_ID', $userID)->fetchCollection();
+        if ($VKs === null) {
+            return false;
+        }
+        $telegrams = TelegramTable::query()->setSelect(['TELEGRAM_USERNAME'])->where('USER_ID', $userID)->fetchCollection();
+        if ($telegrams === null) {
+            return false;
+        }
+
         $subjects = UserSubjectTable::query()->setSelect(['SUBJECT', 'PRICE'])->where('USER_ID', $userID)->fetchCollection();
 //        $time = FreeTimeTable::query()->setSelect(['START', 'END', 'WEEKDAY', 'WEEKDAY_ID'])->where('USER_ID', $userID)->fetchCollection();
 //        $timeByWeekdays = [];
@@ -168,7 +193,12 @@ class UserService
         return [
             'photo' => $photo,
             'mainData' => $user,
-            'contacts'=> $contacts,
+            'contacts'=> [
+                'phone' => $phones,
+                'email' => $emails,
+                'vk' => $VKs,
+                'telegram' => $telegrams,
+            ],
             'subjects' => $subjects,
 //            'time' => $timeByWeekdays,
         ];

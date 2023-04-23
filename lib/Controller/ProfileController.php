@@ -33,6 +33,10 @@ class ProfileController
         {
             return null;
         }
-        return DatetimeService::getWeekdayTimeByUserID($post['userID'], $post['weekdayID']);
+        return DatetimeService::getWeekdayTimeByUserID($post['userID'], (int)$post['weekdayID']);
+    }
+
+    public static function updateUser($id, ParameterDictionary $getPostList)
+    {
     }
 }
