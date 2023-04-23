@@ -3,7 +3,7 @@
 namespace Up\Tutortoday\Controller;
 
 use Bitrix\Main\Type\ParameterDictionary;
-use Up\Tutortoday\Model\Tables\ContactsTable;
+use Up\Tutortoday\Model\FormObjects\UserForm;
 use Up\Tutortoday\Model\Tables\UserTable;
 use Up\Tutortoday\Services\ImagesService;
 use Up\Tutortoday\Services\DatetimeService;
@@ -36,7 +36,18 @@ class ProfileController
         return DatetimeService::getWeekdayTimeByUserID($post['userID'], (int)$post['weekdayID']);
     }
 
-    public static function updateUser($id, ParameterDictionary $getPostList)
+    public static function updateUser($id)
     {
+        if(!check_bitrix_sessid())
+        {
+            return null;
+        }
+        $post = getPostList();
+        $user = new UserForm(
+            $post['name'], $post['surname'], $post['education_format'],
+            $post['middleName'], $post['description'], $post['city'],
+        );
+        (new UserService((int)$id))->UpdateUser($user);
+        LocalRedirect("/profile/$id/");
     }
 }

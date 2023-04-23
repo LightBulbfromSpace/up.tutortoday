@@ -6,7 +6,6 @@
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
 <script src="/local/components/up/tutortoday.registration/templates/.default/scripts.js"></script>
-<div id="overlay"></div>
 <div class="container-custom">
     <?php if ($arResult['isErr']): ?>
         <article class="message is-danger">

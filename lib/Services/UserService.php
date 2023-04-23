@@ -3,6 +3,7 @@
 namespace Up\Tutortoday\Services;
 
 use Bitrix\Main\UrlPreview\Parser\Vk;
+use Up\Tutortoday\Model\FormObjects\UserForm;
 use Up\Tutortoday\Model\Tables\EmailTable;
 use Up\Tutortoday\Model\Tables\FreeTimeTable;
 use Up\Tutortoday\Model\Tables\PhonesTable;
@@ -14,6 +15,13 @@ use Up\Tutortoday\Model\Validator;
 
 class UserService
 {
+    private $userID = 0;
+
+    public function __construct(int $userID)
+    {
+        $this->userID = $userID;
+    }
+
     public static function ValidateUser(string $email, string $password)
     {
         if (!Validator::validateEmail($email) || !Validator::validatePassword($password))
@@ -202,5 +210,18 @@ class UserService
             'subjects' => $subjects,
 //            'time' => $timeByWeekdays,
         ];
+    }
+
+    public function UpdateUser(UserForm $user)
+    {
+        UserTable::update($this->userID, [
+                'NAME' => $user->getName(),
+                'SURNAME' => $user->getSurname(),
+                'MIDDLE_NAME' => $user->getMiddleName(),
+                'EDUCATION_FORMAT_ID' => $user->getEdFormat(),
+                'DESCRIPTION' => $user->getDescription(),
+                'CITY' => $user->getCity(),
+                'ROLE_ID' => $user->getRoleID(),
+        ]);
     }
 }

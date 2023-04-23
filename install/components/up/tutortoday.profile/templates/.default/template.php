@@ -25,9 +25,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         <div class="box">
             <img src="<?=$arResult['user']['photo']?>" class="img-rounded" alt="avatar">
             <div class="box-dark-element-custom">
-                <?=$arResult['user']['mainData']['NAME']?>
-                <?=$arResult['user']['mainData']['SURNAME']?>
-                <?=$arResult['user']['mainData']['MIDDLE_NAME']?>
+                <?=htmlspecialchars($arResult['user']['mainData']['NAME'])?>
+                <?=htmlspecialchars($arResult['user']['mainData']['SURNAME'])?>
+                <?=htmlspecialchars($arResult['user']['mainData']['MIDDLE_NAME'])?>
             </div>
             <div class="box-invisible-custom">I'm a <?=$arResult['user']['mainData']['ROLE']['NAME']?></div>
             <div class="br"></div>
@@ -37,7 +37,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <?php endif; ?>
             <?php foreach ($arResult['user']['contacts']['email'] as $contact): ?>
                 <div class="box-dark-element-custom">
-                    <?=$contact['EMAIL']?>
+                    <?=htmlspecialchars($contact['EMAIL'])?>
                 </div>
             <?php endforeach; ?>
             <label class="label">Phone</label>
@@ -46,7 +46,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <?php endif; ?>
             <?php foreach ($arResult['user']['contacts']['phone'] as $contact): ?>
                 <div class="box-dark-element-custom">
-                    <?=$contact['PHONE_NUMBER']?>
+                    <?=htmlspecialchars($contact['PHONE_NUMBER'])?>
                 </div>
             <?php endforeach; ?>
             <label class="label">VK</label>
@@ -55,7 +55,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <?php endif; ?>
             <?php foreach ($arResult['user']['contacts']['vk'] as $contact): ?>
                 <div class="box-dark-element-custom">
-                    <?=$contact['VK_PROFILE']?>
+                    <?=htmlspecialchars($contact['VK_PROFILE'])?>
                 </div>
             <?php endforeach; ?>
             <label class="label">Telegram</label>
@@ -64,21 +64,23 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <?php endif; ?>
             <?php foreach ($arResult['user']['contacts']['telegram'] as $contact): ?>
                 <div class="box-dark-element-custom">
-                    <?=$contact['TELEGRAM_USERNAME']?>
+                    <?=htmlspecialchars($contact['TELEGRAM_USERNAME'])?>
                 </div>
             <?php endforeach; ?>
         </div>
     </div>
     <div class="container-large-custom">
         <?php if($arResult['isOwner']): ?>
-        Is owner
+            <div class="save-button-container">
+                <a class="button-plus-minus link-button" href="/profile/<?=$arResult['user']['mainData']['ID']?>/settings/">Settings</a>
+            </div>
         <?php endif; ?>
         <label class="label">Description</label>
         <div class="box">
             <?php if($arResult['user']['mainData']['DESCRIPTION'] === ''): ?>
                 No description
             <?php endif; ?>
-            <?=$arResult['user']['mainData']['DESCRIPTION']?>
+            <?=htmlspecialchars($arResult['user']['mainData']['DESCRIPTION'])?>
         </div>
         <div class="container-row-custom">
             <div class="container-column-custom">
@@ -94,7 +96,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                         <?php if($arResult['user']['mainData']['CITY'] === ''): ?>
                             No city selected
                         <?php endif; ?>
-                        <?=$arResult['user']['mainData']['CITY']?>
+                        <?=htmlspecialchars($arResult['user']['mainData']['CITY'])?>
                     </div>
                 </div>
                 <div class="container-column-custom">

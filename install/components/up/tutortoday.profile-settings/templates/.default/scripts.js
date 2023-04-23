@@ -51,3 +51,9 @@ function showTimepicker() {
 function closeTimepicker() {
     document.getElementById('timepicker-form').style.display = 'none';
 }
+
+function submitForms() {
+    document.getElementById('full-name-form').submit();
+    document.getElementById('description-form').submit();
+    document.getElementById('ed-format-form').submit();
+}

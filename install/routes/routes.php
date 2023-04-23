@@ -26,6 +26,6 @@ return function (RoutingConfigurator $routes) {
         return ProfileController::getUserTimeByDayID(getPostList());
     });
     $routes->post('/profile/{id}/settings/', function ($id) {
-        ProfileController::updateUser($id, getPostList());
+        ProfileController::updateUser($id);
     });
 };
