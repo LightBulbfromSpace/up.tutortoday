@@ -42,7 +42,8 @@ class UserRegisterForm
         $this->city = $post['city'];
         $this->roleID = $post['roleID'] ?? 1;
         $this->subjectsIDs = $post['subjects'] ?? [];
-        if ($post['newSubjectsID'] != null)
+        $this->newSubjects = [];
+        if (isset($post['newSubjectsID']) && $post['newSubjectsID'] != null)
         {
             foreach ($post['newSubjectsID'] as $i => $subjectID)
             {

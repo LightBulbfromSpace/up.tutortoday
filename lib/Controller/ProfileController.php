@@ -6,6 +6,7 @@ use Bitrix\Main\Type\ParameterDictionary;
 use Up\Tutortoday\Model\FormObjects\UserForm;
 use Up\Tutortoday\Model\FormObjects\UserRegisterForm;
 use Up\Tutortoday\Model\Tables\UserTable;
+use Up\Tutortoday\Services\EducationService;
 use Up\Tutortoday\Services\ImagesService;
 use Up\Tutortoday\Services\DatetimeService;
 use Up\Tutortoday\Services\UserService;
@@ -48,5 +49,15 @@ class ProfileController
         (new UserService((int)$id))->UpdateUser($user);
 
         LocalRedirect("/profile/$id/");
+    }
+
+    public static function deleteSubject(ParameterDictionary $post)
+    {
+        if(!check_bitrix_sessid())
+        {
+            return null;
+        }
+
+        EducationService::deleteSubject($post['userID'], $post['subjectID']);
     }
 }

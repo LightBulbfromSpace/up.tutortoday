@@ -94,7 +94,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                         <label class="label">Subjects</label>
                         <div class="box max-width-90">
                             <?php foreach ($arResult['user']['subjects'] as $subject): ?>
-                                <div class="container-subjects">
+                                <div class="container-subjects" id="subject-container-<?=$subject['SUBJECT']['ID']?>">
                                     <div class="container-subjects">
                                         <div class="box-dark-element-custom">
                                             <?=$subject['SUBJECT']['NAME']?>
@@ -104,7 +104,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                                 <div class="price">rub/hour</div>
                                             </div>
                                     </div>
-                                    <button type="button" class="button-plus-minus button-large-custom">-</button>
+                                    <button type="button" class="button-plus-minus button-large-custom" onclick="deleteSubject(<?=$subject['SUBJECT']['ID']?>, <?=$arResult['user']['mainData']['ID']?>)">-</button>
                                 </div>
                             <?php endforeach; ?>
                             <?php if(count($arResult['user']['subjects']) !== 0): ?>
@@ -186,5 +186,21 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
     }
     function closeSubjectForm() {
         document.getElementById('add-subject-area').lastChild.remove()
+    }
+
+    function deleteSubject(subjID, userID) {
+        BX.ajax({
+            url: '/profile/settings/<?=$arResult['user']['mainData']['ID']?>/delete_subject/',
+            data: {
+                subjectID: subjID,
+                userID: userID,
+                sessid: BX.bitrix_sessid(),
+            },
+            method: 'POST',
+            dataType: 'json',
+            timeout: 10,
+        })
+
+        document.getElementById('subject-container-' + subjID).remove()
     }
 </script>

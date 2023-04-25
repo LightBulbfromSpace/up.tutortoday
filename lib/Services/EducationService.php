@@ -5,6 +5,7 @@ namespace Up\Tutortoday\Services;
 use Up\Tutortoday\Model\Tables\EducationFormatTable;
 use Up\Tutortoday\Model\Tables\RolesTable;
 use Up\Tutortoday\Model\Tables\SubjectTable;
+use Up\Tutortoday\Model\Tables\UserSubjectTable;
 
 class EducationService
 {
@@ -46,5 +47,19 @@ class EducationService
             return null;
         }
         return $edFormat->fetchObject();
+    }
+
+    public static function deleteSubject(mixed $userID, mixed $subjectID)
+    {
+        $result = UserSubjectTable::delete([
+            'USER_ID' => $userID,
+            'SUBJECT_ID' => $subjectID,
+        ]);
+
+        if (!$result->isSuccess())
+        {
+            return $result->getErrorMessages();
+        }
+        return true;
     }
 }

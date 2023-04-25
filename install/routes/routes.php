@@ -29,4 +29,8 @@ return function (RoutingConfigurator $routes) {
     $routes->post('/profile/{id}/settings/', function ($id) {
         ProfileController::updateUser($id);
     });
+
+    $routes->post('/profile/settings/{id}/delete_subject/', function () {
+        ProfileController::deleteSubject(getPostList());
+    });
 };
