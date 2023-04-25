@@ -57,3 +57,19 @@ function submitForms() {
     document.getElementById('description-form').submit();
     document.getElementById('ed-format-form').submit();
 }
+
+function addSubjectForm() {
+
+    let addArea = document.getElementById('add-subject-area')
+    let form = document.createElement('div')
+    fetch('subjectForm.php')
+        .then(response=> response.text())
+        .then(text=> form.innerHTML = text)
+    form.classList.add('box')
+    form.id = 'subject-form' + addArea.children.length
+    addArea.appendChild(form)
+}
+
+function closeSubjectForm() {
+    document.getElementById('add-subject-area').lastChild.remove()
+}

@@ -1,14 +1,14 @@
 CREATE TABLE IF NOT EXISTS up_tutortoday_user_role (
     USER_ID int unsigned auto_increment not null,
     ROLE_ID int not null,
-    PRIMARY KEY (USER_ID, ROLE_ID),
+    PRIMARY KEY (USER_ID),
     INDEX up_tutortoday_users_roles_index (ROLE_ID)
 );
 
 CREATE TABLE IF NOT EXISTS up_tutortoday_user_ed_format (
     USER_ID int unsigned auto_increment not null,
     EDUCATION_FORMAT_ID int not null,
-    PRIMARY KEY (USER_ID, EDUCATION_FORMAT_ID),
+    PRIMARY KEY (USER_ID),
     INDEX up_tutortoday_users_ed_format_index (EDUCATION_FORMAT_ID)
 );
 

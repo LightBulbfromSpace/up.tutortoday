@@ -18,6 +18,7 @@ class TutorTodayProfileSettingsComponent extends CBitrixComponent {
         $this->fetchUserInfo($this->arResult['ID']);
         $this->fetchWeekdays();
         $this->fetchEducationFormats();
+        $this->fetchAllSubjects();
         $this->prepareTemplateParams();
         $this->includeComponentTemplate();
     }
@@ -51,5 +52,10 @@ class TutorTodayProfileSettingsComponent extends CBitrixComponent {
     protected function fetchEducationFormats()
     {
         $this->arResult['edFormats'] = EducationService::getAllEdFormats();
+    }
+
+    protected function fetchAllSubjects()
+    {
+        $this->arResult['subjects'] = EducationService::getAllSubjects();
     }
 }

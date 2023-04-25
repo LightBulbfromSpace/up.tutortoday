@@ -80,7 +80,7 @@ class AuthController extends Controller
             LocalRedirect('/registration/?err=invalid_subject');
         }
 
-        if (!Validator::validateEducationFormatID($userForm->getEdFormat()))
+        if (!Validator::validateEducationFormatID($userForm->getEdFormatID()))
         {
             LocalRedirect('/registration/?err=invalid_ed_format');
         }

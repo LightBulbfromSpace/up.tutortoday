@@ -300,3 +300,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .price {
     margin-left: 10px;
 }
+
+.hidden-custom {
+    display: none;
+}

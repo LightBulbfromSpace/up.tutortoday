@@ -7,6 +7,7 @@ use Up\Tutortoday\Model\FormObjects\UserForm;
 use Up\Tutortoday\Model\FormObjects\UserRegisterForm;
 use Up\Tutortoday\Model\Tables\FreeTimeTable;
 use Up\Tutortoday\Model\Tables\RolesTable;
+use Up\Tutortoday\Model\Tables\SubjectTable;
 use Up\Tutortoday\Model\Tables\TelegramTable;
 use Up\Tutortoday\Model\Tables\UserDescriptionTable;
 use Up\Tutortoday\Model\Tables\UserEdFormatTable;
@@ -102,7 +103,7 @@ class UserService
 
         $resultEdFormat = UserEdFormatTable::add([
             'USER_ID' => $user->getID(),
-            'EDUCATION_FORMAT_ID' => $userForm->getEdFormat(),
+            'EDUCATION_FORMAT_ID' => $userForm->getEdFormatID(),
         ]);
         if (!$resultEdFormat->isSuccess())
         {
@@ -214,16 +215,77 @@ class UserService
     public function UpdateUser(UserRegisterForm $userForm)
     {
         $user = new \CUser();
-        $user->update($this->userID, [
+        $userResult = $user->update($this->userID, [
                 'NAME' => $userForm->getName(),
                 'LAST_NAME' => $userForm->getLastName(),
                 'SECOND_NAME' => $userForm->getMiddleName(),
-//                'EDUCATION_FORMAT_ID' => $userForm->getEdFormat(),
-//                'DESCRIPTION' => $userForm->getDescription(),
                 'WORK_CITY' => $userForm->getCity(),
                 'WORK_PHONE' => $userForm->getPhoneNumber(),
                 'WORK_MAILBOX' => $userForm->getWorkingEmail(),
-//                'ROLE_ID' => $userForm->getRoleID(),
         ]);
+        if ($userResult !== true)
+        {
+            return $userResult;
+        }
+
+        $descriptionResult = UserDescriptionTable::update($this->userID, [
+            'DESCRIPTION' => $userForm->getDescription()
+        ]);
+        if (!$descriptionResult->isSuccess())
+        {
+            return 'description update error';
+        }
+
+        $edFormatResult = UserEdFormatTable::update([
+            'USER_ID' => $this->userID,
+            'EDUCATION_FORMAT_ID' =>$userForm->getEdFormatID()
+        ], [
+            'EDUCATION_FORMAT_ID' => $userForm->getEdFormatID(),
+        ]);
+        if (!$edFormatResult->isSuccess())
+        {
+            return 'description update error';
+        }
+
+        $subjectsToAdd = [];
+
+        $existingSubjectsIDs = UserSubjectTable::query()
+            ->setSelect(['SUBJECT_ID'])
+            ->where('USER_ID', $this->userID)
+            ->fetchCollection();
+
+        if ($existingSubjectsIDs != null)
+        {
+            foreach ($userForm->getNewSubjects() as $newSubj)
+            {
+                $inArray = false;
+                foreach ($existingSubjectsIDs as $exSubjID)
+                {
+                    if ($newSubj['ID'] === $exSubjID)
+                    {
+                        $inArray = true;
+                    }
+                }
+                if (!$inArray)
+                {
+                    $subjectsToAdd[] = $newSubj;
+                }
+            }
+        }
+        foreach ($subjectsToAdd as $subj)
+        {
+            $subjAddResult = UserSubjectTable::add([
+                'USER_ID' => $this->userID,
+                'SUBJECT_ID' => $subj['ID'],
+                'PRICE' => $subj['price'],
+            ]);
+            if (!$subjAddResult->isSuccess())
+            {
+                return $subjAddResult->getErrorMessages();
+            }
+        }
+        //role update
+
+        return true;
     }
 }

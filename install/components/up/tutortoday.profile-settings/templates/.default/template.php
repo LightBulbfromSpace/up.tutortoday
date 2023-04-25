@@ -110,11 +110,17 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                             <?php if(count($arResult['user']['subjects']) !== 0): ?>
                                 <div class="br"></div>
                             <?php endif; ?>
-                            <div class="container-contacts">
-                                <button type="button" class="button-plus-minus button-large-custom">+</button>
+                            <div class="container-subjects">
+                                <button type="button" class="button-plus-minus button-large-custom" onclick="addSubjectForm()">+</button>
                             </div>
                         </div>
                     </div>
+                    <div id="add-subject-area"></div>
+                    <div class="box max-width-90">
+                        <button type="button" class="button-plus-minus button-large-custom" onclick="closeSubjectForm()">-</button>
+                    </div>
+                    <div class="container-contacts">
+                </div>
                 </div>
                 <div class="container-column-custom">
                     <label class="label">Days of week</label>
@@ -153,3 +159,32 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         </div>
     </div>
 </form>
+<script>
+    function addSubjectForm() {
+        let addArea = document.getElementById('add-subject-area')
+        let form = document.createElement('div')
+        form.innerHTML = `<div class="container-subjects box max-width-90 is-justified-center" id="subject-form">
+            <div class="container-subjects">
+            <div class="control">
+            <div class="select-custom">
+            <select name="newSubjectsID[]">
+            <?php foreach ($arResult['subjects'] as $subject): ?>
+                <option value="<?=$subject['ID']?>"><?=$subject['NAME']?></option>
+            <?php endforeach; ?>
+    </select>
+    </div>
+    </div>
+        <div class="container-row-custom is-aligned-center max-width-90">
+            <div class="box-dark-element-custom">
+                <input type="number" class="input-custom" placeholder="Price" name="newSubjectsPrices[]">
+                    <div class="price">rub/hour</div>
+            </div>
+        </div>
+    </div>
+    </div>`
+        addArea.appendChild(form)
+    }
+    function closeSubjectForm() {
+        document.getElementById('add-subject-area').lastChild.remove()
+    }
+</script>

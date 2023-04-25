@@ -17,13 +17,15 @@ class UserRegisterForm
     private string $email;
     private string $workingEmail;
 
-
     private string $phoneNumber;
     private array $subjectsIDs;
-    private int $edFormat;
+    private int $edFormatID;
     private string $description;
     private string $city;
     private int $roleID;
+
+    private array $newSubjects;
+
     public function __construct(ParameterDictionary $post)
     {
         $this->login = $post['login'] ?? '';
@@ -35,11 +37,21 @@ class UserRegisterForm
         $this->email = $post['email'] ?? '';
         $this->workingEmail = $post['workingEmail'];
         $this->phoneNumber = $post['phoneNumber'];
-        $this->edFormat = $post['edFormat'] ?? 1;
+        $this->edFormatID = $post['edFormat'] ?? 1;
         $this->description = $post['description'];
         $this->city = $post['city'];
         $this->roleID = $post['roleID'] ?? 1;
         $this->subjectsIDs = $post['subjects'] ?? [];
+        if ($post['newSubjectsID'] != null)
+        {
+            foreach ($post['newSubjectsID'] as $i => $subjectID)
+            {
+                $this->newSubjects[] = [
+                    'ID' => (int)$subjectID,
+                    'price' => $post['newSubjectsPrices'][$i]
+                ];
+            }
+        }
     }
     public function getLogin(): string
     {
@@ -49,8 +61,6 @@ class UserRegisterForm
     {
         return $this->name;
     }
-
-
     public function getLastName(): string
     {
         return $this->lastName;
@@ -61,6 +71,7 @@ class UserRegisterForm
     {
         return $this->middleName;
     }
+
 
     public function getPassword(): string
     {
@@ -87,14 +98,11 @@ class UserRegisterForm
         return $this->phoneNumber;
     }
 
-    public function getEdFormat(): int
+    public function getEdFormatID(): int
     {
-        return $this->edFormat;
+        return $this->edFormatID;
     }
 
-    /**
-     * @return array
-     */
     public function getSubjectsIDs(): array
     {
         return $this->subjectsIDs;
@@ -110,11 +118,13 @@ class UserRegisterForm
         return $this->city;
     }
 
-    /**
-     * @return int
-     */
     public function getRoleID(): int
     {
         return $this->roleID;
+    }
+
+    public function getNewSubjects(): array
+    {
+        return $this->newSubjects;
     }
 }
