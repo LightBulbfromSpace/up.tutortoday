@@ -4,6 +4,7 @@ namespace Up\Tutortoday\Controller;
 
 use Bitrix\Main\Type\ParameterDictionary;
 use Up\Tutortoday\Model\FormObjects\UserForm;
+use Up\Tutortoday\Model\FormObjects\UserRegisterForm;
 use Up\Tutortoday\Model\Tables\UserTable;
 use Up\Tutortoday\Services\ImagesService;
 use Up\Tutortoday\Services\DatetimeService;
@@ -42,12 +43,10 @@ class ProfileController
         {
             return null;
         }
-        $post = getPostList();
-        $user = new UserForm(
-            $post['name'], $post['surname'], $post['education_format'],
-            $post['middleName'], $post['description'], $post['city'],
-        );
+
+        $user = new UserRegisterForm(getPostList());
         (new UserService((int)$id))->UpdateUser($user);
+
         LocalRedirect("/profile/$id/");
     }
 }

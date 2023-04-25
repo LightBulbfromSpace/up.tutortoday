@@ -32,7 +32,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <div class="box-invisible-custom">I'm a <?=$arResult['user']['role']['NAME']?></div>
             <div class="br"></div>
             <label class="label">Email</label>
-            <?php if ($arResult['user']['contacts']['email'] === null): ?>
+            <?php if ($arResult['user']['contacts']['email'] == null): ?>
                 <div class="box-dark-element-custom">No email</div>
             <?php else: ?>
                 <div class="box-dark-element-custom">
@@ -40,7 +40,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 </div>
             <?php endif; ?>
             <label class="label">Phone</label>
-            <?php if ($arResult['user']['contacts']['phone'] === null): ?>
+            <?php if ($arResult['user']['contacts']['phone'] == null): ?>
                 <div class="box-dark-element-custom">No phone</div>
             <?php else: ?>
                 <div class="box-dark-element-custom">

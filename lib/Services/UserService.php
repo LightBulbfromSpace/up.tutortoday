@@ -211,16 +211,19 @@ class UserService
         ];
     }
 
-    public function UpdateUser(UserForm $user)
+    public function UpdateUser(UserRegisterForm $userForm)
     {
-        UserTable::update($this->userID, [
-                'NAME' => $user->getName(),
-                'SURNAME' => $user->getSurname(),
-                'MIDDLE_NAME' => $user->getMiddleName(),
-                'EDUCATION_FORMAT_ID' => $user->getEdFormat(),
-                'DESCRIPTION' => $user->getDescription(),
-                'CITY' => $user->getCity(),
-                'ROLE_ID' => $user->getRoleID(),
+        $user = new \CUser();
+        $user->update($this->userID, [
+                'NAME' => $userForm->getName(),
+                'LAST_NAME' => $userForm->getLastName(),
+                'SECOND_NAME' => $userForm->getMiddleName(),
+//                'EDUCATION_FORMAT_ID' => $userForm->getEdFormat(),
+//                'DESCRIPTION' => $userForm->getDescription(),
+                'WORK_CITY' => $userForm->getCity(),
+                'WORK_PHONE' => $userForm->getPhoneNumber(),
+                'WORK_MAILBOX' => $userForm->getWorkingEmail(),
+//                'ROLE_ID' => $userForm->getRoleID(),
         ]);
     }
 }

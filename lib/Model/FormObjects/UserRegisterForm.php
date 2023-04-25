@@ -26,13 +26,13 @@ class UserRegisterForm
     private int $roleID;
     public function __construct(ParameterDictionary $post)
     {
-        $this->login = $post['login'];
+        $this->login = $post['login'] ?? '';
         $this->name = $post['name'];
         $this->lastName = $post['lastName'];
         $this->middleName = $post['middleName'] ?? '';
-        $this->password = $post['password'];
-        $this->confirmPassword = $post['confirmPassword'];
-        $this->email = $post['email'];
+        $this->password = $post['password'] ?? '';
+        $this->confirmPassword = $post['confirmPassword'] ?? '';
+        $this->email = $post['email'] ?? '';
         $this->workingEmail = $post['workingEmail'];
         $this->phoneNumber = $post['phoneNumber'];
         $this->edFormat = $post['edFormat'] ?? 1;

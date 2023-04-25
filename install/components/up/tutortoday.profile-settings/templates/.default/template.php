@@ -19,7 +19,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <input class="input-custom" name="name" placeholder="No name" value="<?=htmlspecialchars($arResult['user']['mainData']['NAME'])?>">
                 </div>
                 <div class="box-dark-element-custom">
-                    <input class="input-custom" name="surname" placeholder="No surname" value="<?=htmlspecialchars($arResult['user']['mainData']['LAST_NAME'])?>">
+                    <input class="input-custom" name="lastName" placeholder="No surname" value="<?=htmlspecialchars($arResult['user']['mainData']['LAST_NAME'])?>">
                 </div>
                 <div class="box-dark-element-custom">
                     <input class="input-custom" name="middleName" placeholder="No middle name" value="<?=htmlspecialchars($arResult['user']['mainData']['SECOND_NAME'])?>">
@@ -28,31 +28,15 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <div class="br"></div>
                 <div class="container-contacts">
                     <label class="label">Email</label>
-                    <?php foreach ($arResult['user']['contacts']['email'] as $i => $contact): ?>
-                        <div class="container-row-custom items-aligned-center">
-                            <div class="box-dark-element-custom">
-                                <input class="input-custom" value="<?=htmlspecialchars($contact['EMAIL'])?>">
-                            </div>
-                            <?php if ($i !== 0 ): ?>
-                                <button type="button" class="button-plus-minus button-small-custom">-</button>
-                            <?php endif; ?>
-                        </div>
-                    <?php endforeach; ?>
-                    <button type="button" class="button-plus-minus button-large-custom">+</button>
+                    <div class="box-dark-element-custom">
+                        <input class="input-custom" name="workingEmail" value="<?=$arResult['user']['contacts']['email']?>">
+                    </div>
                 </div>
                 <div class="container-contacts">
                     <label class="label">Phone</label>
-                    <?php foreach ($arResult['user']['contacts']['phone'] as $i => $contact): ?>
-                        <div class="container-row-custom items-aligned-center">
-                            <div class="box-dark-element-custom">
-                                <input class="input-custom" value="<?=htmlspecialchars($contact['PHONE_NUMBER'])?>">
-                            </div>
-                            <?php if ($i !== 0 ): ?>
-                                <button type="button" class="button-plus-minus button-small-custom">-</button>
-                            <?php endif; ?>
-                        </div>
-                    <?php endforeach; ?>
-                    <button type="button" class="button-plus-minus button-large-custom">+</button>
+                    <div class="box-dark-element-custom">
+                        <input class="input-custom" name="phoneNumber" value="<?=htmlspecialchars($arResult['user']['contacts']['phone'])?>">
+                    </div>
                 </div>
                 <div class="container-contacts">
                     <label class="label">VK</label>
