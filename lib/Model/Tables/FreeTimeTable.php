@@ -56,7 +56,7 @@ class FreeTimeTable extends DataManager
                 ->configureRequired(true),
             (new Reference(
                 'USER',
-                UserTable::class,
+                \CUser::class,
                 Join::on('this.USER_ID', 'ref.ID')
             )),
             (new IntegerField('WEEKDAY_ID',

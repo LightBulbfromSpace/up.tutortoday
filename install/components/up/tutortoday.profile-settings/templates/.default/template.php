@@ -19,12 +19,12 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <input class="input-custom" name="name" placeholder="No name" value="<?=htmlspecialchars($arResult['user']['mainData']['NAME'])?>">
                 </div>
                 <div class="box-dark-element-custom">
-                    <input class="input-custom" name="surname" placeholder="No surname" value="<?=htmlspecialchars($arResult['user']['mainData']['SURNAME'])?>">
+                    <input class="input-custom" name="surname" placeholder="No surname" value="<?=htmlspecialchars($arResult['user']['mainData']['LAST_NAME'])?>">
                 </div>
                 <div class="box-dark-element-custom">
-                    <input class="input-custom" name="middleName" placeholder="No middle name" value="<?=htmlspecialchars($arResult['user']['mainData']['MIDDLE_NAME'])?>">
+                    <input class="input-custom" name="middleName" placeholder="No middle name" value="<?=htmlspecialchars($arResult['user']['mainData']['SECOND_NAME'])?>">
                 </div>
-                <div class="box-invisible-custom">I'm a <?=$arResult['user']['mainData']['ROLE']['NAME']?></div>
+                <div class="box-invisible-custom">I'm a <?=$arResult['user']['role']['NAME']?></div>
                 <div class="br"></div>
                 <div class="container-contacts">
                     <label class="label">Email</label>
@@ -84,7 +84,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             </div>
             <label class="label">Description</label>
             <div class="box-dark-element-custom">
-                <textarea class="textarea-custom" name="description" placeholder="No description"><?=htmlspecialchars($arResult['user']['mainData']['DESCRIPTION'])?></textarea>
+                <textarea class="textarea-custom" name="description" placeholder="No description"><?=htmlspecialchars($arResult['user']['description'])?></textarea>
             </div>
             <div class="container-row-custom">
                 <div class="container-column-custom">
@@ -103,7 +103,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <div class="container-column-custom">
                         <label class="label">City</label>
                         <div class="box-dark-element-custom max-width-90">
-                            <input class="input-custom" name="city" placeholder="No city" value="<?=htmlspecialchars($arResult['user']['mainData']['CITY'])?>">
+                            <input class="input-custom" name="city" placeholder="No city" value="<?=htmlspecialchars($arResult['user']['city'])?>">
                         </div>
                     </div>
                     <div class="container-column-custom">

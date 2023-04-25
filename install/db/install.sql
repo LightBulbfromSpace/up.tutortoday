@@ -1,15 +1,21 @@
-CREATE TABLE IF NOT EXISTS up_tutortoday_user (
-    ID int unsigned auto_increment not null,
-    PASSWORD varchar(100) not null,
-    NAME varchar(100) not null,
-    SURNAME varchar(100) not null,
-    MIDDLE_NAME varchar(100),
-    DESCRIPTION text,
-    CITY varchar(100),
-    EDUCATION_FORMAT_ID int not null,
+CREATE TABLE IF NOT EXISTS up_tutortoday_user_role (
+    USER_ID int unsigned auto_increment not null,
     ROLE_ID int not null,
-    PRIMARY KEY (ID),
-    INDEX up_tutortoday_users_roles (ROLE_ID)
+    PRIMARY KEY (USER_ID, ROLE_ID),
+    INDEX up_tutortoday_users_roles_index (ROLE_ID)
+);
+
+CREATE TABLE IF NOT EXISTS up_tutortoday_user_ed_format (
+    USER_ID int unsigned auto_increment not null,
+    EDUCATION_FORMAT_ID int not null,
+    PRIMARY KEY (USER_ID, EDUCATION_FORMAT_ID),
+    INDEX up_tutortoday_users_ed_format_index (EDUCATION_FORMAT_ID)
+);
+
+CREATE TABLE IF NOT EXISTS up_tutortoday_user_description (
+    USER_ID int unsigned auto_increment not null,
+    DESCRIPTION text,
+    PRIMARY KEY (USER_ID)
 );
 
 CREATE TABLE IF NOT EXISTS up_tutortoday_education_format (
@@ -30,19 +36,19 @@ CREATE TABLE IF NOT EXISTS up_tutortoday_subject (
     PRIMARY KEY (ID)
 );
 
-CREATE TABLE IF NOT EXISTS up_tutortoday_phones (
-    ID int unsigned auto_increment not null,
-    USER_ID int unsigned not null,
-    PHONE_NUMBER varchar(20),
-    PRIMARY KEY (ID)
-);
-
-CREATE TABLE IF NOT EXISTS up_tutortoday_email (
-    ID int unsigned auto_increment not null,
-    USER_ID int unsigned not null,
-    EMAIL varchar(255),
-    PRIMARY KEY (ID)
-);
+# CREATE TABLE IF NOT EXISTS up_tutortoday_phones (
+#     ID int unsigned auto_increment not null,
+#     USER_ID int unsigned not null,
+#     PHONE_NUMBER varchar(20),
+#     PRIMARY KEY (ID)
+# );
+#
+# CREATE TABLE IF NOT EXISTS up_tutortoday_email (
+#     ID int unsigned auto_increment not null,
+#     USER_ID int unsigned not null,
+#     EMAIL varchar(255),
+#     PRIMARY KEY (ID)
+# );
 
 CREATE TABLE IF NOT EXISTS up_tutortoday_vk (
     ID int unsigned auto_increment not null,

@@ -4,12 +4,14 @@ namespace Up\Tutortoday\Services;
 
 use Bitrix\Main\UrlPreview\Parser\Vk;
 use Up\Tutortoday\Model\FormObjects\UserForm;
-use Up\Tutortoday\Model\Tables\EmailTable;
+use Up\Tutortoday\Model\FormObjects\UserRegisterForm;
 use Up\Tutortoday\Model\Tables\FreeTimeTable;
-use Up\Tutortoday\Model\Tables\PhonesTable;
+use Up\Tutortoday\Model\Tables\RolesTable;
 use Up\Tutortoday\Model\Tables\TelegramTable;
+use Up\Tutortoday\Model\Tables\UserDescriptionTable;
+use Up\Tutortoday\Model\Tables\UserEdFormatTable;
+use Up\Tutortoday\Model\Tables\UserRoleTable;
 use Up\Tutortoday\Model\Tables\UserSubjectTable;
-use Up\Tutortoday\Model\Tables\UserTable;
 use Up\Tutortoday\Model\Tables\VkTable;
 use Up\Tutortoday\Model\Validator;
 
@@ -22,116 +24,113 @@ class UserService
         $this->userID = $userID;
     }
 
-    public static function ValidateUser(string $email, string $password)
+//    public static function ValidateUser(string $email, string $password)
+//    {
+//        if (!Validator::validateEmail($email) || !Validator::validatePassword($password))
+//        {
+//            return null;
+//        }
+//
+//        $contactsArray = EmailTable::query()
+//            ->setSelect(['*'])
+//            ->where('EMAIL', $email)
+//            ->fetchCollection();
+//
+//        $userIDs = [];
+//        foreach ($contactsArray as $contacts)
+//        {
+//            $userIDs[] = $contacts['USER_ID'];
+//        }
+//        if ($userIDs === [])
+//        {
+//            return null;
+//        }
+//
+//        $users = UserTable::query()
+//            ->setSelect(['*'])
+//            ->whereIn('ID', $userIDs)
+//            ->fetchCollection();
+//
+//        foreach ($users as $user)
+//        {
+//            if (password_verify($password, $user['PASSWORD']))
+//            {
+//                return $user;
+//            }
+//        }
+//        return null;
+//    }
+
+
+    public static function CreateUser(UserRegisterForm $userForm) : bool|string|array
     {
-        if (!Validator::validateEmail($email) || !Validator::validatePassword($password))
+        $user = new \CUser();
+        $resultUser = $user->Register(
+            $userForm->getLogin(),
+            $userForm->getName(),
+            $userForm->getLastName(),
+            $userForm->getPassword(),
+            $userForm->getConfirmPassword(),
+            $userForm->getEmail(),
+        );
+
+        if ($resultUser['TYPE'] !== 'OK')
         {
-            return null;
+            return $resultUser;
         }
 
-        $contactsArray = EmailTable::query()
-            ->setSelect(['*'])
-            ->where('EMAIL', $email)
-            ->fetchCollection();
-
-        $userIDs = [];
-        foreach ($contactsArray as $contacts)
-        {
-            $userIDs[] = $contacts['USER_ID'];
-        }
-        if ($userIDs === [])
-        {
-            return null;
-        }
-
-        $users = UserTable::query()
-            ->setSelect(['*'])
-            ->whereIn('ID', $userIDs)
-            ->fetchCollection();
-
-        foreach ($users as $user)
-        {
-            if (password_verify($password, $user['PASSWORD']))
-            {
-                return $user;
-            }
-        }
-        return null;
-    }
-
-    //TODO: refactoring of arguments
-
-    /**
-     * @param string $name
-     * @param string $surname
-     * @param string $middleName
-     * @param string $password
-     * @param string $email
-     * @param string $phone
-     * @param string $city
-     * @param int $edFormat
-     * @param int[] $subject
-     * @param string $description
-     * @return int|bool
-     * @throws \Exception
-     */
-    public static function CreateUser(
-        string $name,  string $surname, string $middleName,
-        string $password, string $email, string $phone,
-        string $city, int $edFormat, ?array $subjects,
-        string $description,
-    ) : int|bool
-    {
-        $resultUser = UserTable::add([
-            'NAME' => $name,
-            'SURNAME' => $surname,
-            'MIDDLE_NAME' => $middleName,
-            'PASSWORD' => password_hash($password, PASSWORD_DEFAULT),
-            'CITY' => $city,
-            'EDUCATION_FORMAT_ID' => $edFormat,
-            'ROLE_ID' => 1,
-            'DESCRIPTION' => $description,
+        $resultUser = $user->Update($user->getID(), [
+            'SECOND_NAME' => $userForm->getMiddleName(),
+            'WORK_PHONE' => $userForm->getPhoneNumber(),
+            'WORK_MAILBOX' => $userForm->getWorkingEmail(),
+            'WORK_CITY' => $userForm->getCity(),
         ]);
-        if (!$resultUser->isSuccess())
+
+        if ($resultUser == false)
         {
-            return false;
+            return $resultUser;
         }
-        $resultContacts = PhonesTable::add([
-            'USER_ID' => $resultUser->getId(),
-            'PHONE_NUMBER' => $phone,
+
+        $resultRole = UserRoleTable::add([
+            'USER_ID' => $user->getID(),
+            'ROLE_ID' => $userForm->getRoleID(),
         ]);
-        if (!$resultContacts->isSuccess())
+        if (!$resultRole->isSuccess())
         {
-            return false;
+            return $resultRole->getErrorMessages();
         }
 
-        $resultContacts = EmailTable::add([
-            'USER_ID' => $resultUser->getId(),
-            'EMAIL' => $email,
+        $resultEdFormat = UserEdFormatTable::add([
+            'USER_ID' => $user->getID(),
+            'EDUCATION_FORMAT_ID' => $userForm->getEdFormat(),
         ]);
-        if (!$resultContacts->isSuccess())
+        if (!$resultEdFormat->isSuccess())
         {
-            return false;
+            return $resultEdFormat->getErrorMessages();
         }
 
-        if ($subjects === null)
+        foreach ($userForm->getSubjectsIDs() as $subject)
         {
-            return $resultUser->getId();
-        }
-
-        foreach ($subjects as $subject)
-        {
-            var_dump($subject, $resultUser->getId());
             $resultSubject = UserSubjectTable::add([
-                'USER_ID' => $resultUser->getId(),
+                'USER_ID' => $user->getID(),
                 'SUBJECT_ID' => $subject,
             ]);
             if (!$resultSubject->isSuccess())
             {
-                return false;
+                return $resultSubject->getErrorMessages();
             }
         }
-        return $resultUser->getId();
+
+        $resultDescription = UserDescriptionTable::add([
+            'USER_ID' => $user->getID(),
+            'DESCRIPTION' => $userForm->getDescription(),
+        ]);
+        if (!$resultDescription->isSuccess())
+        {
+            return $resultDescription->getErrorMessages();
+        }
+
+        return $user->getID();
     }
 
 
@@ -167,27 +166,22 @@ class UserService
     // Feedbacks (in public part)
     public static function getUserByID($userID)
     {
-        $user = UserTable::query()->setSelect(['*', 'EDUCATION_FORMAT', 'ROLE'])->where('ID', $userID)->fetchObject();
-        if ($user === null) {
+        $user = \CUser::GetByID($userID)->Fetch();
+        if ($user == null) {
             return false;
         }
-        $phones = PhonesTable::query()->setSelect(['PHONE_NUMBER'])->where('USER_ID', $userID)->fetchCollection();
-        if ($phones === null) {
-            return false;
-        }
-        $emails = EmailTable::query()->setSelect(['EMAIL'])->where('USER_ID', $userID)->fetchCollection();
-        if ($emails === null) {
-            return false;
-        }
-        $VKs = VkTable::query()->setSelect(['VK_PROFILE'])->where('USER_ID', $userID)->fetchCollection();
-        if ($VKs === null) {
-            return false;
-        }
-        $telegrams = TelegramTable::query()->setSelect(['TELEGRAM_USERNAME'])->where('USER_ID', $userID)->fetchCollection();
-        if ($telegrams === null) {
+        $role = UserRoleTable::query()->setSelect(['ROLE'])->where('USER_ID', $userID)->fetchObject();
+        if ($role == null) {
             return false;
         }
 
+        $edFormat = UserEdFormatTable::query()->setSelect(['EDUCATION_FORMAT'])->where('USER_ID', $userID)->fetchObject();
+        if ($edFormat == null) {
+            return false;
+        }
+
+        $VKs = VkTable::query()->setSelect(['VK_PROFILE'])->where('USER_ID', $userID)->fetchCollection();
+        $telegrams = TelegramTable::query()->setSelect(['TELEGRAM_USERNAME'])->where('USER_ID', $userID)->fetchCollection();
         $subjects = UserSubjectTable::query()->setSelect(['SUBJECT', 'PRICE'])->where('USER_ID', $userID)->fetchCollection();
 //        $time = FreeTimeTable::query()->setSelect(['START', 'END', 'WEEKDAY', 'WEEKDAY_ID'])->where('USER_ID', $userID)->fetchCollection();
 //        $timeByWeekdays = [];
@@ -197,13 +191,18 @@ class UserService
 //            $timeByWeekdays[$item['WEEKDAY']->getName()][] = ['start' => $item['START']->format('H:i'), 'end' => $item['END']->format('H:i')];
 //        }
 
+        $description = UserDescriptionTable::query()->setSelect(['DESCRIPTION'])->where('USER_ID', $userID)->fetchObject();
         $photo = ImagesService::getProfileImage($userID);
         return [
             'photo' => $photo,
             'mainData' => $user,
+            'role' => $role->getRole(),
+            'edFormat' => $edFormat->getEducationFormat(),
+            'city' => $user['WORK_CITY'],
+            'description' => $description['DESCRIPTION'],
             'contacts'=> [
-                'phone' => $phones,
-                'email' => $emails,
+                'phone' => $user['WORK_PHONE'],
+                'email' => $user['WORK_MAILBOX'],
                 'vk' => $VKs,
                 'telegram' => $telegrams,
             ],

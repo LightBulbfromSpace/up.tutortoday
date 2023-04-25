@@ -58,7 +58,7 @@ class FeedbacksTable extends DataManager
                 ->configureRequired(true),
             (new Reference(
                 'TUTOR',
-                UserTable::class,
+                \CUser::class,
                 Join::on('this.TUTOR_ID', 'ref.ID')
             )),
             (new StringField('TITLE',

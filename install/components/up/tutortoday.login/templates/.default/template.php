@@ -16,7 +16,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
     <form action="/login/" method="post">
         <div class="field">
             <p class="control">
-                <input class="input-custom" type="email" placeholder="Email" name="email" required>
+                <input class="input-custom" type="text" placeholder="Login" name="login" required>
             </p>
         </div>
         <div class="field">

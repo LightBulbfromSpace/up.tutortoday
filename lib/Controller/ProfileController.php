@@ -12,7 +12,7 @@ use Up\Tutortoday\Services\UserService;
 class ProfileController
 {
 
-    public static function isOwnerOfProfile($userID) : bool
+    public static function isOwnerOfProfile(int $userID) : bool
     {
         if (!session()->has('userID'))
         {

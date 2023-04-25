@@ -7,6 +7,8 @@ use Bitrix\Main\Localization\Loc,
     Bitrix\Main\ORM\Fields\IntegerField,
     Bitrix\Main\ORM\Fields\StringField,
     Bitrix\Main\ORM\Fields\Validators\LengthValidator;
+use Bitrix\Main\ORM\Fields\Relations\Reference;
+use Bitrix\Main\ORM\Query\Join;
 
 Loc::loadMessages(__FILE__);
 
@@ -52,6 +54,11 @@ class VkTable extends DataManager
                 []
             ))->configureTitle(Loc::getMessage('VK_ENTITY_USER_ID_FIELD'))
                 ->configureRequired(true),
+            (new Reference(
+                'USER',
+                \CUser::class,
+                Join::on('this.USER_ID', 'ref.ID')
+            )),
             (new StringField('VK_PROFILE',
                 [
                     'validation' => [__CLASS__, 'validateVkProfile']

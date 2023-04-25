@@ -26,29 +26,27 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <img src="<?=$arResult['user']['photo']?>" class="img-rounded" alt="avatar">
             <div class="box-dark-element-custom">
                 <?=htmlspecialchars($arResult['user']['mainData']['NAME'])?>
-                <?=htmlspecialchars($arResult['user']['mainData']['SURNAME'])?>
-                <?=htmlspecialchars($arResult['user']['mainData']['MIDDLE_NAME'])?>
+                <?=htmlspecialchars($arResult['user']['mainData']['LAST_NAME'])?>
+                <?=htmlspecialchars($arResult['user']['mainData']['SECOND_NAME'])?>
             </div>
-            <div class="box-invisible-custom">I'm a <?=$arResult['user']['mainData']['ROLE']['NAME']?></div>
+            <div class="box-invisible-custom">I'm a <?=$arResult['user']['role']['NAME']?></div>
             <div class="br"></div>
             <label class="label">Email</label>
-            <?php if (count($arResult['user']['contacts']['email']) === 0): ?>
+            <?php if ($arResult['user']['contacts']['email'] === null): ?>
                 <div class="box-dark-element-custom">No email</div>
-            <?php endif; ?>
-            <?php foreach ($arResult['user']['contacts']['email'] as $contact): ?>
+            <?php else: ?>
                 <div class="box-dark-element-custom">
-                    <?=htmlspecialchars($contact['EMAIL'])?>
+                    <?=$arResult['user']['contacts']['email']?>
                 </div>
-            <?php endforeach; ?>
+            <?php endif; ?>
             <label class="label">Phone</label>
-            <?php if (count($arResult['user']['contacts']['phone']) === 0): ?>
+            <?php if ($arResult['user']['contacts']['phone'] === null): ?>
                 <div class="box-dark-element-custom">No phone</div>
-            <?php endif; ?>
-            <?php foreach ($arResult['user']['contacts']['phone'] as $contact): ?>
+            <?php else: ?>
                 <div class="box-dark-element-custom">
-                    <?=htmlspecialchars($contact['PHONE_NUMBER'])?>
+                    <?=$arResult['user']['contacts']['phone']?>
                 </div>
-            <?php endforeach; ?>
+            <?php endif; ?>
             <label class="label">VK</label>
             <?php if (count($arResult['user']['contacts']['vk']) === 0): ?>
                 <div class="box-dark-element-custom">No VK profile</div>
@@ -77,26 +75,26 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         <?php endif; ?>
         <label class="label">Description</label>
         <div class="box">
-            <?php if($arResult['user']['mainData']['DESCRIPTION'] === ''): ?>
+            <?php if($arResult['user']['description'] == ''): ?>
                 No description
             <?php endif; ?>
-            <?=htmlspecialchars($arResult['user']['mainData']['DESCRIPTION'])?>
+            <?=htmlspecialchars($arResult['user']['description'])?>
         </div>
         <div class="container-row-custom">
             <div class="container-column-custom">
                 <div class="container-column-custom">
                     <label class="label">Education format</label>
                     <div class="box">
-                        <?=$arResult['user']['mainData']['EDUCATION_FORMAT']['NAME']?>
+                        <?=$arResult['user']['edFormat']['NAME']?>
                     </div>
                 </div>
                 <div class="container-column-custom">
                     <label class="label">City</label>
                     <div class="box">
-                        <?php if($arResult['user']['mainData']['CITY'] === ''): ?>
+                        <?php if($arResult['user']['city'] == ''): ?>
                             No city selected
                         <?php endif; ?>
-                        <?=htmlspecialchars($arResult['user']['mainData']['CITY'])?>
+                        <?=htmlspecialchars($arResult['user']['city'])?>
                     </div>
                 </div>
                 <div class="container-column-custom">

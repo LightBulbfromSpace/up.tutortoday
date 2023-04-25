@@ -3,8 +3,11 @@
 namespace Up\Tutortoday\Controller;
 
 use Bitrix\Main\Engine\Controller;
+use Up\Tutortoday\Model\FormObjects\UserForm;
+use Up\Tutortoday\Model\FormObjects\UserRegisterForm;
 use Up\Tutortoday\Model\Validator;
 use Up\Tutortoday\Services\UserService;
+use Bitrix\Main\PhoneNumber\Parser;
 
 class AuthController extends Controller
 {
@@ -15,20 +18,25 @@ class AuthController extends Controller
             return;
         }
         $post = getPostList();
-        if ($post['email'] == null || $post['password'] == null)
+        if ($post['login'] == null || $post['password'] == null)
         {
             LocalRedirect("/login/?err=empty_field");
         }
-        $user = UserService::ValidateUser($post['email'], $post['password']);
-        if ($user === null)
+
+        global $USER;
+
+        if (is_object($USER))
+        {
+            $USER->Logout();
+        }
+
+        $USER = new \CUser();
+        $result = $USER->Login($post['login'], $post['password']);
+        if ($result !== true)
         {
             LocalRedirect("/login/?err=auth");
         }
-        else
-        {
-            session()->set('userID', (int)$user['ID']);
-            LocalRedirect("/profile/{$user['ID']}/");
-        }
+        LocalRedirect("/profile/{$USER->getID()}/");
     }
 
     public static function RegistrationAction()
@@ -39,8 +47,14 @@ class AuthController extends Controller
         }
 
         $post = getPostList();
+        $userForm = new UserRegisterForm($post);
 
-        $passCheck = Validator::validatePassword($post['password1'], $post['password2']);
+        if (\CUser::GetByLogin($userForm->getLogin())->Fetch())
+        {
+            LocalRedirect('/registration/?err=user_exists');
+        }
+
+        $passCheck = Validator::validatePassword($post['password'], $post['passwordConfirm']);
         if ($passCheck !== true)
         {
             LocalRedirect("/registration/?err=$passCheck");
@@ -50,45 +64,37 @@ class AuthController extends Controller
             LocalRedirect('/registration/?err=invalid_email');
         }
 
-        if (UserService::ValidateUser($post['email'], $post['password1']) !== null)
-        {
-            LocalRedirect('/registration/?err=user_exists');
-        }
-
-        if (!Validator::validateNameField($post['name']) ||
-            !Validator::validateNameField($post['surname']) ||
-            !Validator::validateNameField($post['middle_name'], false))
+        if (!Validator::validateNameField($userForm->getName()) ||
+            !Validator::validateNameField($userForm->getLastName()) ||
+            !Validator::validateNameField($userForm->getMiddleName(), false))
         {
             LocalRedirect('/registration/?err=empty_field');
         }
-        if (!Validator::validatePhoneNumber($post['phone']))
+        if (!Validator::validatePhoneNumber($userForm->getPhoneNumber()))
         {
             LocalRedirect('/registration/?err=invalid_phone');
         }
-        if (!Validator::validateSubjectID((int)$post['subject'], false))
+
+        if (!Validator::validateSubjectsIDs($userForm->getSubjectsIDs(), false))
         {
             LocalRedirect('/registration/?err=invalid_subject');
         }
 
-        if (!Validator::validateEducationFormatID((int)$post['education_format']))
+        if (!Validator::validateEducationFormatID($userForm->getEdFormat()))
         {
             LocalRedirect('/registration/?err=invalid_ed_format');
         }
 
-        $userID = UserService::CreateUser(
-            $post['name'], $post['surname'], $post['middle_name'],
-            $post['password1'], $post['email'], $post['phone'],
-            $post['city'], (int)$post['education_format'], $post['subjects'],
-            $post['description'],
-        );
-        if ($userID === false)
+        $ErrOrUserID = UserService::CreateUser($userForm);
+        if (!is_numeric($ErrOrUserID))
         {
-            LocalRedirect('/registration/?err=unexpected_error');
+            ShowMessage($ErrOrUserID);
+        }
+        else
+        {
+            LocalRedirect("/profile/$ErrOrUserID/");
         }
 
-        session()->set('userID', (int)$userID);
-
-        LocalRedirect("/profile/$userID/");
     }
 
     public static function LogoutAction()

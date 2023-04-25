@@ -24,27 +24,34 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         <div class="field">
             <label class="label">Surname</label>
             <div class="control">
-                <input class="input-custom" type="text" placeholder="Text input" name="surname" minlength="1" maxlength="100" required>
+                <input class="input-custom" type="text" placeholder="Text input" name="lastName" minlength="1" maxlength="100" required>
             </div>
         </div>
         <div class="field">
             <label class="label">Middle Name</label>
             <div class="control">
-                <input class="input-custom" type="text" placeholder="Text input" name="middle_name" minlength="1" maxlength="100">
+                <input class="input-custom" type="text" placeholder="Text input" name="middleName" minlength="1" maxlength="100">
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Login</label>
+            <div class="control">
+                <input class="input-custom" type="text" placeholder="Login input" name="login" minlength="8" maxlength="100" required>
             </div>
         </div>
 
         <div class="field">
             <label class="label">Password</label>
             <div class="control">
-                <input class="input-custom" type="password" placeholder="Password input" name="password1" minlength="8" maxlength="100" required>
+                <input class="input-custom" type="password" placeholder="Password input" name="password" minlength="8" maxlength="100" required>
             </div>
         </div>
 
         <div class="field">
             <p class="help">Type your password once more</p>
             <div class="control">
-                <input class="input-custom" type="password" placeholder="Password input" name="password2" minlength="8" maxlength="100" required>
+                <input class="input-custom" type="password" placeholder="Password input" name="confirmPassword" minlength="8" maxlength="100" required>
             </div>
         </div>
 
@@ -56,9 +63,17 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         </div>
 
         <div class="field">
-            <label class="label">Phone</label>
+            <label class="label">Working Email</label>
             <div class="control">
-                <input class="input-custom" type="text" placeholder="Phone input" name="phone" maxlength="20" required>
+                <input class="input-custom" type="email" placeholder="Email input" name="workingEmail" maxlength="255" required>
+            </div>
+            <p class="help">This email will be visible on your page</p>
+        </div>
+
+        <div class="field">
+            <label class="label">Working Phone</label>
+            <div class="control">
+                <input class="input-custom" type="tel" placeholder="Phone input" name="phoneNumber" maxlength="20" required>
             </div>
         </div>
 
@@ -109,7 +124,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <label class="label">Education format</label>
             <div class="control">
                 <div class="select">
-                    <select name="education_format">
+                    <select name="edFormat">
                         <?php foreach ($arResult['edFormats'] as $edFormat): ?>
                             <option value="<?=$edFormat->getID()?>"><?=$edFormat->getName()?></option>
                         <?php endforeach; ?>

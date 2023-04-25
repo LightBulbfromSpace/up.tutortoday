@@ -25,8 +25,7 @@ class Validator
 
     public static function validatePhoneNumber(string $phone) : bool
     {
-        $phoneNumbers = preg_replace('/\D/', '', $phone);
-        return (strlen($phoneNumbers) <= 13 && strlen($phoneNumbers) >= 10);
+        return preg_match('/^[+]?\d{4,25}$/', $phone);
     }
 
     public static function validateNameField(string $name, bool $required = true,  int $maxLen = 100, int $minLen = 1) : bool
@@ -38,13 +37,25 @@ class Validator
         return (strlen($name) <= $maxLen && strlen($name) >= $minLen);
     }
 
-    public static function validateSubjectID(int $ID, bool $required = true) : bool
+    public static function validateSubjectsIDs(array $subjectsIDs, bool $required = true) : bool
     {
-        if (!$required && $ID === 0)
+        if ($subjectsIDs === [])
         {
-            return true;
+            return !$required;
         }
-        return !(EducationService::getSubjectByID($ID) === null);
+        $allSubjects = EducationService::getAllSubjects();
+        $allSubjectsIDs = [];
+        foreach ($allSubjects as $subject) {
+            $allSubjectsIDs[] = $subject->getID();
+        }
+        foreach ($subjectsIDs as $subjectID)
+        {
+            if (!in_array($subjectID, $allSubjectsIDs))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static function validateEducationFormatID(int $ID, bool $required = true) : bool

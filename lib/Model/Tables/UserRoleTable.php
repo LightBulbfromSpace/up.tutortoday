@@ -11,18 +11,18 @@ use Bitrix\Main\ORM\Query\Join;
 Loc::loadMessages(__FILE__);
 
 /**
- * Class TutorSubjectTable
+ * Class UserRoleTable
  *
  * Fields:
  * <ul>
- * <li> TUTOR_ID int mandatory
- * <li> SUBJECT_ID int mandatory
+ * <li> USER_ID int mandatory
+ * <li> ROLE_ID int mandatory
  * </ul>
  *
  * @package Bitrix\Tutortoday
  **/
 
-class UserSubjectTable extends DataManager
+class UserRoleTable extends DataManager
 {
     /**
      * Returns DB table name for entity.
@@ -31,7 +31,7 @@ class UserSubjectTable extends DataManager
      */
     public static function getTableName()
     {
-        return 'up_tutortoday_user_subject';
+        return 'up_tutortoday_user_role';
     }
 
     /**
@@ -44,25 +44,24 @@ class UserSubjectTable extends DataManager
         return [
             (new IntegerField('USER_ID',
                 []
-            ))->configureTitle(Loc::getMessage('TUTOR_SUBJECT_ENTITY_TUTOR_ID_FIELD'))
-                ->configurePrimary(true),
+            ))->configureTitle(Loc::getMessage('USER_ROLE_ENTITY_USER_ID_FIELD'))
+                ->configurePrimary(true)
+                ->configureAutocomplete(true),
             (new Reference(
                 'USER',
                 \CUser::class,
                 Join::on('this.USER_ID', 'ref.ID')
             )),
-            (new IntegerField('SUBJECT_ID',
+            (new IntegerField('ROLE_ID',
                 []
-            ))->configureTitle(Loc::getMessage('TUTOR_SUBJECT_ENTITY_SUBJECT_ID_FIELD'))
+            ))->configureTitle(Loc::getMessage('USER_ROLE_ENTITY_ROLE_ID_FIELD'))
                 ->configurePrimary(true),
             (new Reference(
-                'SUBJECT',
-                SubjectTable::class,
-                Join::on('this.SUBJECT_ID', 'ref.ID')
+                'ROLE',
+                RolesTable::class,
+                Join::on('this.ROLE_ID', 'ref.ID')
             )),
-            (new IntegerField('PRICE',
-                []
-            ))->configureTitle(Loc::getMessage('USER_SUBJECT_ENTITY_PRICE_FIELD')),
+
         ];
     }
 }

@@ -59,7 +59,7 @@ class ProfileImagesTable extends DataManager
                 ->configureRequired(true),
             (new Reference(
                 'USER',
-                UserTable::class,
+                \CUser::class,
                 Join::on('this.USER_ID', 'ref.ID')
             )),
             (new StringField('LINK',

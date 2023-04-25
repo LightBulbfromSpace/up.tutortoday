@@ -1,5 +1,9 @@
 DROP TABLE IF EXISTS up_tutortoday_user;
 
+DROP TABLE IF EXISTS up_tutortoday_user_role;
+DROP TABLE IF EXISTS up_tutortoday_user_ed_format;
+
+
 DROP TABLE IF EXISTS up_tutortoday_education_format;
 
 DROP TABLE IF EXISTS up_tutortoday_roles;
