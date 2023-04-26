@@ -64,6 +64,6 @@ class Validator
         {
             return true;
         }
-        return !(EducationService::getEducationFormatByID($ID) === null);
+        return !((new EducationService([$ID]))->getEducationFormatByID() == null);
     }
 }

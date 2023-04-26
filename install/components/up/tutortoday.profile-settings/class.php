@@ -41,7 +41,7 @@ class TutorTodayProfileSettingsComponent extends CBitrixComponent {
 
     protected function fetchUserInfo(int $ID)
     {
-        $this->arResult['user'] = UserService::getUserByID($ID);
+        $this->arResult['user'] = (new UserService($ID))->getUserByID();
     }
 
     protected function fetchWeekdays()

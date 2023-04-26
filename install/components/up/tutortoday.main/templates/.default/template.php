@@ -25,7 +25,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3 bg-light sidebar">
-            <form method="post" action="/main/filter/">
+            <form method="get" action="/">
                 <div class="col-md-9 mt-3">
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="subject-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -35,7 +35,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                             <div class="form-group">
 	                            <?php foreach ($arResult['edFormats'] as $edFormat) : ?>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="<?= $edFormat['NAME']?>">
+                                        <input class="form-check-input" name="edFormats[]" type="checkbox" value="<?= $edFormat['ID']?>">
                                         <label class="form-check-label" for="<?= $edFormat['NAME']?>">
 				                            <?= $edFormat['NAME']?>
                                         </label>
@@ -54,7 +54,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 <div class="form-group">
 	                                <?php foreach ($arResult['subjects'] as $subject) : ?>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="<?= $subject['NAME']?>">
+                                        <input class="form-check-input" name="subjects[]" type="checkbox" value="<?= $subject['ID']?>">
                                         <label class="form-check-label" for="<?= $subject['NAME']?>">
 	                                        <?= $subject['NAME']?>
                                         </label>
@@ -94,9 +94,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h2 class="card-title"><?= $tutor['mainData']['LAST_NAME']?> <?= $tutor['mainData']['NAME']?> <?= $tutor['mainData']['SECOND_NAME']?></h2>
-                                <p class="card-text"><strong>City: </strong> <?= $tutor['mainData']['WORK_CITY']?></p>
-                                <p class="card-text"><strong>Description: </strong><?= $tutor['description']['DESCRIPTION']?></p>
+                                <h2 class="card-title"><?= $tutor['fullName']['lastName']?> <?=$tutor['fullName']['name']?> <?= $tutor['fullName']['secondName']?></h2>
+                                <p class="card-text"><strong>City: </strong> <?= $tutor['city']?></p>
+                                <p class="card-text"><strong>Description: </strong><?= $tutor['description']?></p>
                             </div>
                         </div>
                     </div>

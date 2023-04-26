@@ -2,21 +2,29 @@
 
 namespace Up\Tutortoday\Controller;
 
+use Bitrix\Main\Type\ParameterDictionary;
 use Up\Tutortoday\Services\DatetimeService;
 use Up\Tutortoday\Services\FiltersService;
 use Up\Tutortoday\Services\UserService;
 
 class MainPageController
 {
-    public static function getTutorsByPage(int $page = 1, array $filters = [])
+    public static function getTutorsByPage(int $page = 1, ParameterDictionary $filters = null) : array
     {
-
-        //TODO: Filters handling
-
-        $tutors = UserService::getUsersByPage($page);
-        if ($tutors === false)
+        $page--;
+        if ($filters->count() !== 0)
         {
-            //TODO: Error handling
+            $filter = new FiltersService($filters);
+            $filter->filterTutors($page, USERS_BY_PAGE);
+            $tutors = $filter->getFilteredTutors();
+        }
+        else
+        {
+            $tutors = UserService::getUsersByPage($page);
+            if ($tutors === false)
+            {
+                //TODO: Error handling
+            }
         }
 
         return $tutors;
@@ -30,14 +38,14 @@ class MainPageController
 //        ])->GetCount();
     }
 
-	public static function getTutorsByName(ParameterDictionary $post)
-	{
-		if(!check_bitrix_sessid())
-		{
-			return null;
-		}
-		return FiltersService::getTutorsByName($post['NAME']);
-	}
+//	public static function getTutorsByName(ParameterDictionary $post)
+//	{
+//		if(!check_bitrix_sessid())
+//		{
+//			return null;
+//		}
+//		return FiltersService::getTutorsByName($post['NAME']);
+//	}
 
 	public static function getTutorsByFilters(ParameterDictionary $post)
 	{
@@ -45,6 +53,8 @@ class MainPageController
 		{
 			return null;
 		}
-		return FiltersService::getTutorsByName($post);
+        $filter = new FiltersService;
+        $filter->getTutorsByFilters();
+		return $filter;
 	}
 }

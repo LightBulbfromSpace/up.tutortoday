@@ -9,6 +9,18 @@ use Up\Tutortoday\Model\Tables\UserSubjectTable;
 
 class EducationService
 {
+    private array $usersIDs;
+
+    public function __construct(array $usersIDs)
+    {
+        $this->usersIDs = $usersIDs;
+    }
+
+    public function getUsersIDs(): array
+    {
+        return $this->usersIDs;
+    }
+
     public static function getAllEdFormats()
     {
         return EducationFormatTable::query()->setSelect(['*'])->fetchCollection();
@@ -18,9 +30,9 @@ class EducationService
     {
         return SubjectTable::query()->setSelect(['*'])->fetchCollection();
     }
-    public static function getSubjectByID(int $ID)
+    public function getSubjectsByIDs(array $ID)
     {
-        $subject = SubjectTable::query()->setSelect(['*'])->where('ID', $ID);
+        $subject = SubjectTable::query()->setSelect(['*'])->whereIn('ID', $this->usersIDs);
         if ($subject === null)
         {
             return null;
@@ -39,9 +51,11 @@ class EducationService
         return $role->fetchObject()->getID();
     }
 
-    public static function getEducationFormatByID(int $ID)
+    public function getEducationFormatByID()
     {
-        $edFormat = EducationFormatTable::query()->setSelect(['*'])->where('ID', $ID);
+        $edFormat = EducationFormatTable::query()
+            ->setSelect(['*'])
+            ->whereIn('ID', $this->usersIDs);
         if ($edFormat === null)
         {
             return null;
@@ -49,17 +63,20 @@ class EducationService
         return $edFormat->fetchObject();
     }
 
-    public static function deleteSubject(mixed $userID, mixed $subjectID)
+    public function deleteSubject(mixed $subjectID)
     {
-        $result = UserSubjectTable::delete([
-            'USER_ID' => $userID,
-            'SUBJECT_ID' => $subjectID,
-        ]);
-
-        if (!$result->isSuccess())
+        foreach ($this->usersIDs as $userID)
         {
-            return $result->getErrorMessages();
+            $result = UserSubjectTable::delete([
+                'USER_ID' => $userID,
+                'SUBJECT_ID' => $subjectID,
+            ]);
+            if (!$result->isSuccess())
+            {
+                return $result->getErrorMessages();
+            }
         }
+
         return true;
     }
 }

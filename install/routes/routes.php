@@ -13,12 +13,12 @@ return function (RoutingConfigurator $routes) {
     $routes->get('/profile/{id}/', new PublicPageController('/local/view/tutortoday/tutortoday-profile.php'));
     $routes->get('/profile/{id}/settings/', new PublicPageController('/local/view/tutortoday/tutortoday-profile-settings.php'));
 
-    $routes->post('/search/', function($name) {
-	    MainPageController::getTutorsByName($name);
-	});
+//    $routes->post('/search/', function($name) {
+//	    MainPageController::getTutorsByName($name);
+//	});
 
-	$routes->post('/main/filter/', function($post) {
-	    MainPageController::getTutorsByFilters($post);
+	$routes->post('/main/filter/', function() {
+	    MainPageController::getTutorsByFilters(getPostList());
 	});
 
     $routes->get('/logout/', function (){

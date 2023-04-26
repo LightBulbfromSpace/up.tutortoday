@@ -58,6 +58,6 @@ class ProfileController
             return null;
         }
 
-        EducationService::deleteSubject($post['userID'], $post['subjectID']);
+        (new EducationService([$post['userID']]))->deleteSubject($post['subjectID']);
     }
 }

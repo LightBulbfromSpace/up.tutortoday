@@ -2,6 +2,9 @@
 
 namespace Up\Tutortoday\Services;
 
+use Bitrix\Main\Entity\ReferenceField;
+use Bitrix\Main\ORM\Fields\Relations\Reference;
+use Bitrix\Main\ORM\Query\Join;
 use Bitrix\Main\UrlPreview\Parser\Vk;
 use Bitrix\Main\UserTable;
 use Up\Tutortoday\Model\FormObjects\UserForm;
@@ -169,7 +172,7 @@ class UserService
             ->where('WORK_COMPANY', SITE_NAME)
             ->setOrder(['ID' => 'DESC'])
             ->setOffset($offset)
-            ->setLimit(USERS_BY_PAGE)
+            //->setLimit(USERS_BY_PAGE)
             ->fetchCollection();
 
 
@@ -190,7 +193,12 @@ class UserService
         foreach ($users as $i => $user)
         {
             $result[$i] = [
-                'mainData' => $user,
+                'fullName' => [
+                    'name' => $user['NAME'],
+                    'lastName' => $user['LAST_NAME'],
+                    'secondName' => $user['SECOND_NAME'],
+                ],
+                'city' => $user['WORK_CITY'],
                 //TODO: change work with photo!!!
                 'photo' => $user['PERSONAL_PHOTO'] != null ? $user['PERSONAL_PHOTO'] : DEFAULT_PHOTO,
             ];
@@ -198,7 +206,7 @@ class UserService
             {
                 if ($user->getID() === $description->getUserId())
                 {
-                    $result[$i]['description'] = $description;
+                    $result[$i]['description'] = $description['DESCRIPTION'];
                     break;
                 }
             }
@@ -215,37 +223,59 @@ class UserService
     // Subjects
     // Description
     // Feedbacks (in public part)
-    public static function getUserByID($userID)
+
+    public function getUserByID()
     {
-        $user = \CUser::GetByID($userID)->Fetch();
-        if ($user == null) {
+        $user = UserTable::query()
+            ->setSelect(['*'])
+            ->where('ID', $this->userID)
+            ->fetchObject();
+
+        if ($user == null)
+        {
             return false;
         }
-        $role = UserRoleTable::query()->setSelect(['ROLE'])->where('USER_ID', $userID)->fetchObject();
-        if ($role == null) {
+        $role = UserRoleTable::query()
+            ->setSelect(['USER_ID', 'ROLE'])
+            ->whereIn('USER_ID', $this->userID)
+            ->fetchObject();
+
+        if ($role == null)
+        {
             return false;
         }
 
-        $edFormat = UserEdFormatTable::query()->setSelect(['EDUCATION_FORMAT'])->where('USER_ID', $userID)->fetchObject();
-        if ($edFormat == null) {
+        $edFormat = UserEdFormatTable::query()
+            ->setSelect(['USER_ID', 'EDUCATION_FORMAT'])
+            ->whereIn('USER_ID', $this->userID)
+            ->fetchObject();
+
+        if ($edFormat == null)
+        {
             return false;
         }
 
-        $VKs = VkTable::query()->setSelect(['VK_PROFILE'])->where('USER_ID', $userID)->fetchCollection();
-        $telegrams = TelegramTable::query()->setSelect(['TELEGRAM_USERNAME'])->where('USER_ID', $userID)->fetchCollection();
-        $subjects = UserSubjectTable::query()->setSelect(['SUBJECT', 'PRICE'])->where('USER_ID', $userID)->fetchCollection();
-//        $time = FreeTimeTable::query()->setSelect(['START', 'END', 'WEEKDAY', 'WEEKDAY_ID'])->where('USER_ID', $userID)->fetchCollection();
-//        $timeByWeekdays = [];
-//
-//        foreach ($time as $item)
-//        {
-//            $timeByWeekdays[$item['WEEKDAY']->getName()][] = ['start' => $item['START']->format('H:i'), 'end' => $item['END']->format('H:i')];
-//        }
+        $VKs = VkTable::query()
+            ->setSelect(['USER_ID', 'VK_PROFILE'])
+            ->where('USER_ID', $this->userID)
+            ->fetchCollection();
 
-        $description = UserDescriptionTable::query()->setSelect(['DESCRIPTION'])->where('USER_ID', $userID)->fetchObject();
-        $photo = ImagesService::getProfileImage($userID);
+        $telegrams = TelegramTable::query()
+            ->setSelect(['USER_ID', 'TELEGRAM_USERNAME'])
+            ->where('USER_ID', $this->userID)
+            ->fetchCollection();
+        $subjects = UserSubjectTable::query()
+            ->setSelect(['USER_ID', 'SUBJECT', 'PRICE'])
+            ->where('USER_ID', $this->userID)
+            ->fetchCollection();
+
+        $description = UserDescriptionTable::query()
+            ->setSelect(['USER_ID', 'DESCRIPTION'])
+            ->where('USER_ID', $this->userID)
+            ->fetchObject();
+
         return [
-            'photo' => $photo,
+            'photo' => $user['PERSONAL_PHOTO'] != null ? $user['PERSONAL_PHOTO'] : DEFAULT_PHOTO,
             'mainData' => $user,
             'role' => $role->getRole(),
             'edFormat' => $edFormat->getEducationFormat(),
@@ -258,8 +288,50 @@ class UserService
                 'telegram' => $telegrams,
             ],
             'subjects' => $subjects,
-//            'time' => $timeByWeekdays,
         ];
+    }
+    public static function getUserMainInfoWithDescByIDs(array $userIDs, int $roleID)
+    {
+        $users = UserTable::query()
+            ->setSelect(['ID', 'NAME', 'LAST_NAME', 'SECOND_NAME', 'WORK_CITY', 'PERSONAL_PHOTO'])
+            ->whereIn('ID', $userIDs)
+            ->where('WORK_POSITION', $roleID)
+            ->where('WORK_COMPANY', SITE_NAME)
+            ->fetchCollection();
+
+        if ($users == null)
+        {
+            return false;
+        }
+
+        $descriptions = UserDescriptionTable::query()
+            ->setSelect(['USER_ID', 'DESCRIPTION'])
+            ->whereIn('USER_ID', $userIDs)
+            ->fetchCollection();
+
+        $result = [];
+
+        foreach ($users as $user)
+        {
+            foreach ($descriptions as $description)
+            {
+                if ($user['ID'] === $description['USER_ID'])
+                {
+                    $result[] = [
+                        'photo' => $user['PERSONAL_PHOTO'] != null ? $user['PERSONAL_PHOTO'] : DEFAULT_PHOTO,
+                        'fullName' => [
+                            'name' => $user['NAME'],
+                            'lastName' => $user['LAST_NAME'],
+                            'secondName' => $user['SECOND_NAME'],
+                        ],
+                        'city' => $user['WORK_CITY'],
+                        'description' => $description['DESCRIPTION'],
+                    ];
+                }
+            }
+        }
+
+        return $result;
     }
 
     public function UpdateUser(UserRegisterForm $userForm)

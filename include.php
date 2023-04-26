@@ -23,6 +23,11 @@ function getGetParam(string $name)
     return Context::getCurrent()->getRequest()->getQuery($name);
 }
 
+function getGetList()
+{
+    return Context::getCurrent()->getRequest()->getQueryList();
+}
+
 function getPostList() : ParameterDictionary
 {
     return Context::getCurrent()->getRequest()->getPostList();

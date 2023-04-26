@@ -1,6 +1,7 @@
 <?php
 
 use Bitrix\Main\Localization\Loc;
+use Bitrix\Main\Type\ParameterDictionary;
 use Up\Tutortoday\Controller\MainPageController;
 use Up\Tutortoday\Services\ErrorService;
 use Up\Tutortoday\Services\EducationService;
@@ -12,10 +13,10 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
     {
         $this->prepareLocalization();
         $this->onPrepareComponentParams($this->arParams);
-	    $this->showSubjectFilters();
-	    $this->showEducationFormatsFilters();
+	    $this->fetchSubjectFilters();
+	    $this->fetchEducationFormatsFilters();
 
-        $this->fetchTutors($this->arResult['page']);
+        $this->fetchTutors($this->arResult['page'], getGetList());
         $this->prepareTemplateParams($this->arParams);
         $this->includeComponentTemplate();
     }
@@ -36,7 +37,7 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
     {
     }
 
-    protected function fetchTutors(int $page, array $filters = [])
+    protected function fetchTutors(int $page, ParameterDictionary $filters = null)
     {
         $maxPage = MainPageController::getNumberOfPages();
         $page = $page === 0 ? 1 : $page;
@@ -46,15 +47,16 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
             return;
         }
 
+
         $this->arResult['tutors'] = MainPageController::getTutorsByPage($page, $filters);
     }
 
-	protected function showSubjectFilters()
+	protected function fetchSubjectFilters()
 	{
 		$this->arResult['subjects'] = EducationService::getAllSubjects();
 	}
 
-	protected function showEducationFormatsFilters()
+	protected function fetchEducationFormatsFilters()
 	{
 		$this->arResult['edFormats'] = EducationService::getAllEdFormats();
 	}
