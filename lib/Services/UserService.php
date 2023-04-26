@@ -150,7 +150,6 @@ class UserService
 
     public static function getUsersByPage(int $page = 1, string $role = 'Tutor')
     {
-        $page--;
         $offset = $page * USERS_BY_PAGE;
 
         $tutorRoleID = EducationService::getRoleIDbyName($role);
@@ -172,7 +171,7 @@ class UserService
             ->where('WORK_COMPANY', SITE_NAME)
             ->setOrder(['ID' => 'DESC'])
             ->setOffset($offset)
-            //->setLimit(USERS_BY_PAGE)
+            ->setLimit(USERS_BY_PAGE)
             ->fetchCollection();
 
 

@@ -42,15 +42,15 @@ class FiltersService
 
         $tutorIDsBySubject = null;
         $tutorIDsBySubjectRaw = [];
-        if ($this->subjectIDs !== [])
+        if ($this->subjectIDs != null)
         {
             $tutorIDsBySubjectRaw = UserSubjectTable::query()
                 ->setSelect(['USER_ID', 'PRICE'])
                 ->whereIn('SUBJECT_ID', $this->subjectIDs)
-                ->whereBetween('PRICE', $this->minPrice, $this->maxPrice)
+                //->whereBetween('PRICE', $this->minPrice, $this->maxPrice)
                 ->fetchCollection();
         }
-        //var_dump($this->subjectIDs);die;
+
         foreach ($tutorIDsBySubjectRaw as $ID)
         {
             $tutorIDsBySubject[] = $ID['USER_ID'];
@@ -58,8 +58,8 @@ class FiltersService
 
         $tutorIDsByEdFormat = null;
         $tutorIDsByEdFormatRaw = [];
-
-        if ($this->educationFormatIDs !== [])
+        var_dump($this->educationFormatIDs);
+        if ($this->educationFormatIDs != null)
         {
             $tutorIDsByEdFormatRaw = UserEdFormatTable::query()
                 ->setSelect(['USER_ID'])
@@ -72,6 +72,7 @@ class FiltersService
             $tutorIDsBySubject[] = $ID['USER_ID'];
         }
 
+        var_dump($tutorIDsBySubject, $tutorIDsByEdFormat);
         if ($tutorIDsBySubject !== null && $tutorIDsByEdFormat !== null)
         {
             $tutorsIDs = array_intersect($tutorIDsBySubject, $tutorIDsByEdFormat);
