@@ -2,6 +2,8 @@
 
 namespace Up\Tutortoday\Controller;
 
+use Up\Tutortoday\Services\DatetimeService;
+use Up\Tutortoday\Services\FiltersService;
 use Up\Tutortoday\Services\UserService;
 
 class MainPageController
@@ -27,4 +29,22 @@ class MainPageController
 //            'WORK_COMPANY' => 'TutorToday',
 //        ])->GetCount();
     }
+
+	public static function getTutorsByName(ParameterDictionary $post)
+	{
+		if(!check_bitrix_sessid())
+		{
+			return null;
+		}
+		return FiltersService::getTutorsByName($post['NAME']);
+	}
+
+	public static function getTutorsByFilters(ParameterDictionary $post)
+	{
+		if(!check_bitrix_sessid())
+		{
+			return null;
+		}
+		return FiltersService::getTutorsByName($post);
+	}
 }

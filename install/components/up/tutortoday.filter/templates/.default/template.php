@@ -84,7 +84,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 </form>
             </div>
 
-            <p class="mt-3">Resently created profiles:</p>
+            <p class="mt-3">Отфильтрованные репетиторы</p>
 			<?php foreach ($arResult['tutors'] as $tutor) : ?>
                 <div class="card mt-2">
                     <div class="row no-gutters">

@@ -25,7 +25,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3 bg-light sidebar">
-            <form method="post" action="#">
+            <form method="post" action="/main/filter/">
                 <div class="col-md-9 mt-3">
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="subject-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -79,7 +79,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         </div>
         <div class="col-md-9">
             <div class="mt-3">
-                <form class="form-inline my-2 my-lg-0 ">
+                <form method="post" class="form-inline my-2 my-lg-0" action="/search/">
                     <input class="form-control mr-sm-2" type="search" placeholder="Найти репетитора" aria-label="Search">
                     <button class="btn btn-danger my-2 my-sm-0" type="submit">Search</button>
                 </form>

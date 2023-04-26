@@ -2,19 +2,27 @@
 
 namespace Up\Tutortoday\Services;
 
-use Up\Tutortoday\Model\Tables\UserTable;
+use Bitrix\Main\Entity\Query;
+use Up\Tutortoday\Model\Tables\SubjectTable;
 
 class FiltersService
 {
-	public static function getTutorsByFilters()
+	public static function getTutorsByFilters($arrFilters)
 	{
+		$tutors = userTable::query()
+			->whereBetween('PRICE', $arrFilters['PRICE_MIN'], $arrFilters['PRICE_MAX'])
+			->whereIn("EducationFormatTable" . "NAME", $arrFilters['FORMATS'])
+			->whereIn("SubjectTable" . "NAME", $arrFilters['SUBJECTS']);
 
-		$users = userTable::query()->setSelect(['*'])
-			->where('', )
-			->setOrder(['ID' => 'DESC'])
-			->setOffset($offset)
-			->setLimit(USERS_BY_PAGE);
 
-		return $users->fetchCollection();
+		return $tutors->fetchCollection();
+	}
+
+	public static function getTutorsByName($name)
+	{
+		$tutors = UserTable::query()->setSelect(['*'])
+			->where(Query::expr()->concat("SURNAME", "NAME", "MIDDLE_NAME"), 'like', $name);
+
+		return $tutors->fetchCollection();
 	}
 }
