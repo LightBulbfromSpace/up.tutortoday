@@ -4,6 +4,7 @@ namespace Up\Tutortoday\Services;
 
 use Bitrix\Main\File\Image;
 use Bitrix\Main\FileTable;
+use Bitrix\Main\UserTable;
 use Up\Tutortoday\Model\Tables\ProfileImagesTable;
 
 class ImagesService
@@ -19,12 +20,16 @@ class ImagesService
 
     public static function getProfileImage(int $userID)
     {
-        $photoData = ProfileImagesTable::query()->setSelect(['LINK'])->where('USER_ID', $userID)->fetchObject();
-        if ($photoData === null)
+        $photoData = UserTable::query()
+            ->setSelect(['PERSONAL_PHOTO'])
+            ->where('ID', $userID)
+            ->fetchObject()
+            ->getPersonalPhoto();
+        if ($photoData == null)
         {
             return DEFAULT_PHOTO;
         }
-        return $photoData->fetchObject()->getLink();
+        return $photoData;
     }
 
     // should be called before saving

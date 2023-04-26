@@ -3,6 +3,7 @@
 namespace Up\Tutortoday\Services;
 
 use Bitrix\Main\UrlPreview\Parser\Vk;
+use Bitrix\Main\UserTable;
 use Up\Tutortoday\Model\FormObjects\UserForm;
 use Up\Tutortoday\Model\FormObjects\UserRegisterForm;
 use Up\Tutortoday\Model\Tables\FreeTimeTable;
@@ -80,11 +81,19 @@ class UserService
             return $resultUser;
         }
 
+        $tutorRoleID = EducationService::getRoleIDbyName('tutor');
+        if ($tutorRoleID === null)
+        {
+            // TODO:Error handling
+        }
+
         $resultUser = $user->Update($user->getID(), [
             'SECOND_NAME' => $userForm->getMiddleName(),
             'WORK_PHONE' => $userForm->getPhoneNumber(),
             'WORK_MAILBOX' => $userForm->getWorkingEmail(),
             'WORK_CITY' => $userForm->getCity(),
+            'WORK_POSITION' => $tutorRoleID,
+            'WORK_COMPANY' => 'TutorToday',
         ]);
 
         if ($resultUser == false)
@@ -147,13 +156,54 @@ class UserService
             // TODO:Error handling
         }
 
-        $users = UserTable::query()->setSelect(['*'])
-            ->where('ROLE_ID', $tutorRoleID)
+        $users = UserTable::query()
+//            ->registerRuntimeField('d', [
+//                'data_type' => UserDescriptionTable::class,
+//                'reference' => [
+//                    '=this.ID' => 'ref.USER_ID',
+//                ],
+//                'join_type' => 'right'
+//            ])
+            ->setSelect(['ID', 'NAME', 'LAST_NAME', 'SECOND_NAME', 'WORK_CITY', 'PERSONAL_PHOTO'])
+            ->where('WORK_POSITION', $tutorRoleID)
+            ->where('WORK_COMPANY', SITE_NAME)
             ->setOrder(['ID' => 'DESC'])
             ->setOffset($offset)
-            ->setLimit(USERS_BY_PAGE);
+            ->setLimit(USERS_BY_PAGE)
+            ->fetchCollection();
 
-        return $users?->fetchCollection();
+
+        $usersIDs = [];
+
+        foreach ($users as $user)
+        {
+            $usersIDs[] = $user['ID'];
+        }
+
+        $descriptions = UserDescriptionTable::query()
+            ->setSelect(['*'])
+            ->whereIn('USER_ID', $usersIDs)
+            ->fetchCollection();
+
+
+        $result = [];
+        foreach ($users as $i => $user)
+        {
+            $result[$i] = [
+                'mainData' => $user,
+                //TODO: change work with photo!!!
+                'photo' => $user['PERSONAL_PHOTO'] != null ? $user['PERSONAL_PHOTO'] : DEFAULT_PHOTO,
+            ];
+            foreach ($descriptions as $description)
+            {
+                if ($user->getID() === $description->getUserId())
+                {
+                    $result[$i]['description'] = $description;
+                    break;
+                }
+            }
+        }
+        return $result;
     }
 
     // Photo
@@ -264,6 +314,7 @@ class UserService
                     if ($newSubj['ID'] === $exSubjID)
                     {
                         $inArray = true;
+                        break;
                     }
                 }
                 if (!$inArray)

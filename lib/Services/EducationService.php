@@ -28,7 +28,7 @@ class EducationService
         return $subject->fetchObject();
     }
 
-    public static function getRoleIDbyName(string $name) : int|null
+    public static function getRoleIDbyName(string $name = 'tutor') : int|null
     {
         $role = RolesTable::query()->where('NAME', $name);
         if ($role === null)

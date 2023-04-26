@@ -56,6 +56,6 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
 
 	protected function showEducationFormatsFilters()
 	{
-		$this->arResult['Edformats'] = EducationService::getAllEdFormats();
+		$this->arResult['edFormats'] = EducationService::getAllEdFormats();
 	}
 }

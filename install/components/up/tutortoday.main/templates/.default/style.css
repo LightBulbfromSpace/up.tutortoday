@@ -77,3 +77,23 @@
     box-shadow: none;
     border-color: #aaa;
 }
+
+.img-rounded {
+    border-radius: 50%;
+}
+
+.img-fixed-size {
+    max-width: 12rem;
+    max-height: 12rem;
+}
+
+.card-container {
+    display: flex;
+    align-items: center;
+}
+
+.photo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

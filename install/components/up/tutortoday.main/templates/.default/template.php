@@ -3,6 +3,7 @@
  * @var array $arResult
  */
 
+//var_dump($arResult['tutors']['mainData']);die;
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
 <!--<div class="container-main-custom">-->
@@ -32,11 +33,11 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                         </button>
                         <div class="dropdown-menu" aria-labelledby="subject-dropdown">
                             <div class="form-group">
-	                            <?php foreach ($arResult['Edformats'] as $subject) : ?>
+	                            <?php foreach ($arResult['edFormats'] as $edFormat) : ?>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="<?= $subject['NAME']?>">
-                                        <label class="form-check-label" for="<?= $subject['NAME']?>">
-				                            <?= $subject['NAME']?>
+                                        <input class="form-check-input" type="checkbox" value="<?= $edFormat['NAME']?>">
+                                        <label class="form-check-label" for="<?= $edFormat['NAME']?>">
+				                            <?= $edFormat['NAME']?>
                                         </label>
                                     </div>
 	                            <?php endforeach; ?>
@@ -87,15 +88,15 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <p class="mt-3">Resently created profiles:</p>
 			<?php foreach ($arResult['tutors'] as $tutor) : ?>
                 <div class="card mt-2">
-                    <div class="row no-gutters">
-                        <div class="col-md-4">
-                            <img src="" class="card-img" alt="Tutor photo">
+                    <div class="row no-gutters card-container">
+                        <div class="col-md-4 photo-container">
+                            <img src="<?=$tutor['photo']?>" class="img-rounded card-img img-fixed-size" alt="Tutor photo">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h2 class="card-title"><?= $tutor['SURNAME']?> <?= $tutor['NAME']?> <?= $tutor['MIDDLE_NAME']?></h2>
-                                <p class="card-text"><strong>City: </strong> <?= $tutor['CITY']?></p>
-                                <p class="card-text"><strong>Description: </strong><?= $tutor['DESCRIPTION']?></p>
+                                <h2 class="card-title"><?= $tutor['mainData']['LAST_NAME']?> <?= $tutor['mainData']['NAME']?> <?= $tutor['mainData']['SECOND_NAME']?></h2>
+                                <p class="card-text"><strong>City: </strong> <?= $tutor['mainData']['WORK_CITY']?></p>
+                                <p class="card-text"><strong>Description: </strong><?= $tutor['description']['DESCRIPTION']?></p>
                             </div>
                         </div>
                     </div>

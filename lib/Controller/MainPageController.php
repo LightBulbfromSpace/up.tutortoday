@@ -23,5 +23,8 @@ class MainPageController
     public static function getNumberOfPages() : int
     {
         return 1;
+//        return \CUser::getList('', '', [
+//            'WORK_COMPANY' => 'TutorToday',
+//        ])->GetCount();
     }
 }
