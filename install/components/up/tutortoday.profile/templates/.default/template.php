@@ -48,7 +48,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 </div>
             <?php endif; ?>
             <label class="label">VK</label>
-            <?php if (count($arResult['user']['contacts']['vk']) === 0): ?>
+            <?php if ($arResult['user']['contacts']['vk'] == null): ?>
                 <div class="box-dark-element-custom">No VK profile</div>
             <?php endif; ?>
             <?php foreach ($arResult['user']['contacts']['vk'] as $contact): ?>
@@ -57,7 +57,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 </div>
             <?php endforeach; ?>
             <label class="label">Telegram</label>
-            <?php if (count($arResult['user']['contacts']['telegram']) === 0): ?>
+            <?php if ($arResult['user']['contacts']['telegram'] == null): ?>
                 <div class="box-dark-element-custom">No telegram username</div>
             <?php endif; ?>
             <?php foreach ($arResult['user']['contacts']['telegram'] as $contact): ?>
@@ -100,7 +100,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <div class="container-column-custom">
                     <label class="label">Subjects</label>
                     <div class="box">
-                        <?php if(count($arResult['user']['subjects']) === 0): ?>
+                        <?php if($arResult['user']['subjects'] == null): ?>
                             No subjects selected
                         <?php endif; ?>
                         <?php foreach ($arResult['user']['subjects'] as $subject): ?>

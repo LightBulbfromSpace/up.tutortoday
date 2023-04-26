@@ -93,21 +93,21 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <div class="container-column-custom">
                         <label class="label">Subjects</label>
                         <div class="box max-width-90">
-                            <?php foreach ($arResult['user']['subjects'] as $subject): ?>
-                                <div class="container-subjects" id="subject-container-<?=$subject['SUBJECT']['ID']?>">
-                                    <div class="container-subjects">
-                                        <div class="box-dark-element-custom">
-                                            <?=$subject['SUBJECT']['NAME']?>
-                                        </div>
-                                            <div class="container-row-custom is-aligned-center">
-                                                <input type="number" class="input-custom" name="subject-price-<?=$subject['SUBJECT']['ID']?>" value="<?=$subject['PRICE']?>">
-                                                <div class="price">rub/hour</div>
+                            <?php if($arResult['user']['subjects'] != null): ?>
+                                <?php foreach ($arResult['user']['subjects'] as $subject): ?>
+                                    <div class="container-subjects" id="subject-container-<?=$subject['SUBJECT']['ID']?>">
+                                        <div class="container-subjects">
+                                            <div class="box-dark-element-custom">
+                                                <?=$subject['SUBJECT']['NAME']?>
                                             </div>
+                                                <div class="container-row-custom is-aligned-center">
+                                                    <input type="number" class="input-custom" name="subject-price-<?=$subject['SUBJECT']['ID']?>" value="<?=$subject['PRICE']?>">
+                                                    <div class="price">rub/hour</div>
+                                                </div>
+                                        </div>
+                                        <button type="button" class="button-plus-minus button-large-custom" onclick="deleteSubject(<?=$subject['SUBJECT']['ID']?>, <?=$arResult['user']['mainData']['ID']?>)">-</button>
                                     </div>
-                                    <button type="button" class="button-plus-minus button-large-custom" onclick="deleteSubject(<?=$subject['SUBJECT']['ID']?>, <?=$arResult['user']['mainData']['ID']?>)">-</button>
-                                </div>
-                            <?php endforeach; ?>
-                            <?php if(count($arResult['user']['subjects']) !== 0): ?>
+                                <?php endforeach; ?>
                                 <div class="br"></div>
                             <?php endif; ?>
                             <div class="container-subjects">
