@@ -13,6 +13,12 @@ Loc::loadMessages(__FILE__);
 class TutorTodayProfileSettingsComponent extends CBitrixComponent {
     public function executeComponent()
     {
+        global $USER;
+        if ($USER->GetID() != $this->arResult['ID'])
+        {
+            LocalRedirect("/profile/{$this->arResult['ID']}/");
+        }
+
         $this->prepareLocalization();
         $this->onPrepareComponentParams($this->arParams);
         $this->fetchUserInfo($this->arResult['ID']);
@@ -25,7 +31,7 @@ class TutorTodayProfileSettingsComponent extends CBitrixComponent {
 
     public function prepareTemplateParams()
     {
-        $this->arResult['isOwner'] = ProfileController::isOwnerOfProfile($this->arResult['ID']);
+        $this->arResult['isOwner'] = (new ProfileController($this->arResult['ID']))->isOwnerOfProfile();
     }
 
     public function onPrepareComponentParams($arParams)

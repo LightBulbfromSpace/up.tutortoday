@@ -3,6 +3,14 @@
  * @var CMain $APPLICATION
  */
 
+global $USER;
+
+$linkToProfile = '/login/';
+if ($USER->GetID() != null)
+{
+    $linkToProfile = "/profile/{$USER->GetID()}/";
+}
+
 use Bitrix\Main\Localization\Loc;
 Loc::loadMessages(__FILE__);
 ?>
@@ -30,15 +38,17 @@ Loc::loadMessages(__FILE__);
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item">
+                <a class="nav-link" href="<?=$linkToProfile?>">My Profile</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="#">About</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Contacts</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/registration/">For tutors</a>
+                <a class="nav-link" href="/registration/">Become a tutor</a>
             </li>
         </ul>
     </div>
 </nav>
-<div class="main-container">

@@ -9,22 +9,22 @@ use Up\Tutortoday\Services\UserService;
 
 class MainPageController
 {
-    public static function getTutorsByPage(int $page = 1, ParameterDictionary $filters = null) : array
+    public static function getTutorsByPage(int $pageFromNull = 0, ParameterDictionary $filters = null) : array
     {
-        $page--;
+
         if ($filters->count() !== 0)
         {
             $filter = new FiltersService($filters);
-            $filter->filterTutors($page, USERS_BY_PAGE);
-            $tutors = $filter->getFilteredTutors();
+            $filter->filterTutors($pageFromNull, USERS_BY_PAGE);
+            return $filter->getFilteredTutors();
         }
-        else
+        $service = new UserService();
+        $service->setRoles(['tutor']);
+        $service->setFetchAllAvailableUsers(true);
+        $tutors = $service->getUsersByPage($pageFromNull, USERS_BY_PAGE);
+        if ($tutors === false)
         {
-            $tutors = UserService::getUsersByPage($page);
-            if ($tutors === false)
-            {
-                //TODO: Error handling
-            }
+            //TODO: Error handling
         }
 
         return $tutors;

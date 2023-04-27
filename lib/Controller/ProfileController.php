@@ -14,14 +14,22 @@ use Up\Tutortoday\Services\UserService;
 class ProfileController
 {
 
-    public static function isOwnerOfProfile(int $userID) : bool
+    private int $userID;
+
+    public function __construct(int $userID)
     {
-        if (!session()->has('userID'))
+        $this->userID = $userID;
+    }
+
+    public function isOwnerOfProfile() : bool
+    {
+        global $USER;
+        if ($USER->GetID() == null)
         {
             return false;
         }
 
-        if (session()->get('userID') !== $userID)
+        if ((int)$USER->GetID() !== $this->userID)
         {
             return false;
         }

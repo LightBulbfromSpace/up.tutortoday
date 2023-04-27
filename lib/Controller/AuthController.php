@@ -30,8 +30,13 @@ class AuthController extends Controller
             $USER->Logout();
         }
 
+        global $USER;
         $USER = new \CUser();
+
         $result = $USER->Login($post['login'], $post['password']);
+
+        session()->set('userID', $USER->GetID());
+
         if ($result !== true)
         {
             LocalRedirect("/login/?err=auth");

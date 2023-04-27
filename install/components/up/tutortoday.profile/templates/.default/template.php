@@ -3,17 +3,7 @@
  * @var array $arResult
  */
 
-// Photo
-// Full name
-// Contacts (email, phone, telegram, vk)
-// Role
-
-// Education format
-// City
-// Subjects
-// Description
-
-// Feedbacks (in public part)
+global $USER;
 
 \Bitrix\Main\UI\Extension::load('main.core');
 
@@ -48,7 +38,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 </div>
             <?php endif; ?>
             <label class="label">VK</label>
-            <?php if ($arResult['user']['contacts']['vk'] == null): ?>
+            <?php if (count($arResult['user']['contacts']['vk']) === 0): ?>
                 <div class="box-dark-element-custom">No VK profile</div>
             <?php endif; ?>
             <?php foreach ($arResult['user']['contacts']['vk'] as $contact): ?>
@@ -57,7 +47,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 </div>
             <?php endforeach; ?>
             <label class="label">Telegram</label>
-            <?php if ($arResult['user']['contacts']['telegram'] == null): ?>
+            <?php if (count($arResult['user']['contacts']['telegram']) === 0): ?>
                 <div class="box-dark-element-custom">No telegram username</div>
             <?php endif; ?>
             <?php foreach ($arResult['user']['contacts']['telegram'] as $contact): ?>
@@ -69,9 +59,14 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
     </div>
     <div class="container-large-custom">
         <?php if($arResult['isOwner']): ?>
+        <div class="container-button-custom">
             <div class="save-button-container">
-                <a class="button-plus-minus link-button" href="/profile/<?=$arResult['user']['mainData']['ID']?>/settings/">Settings</a>
+                <a class="button-plus-minus link-button button-small-container-custom" href="/profile/<?=$USER->GetID()?>/settings/">Settings</a>
             </div>
+            <div class="save-button-container">
+                <a class="button-plus-minus link-button button-small-container-custom" href="/logout/">Logout</a>
+            </div>
+        </div>
         <?php endif; ?>
         <label class="label">Description</label>
         <div class="box">
@@ -100,7 +95,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <div class="container-column-custom">
                     <label class="label">Subjects</label>
                     <div class="box">
-                        <?php if($arResult['user']['subjects'] == null): ?>
+                        <?php if(count($arResult['user']['subjects']) === 0): ?>
                             No subjects selected
                         <?php endif; ?>
                         <?php foreach ($arResult['user']['subjects'] as $subject): ?>

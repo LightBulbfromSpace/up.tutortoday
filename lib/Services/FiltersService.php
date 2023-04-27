@@ -20,8 +20,8 @@ class FiltersService
     private array $subjectIDs;
     private array $cityValues;
 
-    private int $minPrice;
-    private int $maxPrice;
+    private $minPrice;
+    private $maxPrice;
 
     public function __construct(ParameterDictionary $dict)
     {
@@ -34,31 +34,31 @@ class FiltersService
 
     public function filterTutors(int $offset = 0, int $limit = 50) : void
 	{
-//		$tutors = UserTable::query()
-//			->whereBetween('PRICE', $arrFilters['PRICE_MIN'], $arrFilters['PRICE_MAX'])
-//			->whereIn("EducationFormatTable" . "NAME", $arrFilters['FORMATS'])
-//			->whereIn("SubjectTable" . "NAME", $arrFilters['SUBJECTS']);
-
-
         $tutorIDsBySubject = null;
-        $tutorIDsBySubjectRaw = [];
-        if ($this->subjectIDs != null)
-        {
-            $tutorIDsBySubjectRaw = UserSubjectTable::query()
-                ->setSelect(['USER_ID', 'PRICE'])
-                ->whereIn('SUBJECT_ID', $this->subjectIDs)
-                //->whereBetween('PRICE', $this->minPrice, $this->maxPrice)
-                ->fetchCollection();
+        $tutorIDsBySubjectRaw = UserSubjectTable::query()
+            ->setSelect(['USER_ID', 'PRICE']);
+
+        if ($this->subjectIDs != null) {
+
+            $tutorIDsBySubjectRaw = $tutorIDsBySubjectRaw->whereIn('SUBJECT_ID', $this->subjectIDs);
         }
+
+        if ($this->minPrice !== null || $this->maxPrice !== null)
+        {
+            $tutorIDsBySubjectRaw = $tutorIDsBySubjectRaw->whereBetween('PRICE', $this->minPrice, $this->maxPrice);
+        }
+
+        $tutorIDsBySubjectRaw = $tutorIDsBySubjectRaw->fetchCollection();
 
         foreach ($tutorIDsBySubjectRaw as $ID)
         {
             $tutorIDsBySubject[] = $ID['USER_ID'];
         }
+        $tutorIDsBySubject = array_unique($tutorIDsBySubject);
 
         $tutorIDsByEdFormat = null;
         $tutorIDsByEdFormatRaw = [];
-        var_dump($this->educationFormatIDs);
+
         if ($this->educationFormatIDs != null)
         {
             $tutorIDsByEdFormatRaw = UserEdFormatTable::query()
@@ -72,7 +72,6 @@ class FiltersService
             $tutorIDsBySubject[] = $ID['USER_ID'];
         }
 
-        var_dump($tutorIDsBySubject, $tutorIDsByEdFormat);
         if ($tutorIDsBySubject !== null && $tutorIDsByEdFormat !== null)
         {
             $tutorsIDs = array_intersect($tutorIDsBySubject, $tutorIDsByEdFormat);
@@ -91,11 +90,11 @@ class FiltersService
         }
         $tutorsIDs = array_slice($tutorsIDs, $offset, $limit);
 
-        $tutorRoleID = RolesTable::query()
-            ->setSelect(['ID'])
-            ->where('NAME', 'tutor')
-            ->fetchObject();
-        $this->filteredTutors = UserService::getUserMainInfoWithDescByIDs($tutorsIDs, $tutorRoleID['ID']);
+        $service = new UserService(0, $tutorsIDs);
+        $service->setRoles(['tutor']);
+        $service->setFetchAllAvailableUsers(false);
+
+        $this->filteredTutors = $service->getUsersByPage($offset, $limit);
 	}
     public function getTutorsByName($name)
 	{

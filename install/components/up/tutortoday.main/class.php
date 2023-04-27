@@ -15,8 +15,8 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
         $this->onPrepareComponentParams($this->arParams);
 	    $this->fetchSubjectFilters();
 	    $this->fetchEducationFormatsFilters();
-
-        $this->fetchTutors($this->arResult['page'], getGetList());
+        $this->fetchLoggedInUser();
+        $this->fetchTutors((int)$this->arResult['page'], getGetList());
         $this->prepareTemplateParams($this->arParams);
         $this->includeComponentTemplate();
     }
@@ -40,13 +40,13 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
     protected function fetchTutors(int $page, ParameterDictionary $filters = null)
     {
         $maxPage = MainPageController::getNumberOfPages();
-        $page = $page === 0 ? 1 : $page;
-        if ($page < 1 || $page > $maxPage)
+        $page = $page == null ? 1 : $page;
+        $page--;
+        if ($page < 0 || $page > $maxPage - 1)
         {
             $this->arResult['tutors'] = [];
             return;
         }
-
 
         $this->arResult['tutors'] = MainPageController::getTutorsByPage($page, $filters);
     }
@@ -60,4 +60,10 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
 	{
 		$this->arResult['edFormats'] = EducationService::getAllEdFormats();
 	}
+
+    protected function fetchLoggedInUser()
+    {
+        global $USER;
+        $this->arResult['loggedInUser'] = $USER->GetID();
+    }
 }

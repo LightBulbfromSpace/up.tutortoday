@@ -19,11 +19,13 @@ class UserRegisterForm
 
     private string $phoneNumber;
     private array $subjectsIDs;
+
+    private array $existingSubjectsPrices;
+
     private int $edFormatID;
     private string $description;
     private string $city;
     private int $roleID;
-
     private array $newSubjects;
 
     public function __construct(ParameterDictionary $post)
@@ -42,6 +44,13 @@ class UserRegisterForm
         $this->city = $post['city'];
         $this->roleID = $post['roleID'] ?? 1;
         $this->subjectsIDs = $post['subjects'] ?? [];
+        foreach ($post['subjectsPrices'] as $ID => $subjectPrice)
+        {
+            $this->existingSubjectsPrices[] = [
+                'ID' => $ID,
+                'price' => $subjectPrice,
+            ];
+        }
         $this->newSubjects = [];
         if (isset($post['newSubjectsID']) && $post['newSubjectsID'] != null)
         {
@@ -54,6 +63,7 @@ class UserRegisterForm
             }
         }
     }
+
     public function getLogin(): string
     {
         return $this->login;
@@ -66,8 +76,6 @@ class UserRegisterForm
     {
         return $this->lastName;
     }
-
-
     public function getMiddleName(): string
     {
         return $this->middleName;
@@ -78,6 +86,7 @@ class UserRegisterForm
     {
         return $this->password;
     }
+
 
     public function getConfirmPassword(): string
     {
@@ -107,6 +116,11 @@ class UserRegisterForm
     public function getSubjectsIDs(): array
     {
         return $this->subjectsIDs;
+    }
+
+    public function getExistingSubjectsPrices(): array
+    {
+        return $this->existingSubjectsPrices;
     }
 
     public function getDescription(): string

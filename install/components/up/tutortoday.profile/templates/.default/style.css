@@ -4,8 +4,7 @@
     display: flex;
     flex-wrap: wrap;
     max-width: 1100px;
-    /*flex-grow: 1;*/
-    margin: 0 auto;
+    margin: 4rem auto;
     justify-content: space-evenly;
     position: relative;
 }
@@ -81,6 +80,11 @@
     border-top: solid #D9D9D9 1px;
     margin: 20px 0;
 }
+
+.main-container-custom {
+    margin: 4rem 0;
+}
+
 .container-narrow-custom {
     flex: 1;
 }
@@ -94,6 +98,11 @@
 .container-row-custom {
     display: flex;
     justify-content: space-between;
+}
+
+.container-button-custom {
+    display: flex;
+    justify-content: end;
 }
 
 .container-column-custom {
@@ -155,7 +164,25 @@
     cursor: pointer;
 }
 
+.button-small-container-custom {
+    margin: 10px;
+}
+
 a:link { text-decoration: none; }
 a:visited { text-decoration: none; }
 a:hover { text-decoration: none; }
 a:active { text-decoration: none; }
+
+body::-webkit-scrollbar {
+    width: 5px;
+}
+
+body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #D9D9D9;
+    border-radius: 20px;
+    border: none;
+}

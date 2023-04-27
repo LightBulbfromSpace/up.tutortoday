@@ -101,7 +101,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                                 <?=$subject['SUBJECT']['NAME']?>
                                             </div>
                                                 <div class="container-row-custom is-aligned-center">
-                                                    <input type="number" class="input-custom" name="subject-price-<?=$subject['SUBJECT']['ID']?>" value="<?=$subject['PRICE']?>">
+                                                    <input type="number" class="input-custom" name="subjectsPrices[<?=$subject['SUBJECT']['ID']?>]" value="<?=$subject['PRICE']?>">
                                                     <div class="price">rub/hour</div>
                                                 </div>
                                         </div>

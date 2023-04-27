@@ -1,9 +1,12 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
 
 .container-custom {
-    max-width: 600px;
+    display: flex;
+    align-items: center;
+    width: 100vw;
+    height: 75vh;
     flex-grow: 1;
-    margin: 0 auto;
+    justify-content: center;
     position: relative;
 }
 
@@ -35,4 +38,29 @@
     padding-top: calc(0.5em - 1px);
     position: relative;
     vertical-align: top;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 10px;
+}
+
+.small-container {
+    margin: 0 5px;
+}
+
+body::-webkit-scrollbar {
+    width: 5px;
+}
+
+body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #D9D9D9;
+    border-radius: 20px;
+    border: none;
 }

@@ -23,49 +23,37 @@ use Up\Tutortoday\Model\Validator;
 class UserService
 {
     private $userID = 0;
+    private array $userIDs = [];
+    private bool $fetchAllAvailableUsers = false;
 
-    public function __construct(int $userID)
+    private array $roleIDs = [1];
+
+    public function __construct(int $userID = 0, array $userIDs = [])
     {
         $this->userID = $userID;
+        $this->userIDs = $userIDs;
     }
 
-//    public static function ValidateUser(string $email, string $password)
-//    {
-//        if (!Validator::validateEmail($email) || !Validator::validatePassword($password))
-//        {
-//            return null;
-//        }
-//
-//        $contactsArray = EmailTable::query()
-//            ->setSelect(['*'])
-//            ->where('EMAIL', $email)
-//            ->fetchCollection();
-//
-//        $userIDs = [];
-//        foreach ($contactsArray as $contacts)
-//        {
-//            $userIDs[] = $contacts['USER_ID'];
-//        }
-//        if ($userIDs === [])
-//        {
-//            return null;
-//        }
-//
-//        $users = UserTable::query()
-//            ->setSelect(['*'])
-//            ->whereIn('ID', $userIDs)
-//            ->fetchCollection();
-//
-//        foreach ($users as $user)
-//        {
-//            if (password_verify($password, $user['PASSWORD']))
-//            {
-//                return $user;
-//            }
-//        }
-//        return null;
-//    }
 
+    public function setFetchAllAvailableUsers(bool $fetchAllAvailableUsers): void
+    {
+        $this->fetchAllAvailableUsers = $fetchAllAvailableUsers;
+    }
+
+    /**
+     * @param string[] $rolesNames
+     */
+    public function setRoles(array $rolesNames): void
+    {
+        $roleIDs = RolesTable::query()
+            ->setSelect(['ID'])
+            ->whereIn('NAME', $rolesNames)
+            ->fetchCollection();
+        foreach ($roleIDs as $roleID)
+        {
+            $this->roleIDs[] = $roleID['ID'];
+        }
+    }
 
     public static function CreateUser(UserRegisterForm $userForm) : bool|string|array
     {
@@ -148,70 +136,63 @@ class UserService
 
 
 
-    public static function getUsersByPage(int $page = 1, string $role = 'Tutor')
-    {
-        $offset = $page * USERS_BY_PAGE;
-
-        $tutorRoleID = EducationService::getRoleIDbyName($role);
-        if ($tutorRoleID === null)
-        {
-            // TODO:Error handling
-        }
-
-        $users = UserTable::query()
-//            ->registerRuntimeField('d', [
-//                'data_type' => UserDescriptionTable::class,
-//                'reference' => [
-//                    '=this.ID' => 'ref.USER_ID',
+//    public static function getUsersByPage(int $page = 1, string $role = 'Tutor')
+//    {
+//        $offset = $page * USERS_BY_PAGE;
+//
+//        $tutorRoleID = EducationService::getRoleIDbyName($role);
+//        if ($tutorRoleID === null)
+//        {
+//            // TODO:Error handling
+//        }
+//
+//        $users = UserTable::query()
+//            ->setSelect(['ID', 'NAME', 'LAST_NAME', 'SECOND_NAME', 'WORK_CITY', 'PERSONAL_PHOTO'])
+//            ->where('WORK_POSITION', $tutorRoleID)
+//            ->where('WORK_COMPANY', SITE_NAME)
+//            ->setOrder(['ID' => 'DESC'])
+//            ->setOffset($offset)
+//            ->setLimit(USERS_BY_PAGE)
+//            ->fetchCollection();
+//
+//
+//        $usersIDs = [];
+//
+//        foreach ($users as $user)
+//        {
+//            $usersIDs[] = $user['ID'];
+//        }
+//
+//        $descriptions = UserDescriptionTable::query()
+//            ->setSelect(['*'])
+//            ->whereIn('USER_ID', $usersIDs)
+//            ->fetchCollection();
+//
+//
+//        $result = [];
+//        foreach ($users as $i => $user)
+//        {
+//            $result[$i] = [
+//                'fullName' => [
+//                    'name' => $user['NAME'],
+//                    'lastName' => $user['LAST_NAME'],
+//                    'secondName' => $user['SECOND_NAME'],
 //                ],
-//                'join_type' => 'right'
-//            ])
-            ->setSelect(['ID', 'NAME', 'LAST_NAME', 'SECOND_NAME', 'WORK_CITY', 'PERSONAL_PHOTO'])
-            ->where('WORK_POSITION', $tutorRoleID)
-            ->where('WORK_COMPANY', SITE_NAME)
-            ->setOrder(['ID' => 'DESC'])
-            ->setOffset($offset)
-            ->setLimit(USERS_BY_PAGE)
-            ->fetchCollection();
-
-
-        $usersIDs = [];
-
-        foreach ($users as $user)
-        {
-            $usersIDs[] = $user['ID'];
-        }
-
-        $descriptions = UserDescriptionTable::query()
-            ->setSelect(['*'])
-            ->whereIn('USER_ID', $usersIDs)
-            ->fetchCollection();
-
-
-        $result = [];
-        foreach ($users as $i => $user)
-        {
-            $result[$i] = [
-                'fullName' => [
-                    'name' => $user['NAME'],
-                    'lastName' => $user['LAST_NAME'],
-                    'secondName' => $user['SECOND_NAME'],
-                ],
-                'city' => $user['WORK_CITY'],
-                //TODO: change work with photo!!!
-                'photo' => $user['PERSONAL_PHOTO'] != null ? $user['PERSONAL_PHOTO'] : DEFAULT_PHOTO,
-            ];
-            foreach ($descriptions as $description)
-            {
-                if ($user->getID() === $description->getUserId())
-                {
-                    $result[$i]['description'] = $description['DESCRIPTION'];
-                    break;
-                }
-            }
-        }
-        return $result;
-    }
+//                'city' => $user['WORK_CITY'],
+//                //TODO: change work with photo!!!
+//                'photo' => $user['PERSONAL_PHOTO'] != null ? $user['PERSONAL_PHOTO'] : DEFAULT_PHOTO,
+//            ];
+//            foreach ($descriptions as $description)
+//            {
+//                if ($user->getID() === $description->getUserId())
+//                {
+//                    $result[$i]['description'] = $description['DESCRIPTION'];
+//                    break;
+//                }
+//            }
+//        }
+//        return $result;
+//    }
 
     // Photo
     // Full name
@@ -234,9 +215,10 @@ class UserService
         {
             return false;
         }
+
         $role = UserRoleTable::query()
             ->setSelect(['USER_ID', 'ROLE'])
-            ->whereIn('USER_ID', $this->userID)
+            ->where('USER_ID', $this->userID)
             ->fetchObject();
 
         if ($role == null)
@@ -246,7 +228,7 @@ class UserService
 
         $edFormat = UserEdFormatTable::query()
             ->setSelect(['USER_ID', 'EDUCATION_FORMAT'])
-            ->whereIn('USER_ID', $this->userID)
+            ->where('USER_ID', $this->userID)
             ->fetchObject();
 
         if ($edFormat == null)
@@ -289,45 +271,80 @@ class UserService
             'subjects' => $subjects,
         ];
     }
-    public static function getUserMainInfoWithDescByIDs(array $userIDs, int $roleID)
+
+    public function getUsersByPage(int $offset = 0, int $limit = 50)
     {
-        $users = UserTable::query()
+        if ($offset < 0)
+        {
+            return false;
+        }
+
+        $query = UserTable::query()
             ->setSelect(['ID', 'NAME', 'LAST_NAME', 'SECOND_NAME', 'WORK_CITY', 'PERSONAL_PHOTO'])
-            ->whereIn('ID', $userIDs)
-            ->where('WORK_POSITION', $roleID)
+            ->whereIn('WORK_POSITION', $this->roleIDs)
             ->where('WORK_COMPANY', SITE_NAME)
-            ->fetchCollection();
+            ->setOrder(['ID' => 'DESC'])
+            ->setOffset($offset)
+            ->setLimit($limit);
+
+        if (!$this->fetchAllAvailableUsers)
+        {
+            $query->whereIn('ID', $this->userIDs);
+        }
+
+        $users = $query->fetchCollection();
 
         if ($users == null)
         {
             return false;
         }
 
+        $fetchedUserIDs = [];
+        foreach ($users as $user)
+        {
+            $fetchedUserIDs[] = $user['ID'];
+        }
+
         $descriptions = UserDescriptionTable::query()
             ->setSelect(['USER_ID', 'DESCRIPTION'])
-            ->whereIn('USER_ID', $userIDs)
+            ->whereIn('USER_ID', $fetchedUserIDs)
+            ->fetchCollection();
+
+        $subjects = UserSubjectTable::query()
+            ->setSelect(['*', 'SUBJECT'])
+            ->whereIn('USER_ID', $fetchedUserIDs)
             ->fetchCollection();
 
         $result = [];
 
-        foreach ($users as $user)
+        foreach ($users as $i => $user)
         {
+            $result[$i] = [
+                'ID' => $user['ID'],
+                'photo' => $user['PERSONAL_PHOTO'] != null ? $user['PERSONAL_PHOTO'] : DEFAULT_PHOTO,
+                'fullName' => [
+                    'name' => $user['NAME'],
+                    'lastName' => $user['LAST_NAME'],
+                    'secondName' => $user['SECOND_NAME'],
+                ],
+                'city' => $user['WORK_CITY'],
+            ];
             foreach ($descriptions as $description)
             {
                 if ($user['ID'] === $description['USER_ID'])
                 {
-                    $result[] = [
-                        'photo' => $user['PERSONAL_PHOTO'] != null ? $user['PERSONAL_PHOTO'] : DEFAULT_PHOTO,
-                        'fullName' => [
-                            'name' => $user['NAME'],
-                            'lastName' => $user['LAST_NAME'],
-                            'secondName' => $user['SECOND_NAME'],
-                        ],
-                        'city' => $user['WORK_CITY'],
-                        'description' => $description['DESCRIPTION'],
-                    ];
+                    $result[$i]['description'] = $description['DESCRIPTION'];
+                    break;
                 }
             }
+            foreach ($subjects as $subject)
+            {
+                if ($user['ID'] === $subject['USER_ID'])
+                {
+                    $result[$i]['subjects'][] = $subject['SUBJECT'];
+                }
+            }
+
         }
 
         return $result;
@@ -366,6 +383,23 @@ class UserService
         if (!$edFormatResult->isSuccess())
         {
             return 'description update error';
+        }
+
+        foreach ($userForm->getExistingSubjectsPrices() as $subject)
+        {
+            if ($subject['price'] < 0) {
+                continue;
+            }
+            $subjAddResult = UserSubjectTable::update([
+                'USER_ID' => $this->userID,
+                'SUBJECT_ID' =>$subject['ID'],
+                ], [
+                    'PRICE' => $subject['price'],
+            ]);
+            if (!$subjAddResult->isSuccess())
+            {
+                return 'subject\'s price update error';
+            }
         }
 
         $subjectsToAdd = [];

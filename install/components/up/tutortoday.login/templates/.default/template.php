@@ -25,12 +25,12 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             </p>
         </div>
         <?=bitrix_sessid_post()?>
-        <div class="field is-grouped is-justify-content-center">
+        <div class="button-container">
             <p class="control">
-                <button class="button is-dark" type="submit">
+                <button class="button is-dark small-container" type="submit">
                     Login
                 </button>
-                <a class="button is-dark" href="/registration/">
+                <a class="button is-dark small-container" href="/registration/">
                     Sign up
                 </a>
             </p>

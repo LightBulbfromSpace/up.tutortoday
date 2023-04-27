@@ -24,7 +24,7 @@ class TutorTodayProfileComponent extends CBitrixComponent {
 
     public function prepareTemplateParams()
     {
-        $this->arResult['isOwner'] = ProfileController::isOwnerOfProfile($this->arResult['ID']);
+        $this->arResult['isOwner'] = (new ProfileController($this->arResult['ID']))->isOwnerOfProfile();
     }
 
     public function onPrepareComponentParams($arParams)
@@ -40,7 +40,12 @@ class TutorTodayProfileComponent extends CBitrixComponent {
 
     protected function fetchUserInfo(int $ID)
     {
-        $this->arResult['user'] = (new UserService($ID))->getUserByID();
+        $user = (new UserService($ID))->getUserByID();
+        if ($user === false)
+        {
+            LocalRedirect('/404/');
+        }
+        $this->arResult['user'] = $user;
     }
 
 //    protected function prepareContactInfo($contacts)
