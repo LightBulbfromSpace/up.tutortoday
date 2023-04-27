@@ -14,7 +14,7 @@ use Up\Tutortoday\Model\Tables\UserSubjectTable;
 class FiltersService
 {
     private mixed $filteredTutors;
-    private int $numberOfUsersByFilters;
+    private int $numberOfUsersByFilters = 0;
 
 
     private bool $isFilterUsed;
@@ -60,7 +60,8 @@ class FiltersService
         {
             $tutorIDsBySubject[] = $ID['USER_ID'];
         }
-        $tutorIDsBySubject = array_unique($tutorIDsBySubject);
+
+        $tutorIDsBySubject = $tutorIDsBySubject != null ? array_unique($tutorIDsBySubject): [];
 
         $tutorIDsByEdFormat = null;
         $tutorIDsByEdFormatRaw = [];

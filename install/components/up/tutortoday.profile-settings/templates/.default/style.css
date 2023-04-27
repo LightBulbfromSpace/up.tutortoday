@@ -354,3 +354,18 @@ textarea::-webkit-scrollbar-thumb {
     border-radius: 20px;
     border: none;
 }
+
+.box-small-dark-custom {
+    background-color: #D9D9D9;
+    border-radius: 6px;
+    box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%), 0 0 0 1px rgb(10 10 10 / 0.1%);
+    color: #4a4a4a;
+    padding: 0.25rem;
+    flex-shrink: 1;
+}
+
+.role-container-custom {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}

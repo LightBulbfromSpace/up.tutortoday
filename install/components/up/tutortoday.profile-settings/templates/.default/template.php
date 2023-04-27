@@ -24,7 +24,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <div class="box-dark-element-custom">
                     <input class="input-custom" name="middleName" placeholder="No middle name" value="<?=htmlspecialchars($arResult['user']['mainData']['SECOND_NAME'])?>">
                 </div>
-                <div class="box-invisible-custom">I'm a <?=$arResult['user']['role']['NAME']?></div>
+                <div class="box-invisible-custom role-container-custom"><div>I'm a</div>&nbsp;<div class="box-small-dark-custom"><?=$arResult['user']['role']['NAME']?></div></div>
                 <div class="br"></div>
                 <div class="container-contacts">
                     <label class="label">Email</label>
