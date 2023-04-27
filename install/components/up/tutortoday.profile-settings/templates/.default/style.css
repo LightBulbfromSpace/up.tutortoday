@@ -304,16 +304,22 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     display: none;
 }
 
-body::-webkit-scrollbar {
+body::-webkit-scrollbar, textarea::-webkit-scrollbar {
     width: 5px;
 }
 
-body::-webkit-scrollbar-track {
+body::-webkit-scrollbar-track, textarea::-webkit-scrollbar-track  {
     background: transparent;
 }
 
-body::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb{
     background-color: #D9D9D9;
+    border-radius: 20px;
+    border: none;
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background-color: #E8E8E8;
     border-radius: 20px;
     border: none;
 }

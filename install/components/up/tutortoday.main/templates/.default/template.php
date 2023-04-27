@@ -4,6 +4,8 @@
  */
 
 //var_dump($arResult['tutors']['mainData']);die;
+use Up\Tutortoday\Services\HTMLHelper;
+
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
 <!--<div class="container-main-custom">-->
@@ -87,7 +89,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
             <p class="mt-3">Resently created profiles:</p>
 			<?php foreach ($arResult['tutors'] as $tutor) : ?>
-            <a href="/profile/<?=$tutor['ID']?>/">
+            <a href="/profile/<?=$tutor['ID']?>/" class="card-link">
                 <div class="mt-2 card-box-container-custom">
                     <div class="row no-gutters card-container">
                         <div class="col-md-4 photo-container">
@@ -95,7 +97,10 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                         </div>
                         <div class="col-md-8">
                             <div class="card-body-custom">
-                                <h2 class="card-title"><?= $tutor['fullName']['lastName']?>&nbsp;&nbsp;<?=$tutor['fullName']['name']?>&nbsp;&nbsp;<?=$tutor['fullName']['secondName']?></h2>
+                                <h2 class="card-title">
+                                    <?=htmlspecialchars($tutor['fullName']['lastName'])?>&nbsp;&nbsp;
+                                    <?=htmlspecialchars($tutor['fullName']['name'])?>&nbsp;&nbsp;
+                                    <?=htmlspecialchars($tutor['fullName']['secondName'])?></h2>
                                 <div class="br"></div>
                                 <p class="card-text">
                                     <strong>City:</strong>
@@ -103,7 +108,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                     <?php if($tutor['city'] == ''): ?>
                                         No city
                                     <?php endif; ?>
-                                    <?= $tutor['city']?>
+                                    <?=htmlspecialchars($tutor['city'])?>
                                 </p>
                                 <div class="container-subjects">
                                     <?php if($tutor['subjects'] == null): ?>
@@ -119,7 +124,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                     <?php if($tutor['description'] == ''): ?>
                                         No description
                                     <?php endif; ?>
-                                    <?=$tutor['description']?>
+                                    <?=htmlspecialchars(HTMLHelper::cutText($tutor['description'], 300))?>
                                 </p>
                             </div>
                         </div>

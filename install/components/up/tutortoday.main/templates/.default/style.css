@@ -119,6 +119,11 @@
     padding: 1.25rem;
 }
 
+.card-box-container-custom:hover {
+    box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 40%), 0 0 0 1px rgb(10 10 10 / 1%);
+    transition-duration: 0.3s;
+}
+
 .container-subjects {
     display: flex;
     flex-wrap: wrap;
@@ -137,10 +142,10 @@
     border-top: solid #D9D9D9 1px;
     margin: 20px 0;
 }
-
 a:link { text-decoration: none; }
 a:visited { text-decoration: none; }
 a:hover { text-decoration: none; }
+
 a:active { text-decoration: none; }
 
 .form-check-custom {

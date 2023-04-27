@@ -142,12 +142,12 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 <form class="timepicker">
                                     <div class="formfield">
                                         <label>From:</label>
-                                        <input type="time" min="00:00" max="23:59"/>
+                                        <input type="time" id="time-from" min="00:00" max="23:59"/>
                                     </div>
 
                                     <div class="formfield">
                                         <label>To:</label>
-                                        <input type="time" min="00:00" max="23:59"/>
+                                        <input type="time" id="time-to" min="00:00" max="23:59"/>
                                     </div>
                                 </form>
                                 <button type="button" class="button-plus-minus button-small-custom" onclick="closeTimepicker()">OK</button>
@@ -176,7 +176,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
     </div>
         <div class="container-row-custom is-aligned-center max-width-90">
             <div class="box-dark-element-custom">
-                <input type="number" class="input-custom" placeholder="Price" name="newSubjectsPrices[]">
+                <input type="number" class="input-custom" placeholder="Price" name="newSubjectsPrices[]" value="1000">
                     <div class="price">rub/hour</div>
             </div>
         </div>
@@ -184,6 +184,11 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
     </div>`
         addArea.appendChild(form)
     }
+
+    function addTime() {
+
+    }
+
     function closeSubjectForm() {
         document.getElementById('add-subject-area').lastChild.remove()
     }

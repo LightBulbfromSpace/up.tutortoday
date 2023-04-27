@@ -20,7 +20,7 @@ class UserRegisterForm
     private string $phoneNumber;
     private array $subjectsIDs;
 
-    private array $existingSubjectsPrices;
+    private array $existingSubjectsPrices = [];
 
     private int $edFormatID;
     private string $description;
