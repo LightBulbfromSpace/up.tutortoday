@@ -8,21 +8,6 @@ use Up\Tutortoday\Services\HTMLHelper;
 
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
-<!--<div class="container-main-custom">-->
-<!--    <div class="container-custom">-->
-<!--        <form action="/" method="post">-->
-<!--            filters-->
-<!--            --><?php //=bitrix_sessid_post()?>
-<!--        </form>-->
-<!--    </div>-->
-<!--    <div class="container-custom">-->
-<!--        <form action="/" method="get">-->
-<!--            search-->
-<!--            --><?php //=bitrix_sessid_post()?>
-<!--        </form>-->
-<!--        <div class="container-content-custom"></div>-->
-<!--    </div>-->
-<!--</div>-->
 
 <div class="container-fluid">
     <div class="row">
@@ -77,6 +62,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     </div>
                 </div>
                 <button type="submit" class="btn mt-6 ml-3 btn-danger">Find</button>
+                <a class="btn mt-6 ml-3 btn-danger" href="/">Reset</a>
             </form>
         </div>
         <div class="col-md-9">
@@ -132,6 +118,44 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 </div>
             </a>
 			<?php endforeach; ?>
+<!--            pagination-->
+            <div class="container-margin-top-bottom is-justified-center">
+                <nav role="navigation" class="container-row-custom">
+                    <ul class="pagination-list">
+                        <li>
+                            <a class="pagination-link" href="/?page=1">1</a>
+                        </li>
+                        <li>
+                            <span class="pagination-ellipsis">&hellip;</span>
+                        </li>
+                        <li>
+                            <a class="pagination-link"
+                                <?=($arResult['currentPage'] - 1) > 0 ?
+                                    'href="/?'. $arResult['currentURIParams'] . '&page=' . $arResult['currentPage'] - 1 . '"' : ''?>>
+                                <?=($arResult['currentPage'] - 1) > 0 ?
+                                    $arResult['currentPage'] - 1 : ''?>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="pagination-link is-current-custom" href="/?<?=$arResult['currentURIParams']?>&page=<?=$arResult['currentPage']?>"><?=$arResult['currentPage']?></a>
+                        </li>
+                        <li>
+                            <a class="pagination-link"
+                                <?=($arResult['currentPage'] + 1) <= $arResult['maxPage'] ?
+                                'href="/?'. $arResult['currentURIParams'] . '&page=' . $arResult['currentPage'] + 1 . '"' : ''?>>
+                                <?=($arResult['currentPage'] + 1) <= $arResult['maxPage'] ?
+                                    $arResult['currentPage'] + 1 : ''?>
+                            </a>
+                        </li>
+                        <li>
+                            <span class="pagination-ellipsis">&hellip;</span>
+                        </li>
+                        <li>
+                            <a class="pagination-link" href="/?<?=$arResult['currentURIParams']?>&page=<?=$arResult['maxPage']?>"><?=$arResult['maxPage']?></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
 </div>

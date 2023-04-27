@@ -1,5 +1,6 @@
 <?php
 
+use Bitrix\Main\Context;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Type\ParameterDictionary;
 use Up\Tutortoday\Controller\MainPageController;
@@ -13,17 +14,30 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
     {
         $this->prepareLocalization();
         $this->onPrepareComponentParams($this->arParams);
+        $this->prepareFilters(getGetList());
 	    $this->fetchSubjectFilters();
 	    $this->fetchEducationFormatsFilters();
         $this->fetchLoggedInUser();
-        $this->fetchTutors((int)$this->arResult['page'], getGetList());
-        $this->prepareTemplateParams($this->arParams);
+        $this->fetchTutors($this->arResult['page'], $this->arResult['filters']);
+        $this->prepareTemplateParams();
         $this->includeComponentTemplate();
     }
 
-    public function prepareTemplateParams($arParams)
+    public function prepareFilters(ParameterDictionary $dict)
     {
+        $filters = [];
+        foreach ($dict as $key => $item)
+        {
+            $filters[$key] = $item;
+        }
+        unset($filters['page']);
+        $this->arResult['filters'] = $filters;
+    }
 
+
+    public function prepareTemplateParams()
+    {
+        $this->arResult['currentURIParams'] = http_build_query($this->arResult['filters']);
     }
 
     public function onPrepareComponentParams($arParams)
@@ -37,18 +51,17 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
     {
     }
 
-    protected function fetchTutors(int $page, ParameterDictionary $filters = null)
+    protected function fetchTutors($page, array $filters = null)
     {
-        $maxPage = MainPageController::getNumberOfPages();
-        $page = $page == null ? 1 : $page;
-        $page--;
-        if ($page < 0 || $page > $maxPage - 1)
+        if (!is_numeric($page) || $page < 1 || $page == null)
         {
-            $this->arResult['tutors'] = [];
-            return;
+            $page = 1;
         }
-
-        $this->arResult['tutors'] = MainPageController::getTutorsByPage($page, $filters);
+        $controller = new MainPageController();
+        $this->arResult['tutors'] = $controller->getTutorsByPage($page - 1, $filters);
+        $maxPage = ceil($controller->getNumberOfUsers() / USERS_BY_PAGE);
+        $this->arResult['currentPage'] = $page;
+        $this->arResult['maxPage'] = $maxPage;
     }
 
 	protected function fetchSubjectFilters()

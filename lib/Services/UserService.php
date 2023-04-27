@@ -24,14 +24,23 @@ class UserService
 {
     private $userID = 0;
     private array $userIDs = [];
+    private int $numberOfAllAvailableUsers = 0;
     private bool $fetchAllAvailableUsers = false;
-
     private array $roleIDs = [1];
-
     public function __construct(int $userID = 0, array $userIDs = [])
     {
         $this->userID = $userID;
         $this->userIDs = $userIDs;
+    }
+
+    public function getNumberOfAllAvailableUsers(): int
+    {
+        return UserTable::query()
+            ->setSelect(['ID'])
+            ->whereIn('WORK_POSITION', $this->roleIDs)
+            ->where('WORK_COMPANY', SITE_NAME)
+            ->fetchCollection()
+            ->count();
     }
 
 
@@ -53,6 +62,15 @@ class UserService
         {
             $this->roleIDs[] = $roleID['ID'];
         }
+    }
+
+
+    /**
+     * @param int[] $rolesIDs
+     */
+    public function setRolesByIDs(array $rolesIDs): void
+    {
+            $this->roleIDs = $rolesIDs;
     }
 
     public static function CreateUser(UserRegisterForm $userForm) : bool|string|array
@@ -133,7 +151,6 @@ class UserService
 
         return $user->getID();
     }
-
 
 
 //    public static function getUsersByPage(int $page = 1, string $role = 'Tutor')

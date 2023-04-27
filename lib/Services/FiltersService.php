@@ -14,22 +14,28 @@ use Up\Tutortoday\Model\Tables\UserSubjectTable;
 class FiltersService
 {
     private mixed $filteredTutors;
-    private bool $isFilterUsed;
+    private int $numberOfUsersByFilters;
 
+
+    private bool $isFilterUsed;
     private array $educationFormatIDs;
     private array $subjectIDs;
     private array $cityValues;
-
     private $minPrice;
-    private $maxPrice;
 
-    public function __construct(ParameterDictionary $dict)
+    private $maxPrice;
+    public function __construct(array $dict)
     {
         $this->educationFormatIDs = $dict['edFormats'] != null ? $dict['edFormats'] : [];
         $this->subjectIDs = $dict['subjects'] != null ? $dict['subjects'] : [];
         $this->cityValues = $dict['city'] != null ? $dict['city'] : [];
-        $this->minPrice = $dict['minPrice'] != null ? $dict['minPrice'] : 0;
-        $this->maxPrice = $dict['maxPrice'] != null ? $dict['maxPrice'] : PHP_INT_MAX;
+        $this->minPrice = $dict['minPrice'] != null || $dict['minPrice'] != '' ? $dict['minPrice'] : 0;
+        $this->maxPrice = $dict['maxPrice'] != null || $dict['maxPrice'] != ''  ? $dict['maxPrice'] : PHP_INT_MAX;
+    }
+
+    public function getNumberOfFilteredUsers(): int
+    {
+        return $this->numberOfUsersByFilters;
     }
 
     public function filterTutors(int $offset = 0, int $limit = 50) : void
@@ -88,6 +94,9 @@ class FiltersService
             $this->filteredTutors = [];
             return;
         }
+
+        $this->numberOfUsersByFilters = count($tutorsIDs);
+
         $tutorsIDs = array_slice($tutorsIDs, $offset, $limit);
 
         $service = new UserService(0, $tutorsIDs);

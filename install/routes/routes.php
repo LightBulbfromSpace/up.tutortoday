@@ -23,9 +23,9 @@ return function (RoutingConfigurator $routes) {
 //	    MainPageController::getTutorsByName($name);
 //	});
 
-	$routes->post('/main/filter/', function() {
-	    MainPageController::getTutorsByFilters(getPostList());
-	});
+//	$routes->post('/main/filter/', function() {
+//	    MainPageController::getTutorsByFilters(getPostList());
+//	});
 
     $routes->get('/logout/', function (){
         AuthController::LogoutAction();
