@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS up_tutortoday_feedbacks (
 CREATE TABLE IF NOT EXISTS up_tutortoday_user_subject (
     USER_ID int unsigned not null,
     SUBJECT_ID int unsigned not null,
-    PRICE int unsigned,
+    PRICE int unsigned default 0,
     PRIMARY KEY (USER_ID, SUBJECT_ID)
 );
 

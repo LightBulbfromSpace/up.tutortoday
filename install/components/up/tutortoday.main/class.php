@@ -28,6 +28,10 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
         $filters = [];
         foreach ($dict as $key => $item)
         {
+            if ($item === '')
+            {
+                continue;
+            }
             $filters[$key] = $item;
         }
         unset($filters['page']);

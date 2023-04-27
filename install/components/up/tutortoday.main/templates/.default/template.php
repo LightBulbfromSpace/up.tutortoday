@@ -21,7 +21,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                         <div class="dropdown-menu" aria-labelledby="subject-dropdown">
                             <div class="form-group">
 	                            <?php foreach ($arResult['edFormats'] as $edFormat) : ?>
-                                    <div class="form-check">
+                                    <div class="form-check form-check-custom">
                                         <input class="form-check-input" name="edFormats[]" type="checkbox" value="<?= $edFormat['ID']?>">
                                         <label class="form-check-label" for="<?= $edFormat['NAME']?>">
 				                            <?= $edFormat['NAME']?>
@@ -102,6 +102,14 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                     <?php endif; ?>
                                     <?php foreach ($tutor['subjects'] as $subject): ?>
                                         <div class="box-dark-element-custom"><?=$subject['NAME']?></div>
+                                    <?php endforeach; ?>
+                                </div>
+                                <div class="container-subjects">
+                                    <?php if($tutor['edFormat'] == null): ?>
+                                        <div class="box-darker-element-custom">No education format</div>
+                                    <?php endif; ?>
+                                    <?php foreach ($tutor['edFormat'] as $edFormat): ?>
+                                        <div class="box-darker-element-custom"><?=$edFormat['NAME']?></div>
                                     <?php endforeach; ?>
                                 </div>
                                 <p class="card-text">

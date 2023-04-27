@@ -300,13 +300,15 @@ class UserService
             ->setSelect(['ID', 'NAME', 'LAST_NAME', 'SECOND_NAME', 'WORK_CITY', 'PERSONAL_PHOTO'])
             ->whereIn('WORK_POSITION', $this->roleIDs)
             ->where('WORK_COMPANY', SITE_NAME)
-            ->setOrder(['ID' => 'DESC'])
-            ->setOffset($offset)
-            ->setLimit($limit);
+            ->setOrder(['ID' => 'DESC']);
 
         if (!$this->fetchAllAvailableUsers)
         {
             $query->whereIn('ID', $this->userIDs);
+        }
+        else
+        {
+            $query->setOffset($offset)->setLimit($limit);
         }
 
         $users = $query->fetchCollection();
@@ -329,6 +331,11 @@ class UserService
 
         $subjects = UserSubjectTable::query()
             ->setSelect(['*', 'SUBJECT'])
+            ->whereIn('USER_ID', $fetchedUserIDs)
+            ->fetchCollection();
+
+        $edFormats = UserEdFormatTable::query()
+            ->setSelect(['*', 'EDUCATION_FORMAT'])
             ->whereIn('USER_ID', $fetchedUserIDs)
             ->fetchCollection();
 
@@ -359,6 +366,13 @@ class UserService
                 if ($user['ID'] === $subject['USER_ID'])
                 {
                     $result[$i]['subjects'][] = $subject['SUBJECT'];
+                }
+            }
+            foreach ($edFormats as $edFormat)
+            {
+                if ($user['ID'] === $edFormat['USER_ID'])
+                {
+                    $result[$i]['edFormat'][] = $edFormat['EDUCATION_FORMAT'];
                 }
             }
 

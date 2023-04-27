@@ -42,9 +42,10 @@ class FiltersService
 	{
         $tutorIDsBySubject = null;
         $tutorIDsBySubjectRaw = UserSubjectTable::query()
-            ->setSelect(['USER_ID', 'PRICE']);
+            ->setSelect(['USER_ID', 'PRICE'])
+            ->setOrder(['USER_ID' => 'DESC']);
 
-        if ($this->subjectIDs != null) {
+        if ($this->subjectIDs !== []) {
 
             $tutorIDsBySubjectRaw = $tutorIDsBySubjectRaw->whereIn('SUBJECT_ID', $this->subjectIDs);
         }
@@ -66,20 +67,21 @@ class FiltersService
         $tutorIDsByEdFormat = null;
         $tutorIDsByEdFormatRaw = [];
 
-        if ($this->educationFormatIDs != null)
+        if ($this->educationFormatIDs !== [])
         {
             $tutorIDsByEdFormatRaw = UserEdFormatTable::query()
                 ->setSelect(['USER_ID'])
-                ->whereIn('EDUCATION_FORMAT_ID', $this->subjectIDs)
+                ->whereIn('EDUCATION_FORMAT_ID', $this->educationFormatIDs)
+                ->setOrder(['USER_ID' => 'DESC'])
                 ->fetchCollection();
         }
 
         foreach ($tutorIDsByEdFormatRaw as $ID)
         {
-            $tutorIDsBySubject[] = $ID['USER_ID'];
+            $tutorIDsByEdFormat[] = $ID['USER_ID'];
         }
 
-        if ($tutorIDsBySubject !== null && $tutorIDsByEdFormat !== null)
+        if ($tutorIDsBySubject != null && $tutorIDsByEdFormat != null)
         {
             $tutorsIDs = array_intersect($tutorIDsBySubject, $tutorIDsByEdFormat);
         }
@@ -97,9 +99,7 @@ class FiltersService
         }
 
         $this->numberOfUsersByFilters = count($tutorsIDs);
-
         $tutorsIDs = array_slice($tutorsIDs, $offset, $limit);
-
         $service = new UserService(0, $tutorsIDs);
         $service->setRoles(['tutor']);
         $service->setFetchAllAvailableUsers(false);

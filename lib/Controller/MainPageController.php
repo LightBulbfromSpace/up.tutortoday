@@ -40,7 +40,7 @@ class MainPageController
         if (count($filters) !== 0)
         {
             $filter = new FiltersService($filters);
-            $filter->filterTutors($pageFromNull, USERS_BY_PAGE);
+            $filter->filterTutors($pageFromNull * USERS_BY_PAGE, USERS_BY_PAGE);
 
             $this->numberOfUsers = $filter->getNumberOfFilteredUsers();
 
@@ -50,7 +50,7 @@ class MainPageController
         $service->setRoles($this->rolesIDs);
         $service->setFetchAllAvailableUsers(true);
 
-        $tutors = $service->getUsersByPage($pageFromNull, USERS_BY_PAGE);
+        $tutors = $service->getUsersByPage($pageFromNull * USERS_BY_PAGE, USERS_BY_PAGE);
 
         $this->numberOfUsers = $service->getNumberOfAllAvailableUsers();
 
