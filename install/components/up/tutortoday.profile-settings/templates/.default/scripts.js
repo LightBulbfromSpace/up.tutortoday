@@ -10,7 +10,7 @@ function getTime(userID, dayID) {
         dataType: 'json',
         timeout: 10,
         onsuccess: function (res) {
-            displayTime(res)
+            displayTime(res, dayID, userID)
         },
         onfailure: e => {
             console.error(e)
@@ -18,30 +18,41 @@ function getTime(userID, dayID) {
     })
 }
 
-function displayTime(res) {
-    if (res != null) {
-        let area = document.getElementById('free-time-area')
-        while (area.lastElementChild) {
-            area.removeChild(area.lastElementChild);
-        }
-
-        if (res.length === 0) {
-            let divElem = document.createElement('div');
-            divElem.innerText = 'No time selected';
-            area.appendChild(divElem);
-        } else {
-            res.forEach((interval) => {
-                let time = document.createElement('div');
-                time.innerText = interval['start'] + ' - ' + interval['end'];
-                time.classList.add('box-dark-element-custom', 'width-100', 'is-justified-center')
-                let button = document.createElement('button');
-                button.innerText = '-';
-                button.classList.add('button-plus-minus', 'button-large-custom')
-                area.appendChild(time);
-                area.appendChild(button);
-            });
-        }
+function displayTime(res, weekdayID, userID) {
+    if (res == null) {
+        return
     }
+    let area = document.getElementById('free-time-area')
+    while (area.lastElementChild) {
+        area.removeChild(area.lastElementChild);
+    }
+
+    if (res.length === 0) {
+        let divElem = document.createElement('div');
+        divElem.innerText = 'No time selected';
+        area.appendChild(divElem);
+    } else {
+        res.forEach((interval) => {
+            let time = document.createElement('div');
+            time.innerText = interval['start'] + ' - ' + interval['end'];
+            time.classList.add('box-dark-element-custom', 'width-100', 'is-justified-center')
+            let button = document.createElement('button');
+            button.type = 'button'
+            button.innerText = '-';
+            button.classList.add('button-plus-minus', 'button-large-custom')
+            button.onclick = () => {
+                deleteTime(interval['ID'])
+                getTime(userID, weekdayID)
+            }
+            area.appendChild(time);
+            area.appendChild(button);
+        });
+    }
+    for(let i = 1; i < 8; i++)
+    {
+        document.getElementById('weekday-' + i).classList.remove('weekday-selected')
+    }
+    document.getElementById('weekday-' + weekdayID).classList.add('weekday-selected')
 }
 
 function showTimepicker() {
@@ -58,18 +69,126 @@ function submitForms() {
     document.getElementById('ed-format-form').submit();
 }
 
-function addSubjectForm() {
+function closeSubjectForm() {
+    document.getElementById('add-subject-area').lastChild.remove()
+}
 
+function deleteSubject(subjID, userID) {
+    BX.ajax({
+        url: '/profile/settings/deleteSubject/',
+        data: {
+            subjectID: subjID,
+            userID: userID,
+            sessid: BX.bitrix_sessid(),
+        },
+        method: 'POST',
+        dataType: 'json',
+        timeout: 10,
+    })
+
+    document.getElementById('subject-container-' + subjID).remove()
+}
+
+function AddSubjectForm() {
+    BX.ajax({
+        url: '/profile/settings/allSubjects/',
+        method: 'GET',
+        dataType: 'json',
+        timeout: 10,
+        onsuccess: (res) => {
+            openSubjectForm(res)
+        },
+        onfailure: (e) => {
+          console.log(e)
+        }
+    })
+    return null
+}
+
+function openSubjectForm(weekdays) {
     let addArea = document.getElementById('add-subject-area')
     let form = document.createElement('div')
-    fetch('subjectForm.php')
-        .then(response=> response.text())
-        .then(text=> form.innerHTML = text)
-    form.classList.add('box')
-    form.id = 'subject-form' + addArea.children.length
+
+    let options = '';
+    weekdays.forEach((weekday) => {
+        options += `<option value="` + weekday['ID'] + `">` + weekday['name'] + `</option>`
+    })
+
+    form.innerHTML = `<div class="container-subjects box max-width-90 is-justified-center" id="subject-form">
+                        <div class="container-subjects">
+                            <div class="control">
+                                <div class="select-custom">
+                                    <select name="newSubjectsID[]">`
+                                    +
+                                    options
+                                    +
+                                    `</select>
+                                </div>
+                            </div>
+                            <div class="container-row-custom is-aligned-center max-width-90">
+                                <div class="box-dark-element-custom">
+                                    <input type="number" class="input-custom" placeholder="Price" name="newSubjectsPrices[]" value="1000">
+                                    <div class="price">rub/hour</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
     addArea.appendChild(form)
 }
 
-function closeSubjectForm() {
-    document.getElementById('add-subject-area').lastChild.remove()
+function addTime(userID) {
+
+    let weekdayID = null
+    for(let i = 1; i < 8; i++)
+    {
+        let weekday = document.getElementById('weekday-' + i)
+        if (weekday.classList.contains('weekday-selected'))
+        {
+            weekdayID = i
+        }
+    }
+
+    let from = document.getElementById('time-from').value
+    let to = document.getElementById('time-to').value
+    if (weekdayID === null) { return }
+
+    BX.ajax({
+        url: '/profile/settings/addTime/',
+        data: {
+            timeFrom: from,
+            timeTo: to,
+            userID: userID,
+            weekdayID: weekdayID,
+            sessid: BX.bitrix_sessid(),
+        },
+        method: 'POST',
+        dataType: 'json',
+        timeout: 10,
+        onsuccess: (res) => {
+            console.log(res)
+        },
+        onfailure: (e) => {
+            console.log(e)
+        },
+    })
+    getTime(userID, weekdayID)
+}
+
+function deleteTime(timeID) {
+    BX.ajax({
+        url: '/profile/settings/deleteTime/',
+        data: {
+            timeID: timeID,
+            sessid: BX.bitrix_sessid(),
+        },
+        method: 'POST',
+        dataType: 'json',
+        timeout: 10,
+        onsuccess: (res) => {
+            console.log(res)
+        },
+        onfailure: (e) => {
+            console.log(e)
+        },
+    })
 }

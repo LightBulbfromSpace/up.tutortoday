@@ -5,6 +5,7 @@ use Bitrix\Main\Routing\RoutingConfigurator;
 use Up\Tutortoday\Controller\AuthController;
 use Up\Tutortoday\Controller\MainPageController;
 use Up\Tutortoday\Controller\ProfileController;
+use Up\Tutortoday\Services\EducationService;
 
 return function (RoutingConfigurator $routes) {
     $routes->get('/', new PublicPageController('/local/view/tutortoday/tutortoday-main.php'));
@@ -12,6 +13,11 @@ return function (RoutingConfigurator $routes) {
     $routes->get('/registration/', new PublicPageController('/local/view/tutortoday/tutortoday-registration.php'));
     $routes->get('/profile/{id}/', new PublicPageController('/local/view/tutortoday/tutortoday-profile.php'));
     $routes->get('/profile/{id}/settings/', new PublicPageController('/local/view/tutortoday/tutortoday-profile-settings.php'));
+
+
+    $routes->get('/profile/settings/allSubjects/', function () {
+        return ProfileController::getAllSubjectsJSON();
+    });
 
 //    $routes->post('/search/', function($name) {
 //	    MainPageController::getTutorsByName($name);
@@ -24,7 +30,7 @@ return function (RoutingConfigurator $routes) {
     $routes->get('/logout/', function (){
         AuthController::LogoutAction();
     });
-	$routes->get('/filter/', new PublicPageController('/local/view/tutortoday/tutortoday-profile.php'));
+	//$routes->get('/filter/', new PublicPageController('/local/view/tutortoday/tutortoday-profile.php'));
 
     $routes->post('/login/', function () {
         AuthController::LoginAction();
@@ -39,7 +45,13 @@ return function (RoutingConfigurator $routes) {
         ProfileController::updateUser($id);
     });
 
-    $routes->post('/profile/settings/{id}/delete_subject/', function () {
+    $routes->post('/profile/settings/deleteSubject/', function () {
         ProfileController::deleteSubject(getPostList());
+    });
+    $routes->post('/profile/settings/addTime/', function (){
+        ProfileController::createTime(getPostList());
+    });
+    $routes->post('/profile/settings/deleteTime/', function (){
+        ProfileController::deleteTime(getPostList());
     });
 };

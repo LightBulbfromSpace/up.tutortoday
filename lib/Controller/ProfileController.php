@@ -37,6 +37,28 @@ class ProfileController
         return true;
     }
 
+    public static function createTime(ParameterDictionary $post)
+    {
+        if(!check_bitrix_sessid())
+        {
+            return null;
+        }
+        $timeToAdd = [
+            'timeFrom' => $post['timeFrom'],
+            'timeTo' => $post['timeTo'],
+        ];
+        return DatetimeService::createTime((int)$post['userID'], (int)$post['weekdayID'], $timeToAdd);
+    }
+
+    public static function deleteTime(ParameterDictionary $post)
+    {
+        if(!check_bitrix_sessid())
+        {
+            return null;
+        }
+        return DatetimeService::deleteTime($post['timeID']);
+    }
+
     public static function getUserTimeByDayID(ParameterDictionary $post)
     {
         if(!check_bitrix_sessid())
@@ -67,5 +89,19 @@ class ProfileController
         }
 
         (new EducationService([$post['userID']]))->deleteSubject($post['subjectID']);
+    }
+
+    public static function getAllSubjectsJSON()
+    {
+        $subjectsRaw = EducationService::getAllSubjects();
+        $subjects = [];
+        foreach ($subjectsRaw as $subject)
+        {
+            $subjects[] = [
+              'ID' => $subject['ID'],
+              'name' => $subject['NAME'],
+            ];
+        }
+        return $subjects;
     }
 }

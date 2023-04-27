@@ -63,8 +63,13 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             </div>
         </div>
         <div class="container-large-custom">
-            <div class="save-button-container">
-                <button type="submit" class="button-plus-minus button-small-custom" onclick="submitForms()">Save Changes</button>
+            <div class="container-row-custom">
+                <div class="save-button-container">
+                    <a class="link-button" href="/profile/<?=$arResult['user']['mainData']['ID']?>/">Back</a>
+                </div>
+                <div class="save-button-container">
+                    <button type="submit" class="button-plus-minus button-small-custom container-margin-top-bottom" onclick="submitForms()">Save Changes</button>
+                </div>
             </div>
             <label class="label">Description</label>
             <div class="box-dark-element-custom">
@@ -111,7 +116,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 <div class="br"></div>
                             <?php endif; ?>
                             <div class="container-subjects">
-                                <button type="button" class="button-plus-minus button-large-custom" onclick="addSubjectForm()">+</button>
+                                <button type="button" class="button-plus-minus button-large-custom" onclick="AddSubjectForm()">+</button>
                             </div>
                         </div>
                     </div>
@@ -126,7 +131,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <label class="label">Days of week</label>
                     <div class="box-stretched-custom">
                         <?php foreach ($arResult['weekdays'] as $weekday): ?>
-                            <button type="button" class="box-button" onclick="getTime(<?=$arResult['user']['mainData']['ID']?>, <?=$weekday['ID']?>)"><?=$weekday['NAME']?></button>
+                            <button type="button" class="box-button" id="weekday-<?=$weekday['ID']?>" onclick="getTime(<?=$arResult['user']['mainData']['ID']?>, <?=$weekday['ID']?>)"><?=$weekday['NAME']?></button>
                         <?php endforeach; ?>
                     </div>
                 </div>
@@ -142,15 +147,15 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 <form class="timepicker">
                                     <div class="formfield">
                                         <label>From:</label>
-                                        <input type="time" id="time-from" min="00:00" max="23:59"/>
+                                        <input type="time" id="time-from" name="time-from" min="00:00" max="23:59"/>
                                     </div>
 
                                     <div class="formfield">
                                         <label>To:</label>
-                                        <input type="time" id="time-to" min="00:00" max="23:59"/>
+                                        <input type="time" id="time-to" name="time-to" min="00:00" max="23:59"/>
                                     </div>
                                 </form>
-                                <button type="button" class="button-plus-minus button-small-custom" onclick="closeTimepicker()">OK</button>
+                                <button type="button" class="button-plus-minus button-small-custom" onclick="addTime(<?=$arResult['user']['mainData']['ID']?>); closeTimepicker()">OK</button>
                             </div>
                         </div>
                     </div>
@@ -159,53 +164,3 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         </div>
     </div>
 </form>
-<script>
-    function addSubjectForm() {
-        let addArea = document.getElementById('add-subject-area')
-        let form = document.createElement('div')
-        form.innerHTML = `<div class="container-subjects box max-width-90 is-justified-center" id="subject-form">
-            <div class="container-subjects">
-            <div class="control">
-            <div class="select-custom">
-            <select name="newSubjectsID[]">
-            <?php foreach ($arResult['subjects'] as $subject): ?>
-                <option value="<?=$subject['ID']?>"><?=$subject['NAME']?></option>
-            <?php endforeach; ?>
-    </select>
-    </div>
-    </div>
-        <div class="container-row-custom is-aligned-center max-width-90">
-            <div class="box-dark-element-custom">
-                <input type="number" class="input-custom" placeholder="Price" name="newSubjectsPrices[]" value="1000">
-                    <div class="price">rub/hour</div>
-            </div>
-        </div>
-    </div>
-    </div>`
-        addArea.appendChild(form)
-    }
-
-    function addTime() {
-
-    }
-
-    function closeSubjectForm() {
-        document.getElementById('add-subject-area').lastChild.remove()
-    }
-
-    function deleteSubject(subjID, userID) {
-        BX.ajax({
-            url: '/profile/settings/<?=$arResult['user']['mainData']['ID']?>/delete_subject/',
-            data: {
-                subjectID: subjID,
-                userID: userID,
-                sessid: BX.bitrix_sessid(),
-            },
-            method: 'POST',
-            dataType: 'json',
-            timeout: 10,
-        })
-
-        document.getElementById('subject-container-' + subjID).remove()
-    }
-</script>
