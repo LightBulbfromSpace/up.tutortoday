@@ -43,6 +43,10 @@ class ProfileController
         {
             return null;
         }
+        if($post['timeFrom'] === null || $post['timeTo'] === null)
+        {
+            return null;
+        }
         $timeToAdd = [
             'timeFrom' => $post['timeFrom'],
             'timeTo' => $post['timeTo'],
