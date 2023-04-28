@@ -99,10 +99,15 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                             </div>
                         </div>
                     </div>
-                    <div class="container-column-custom">
-                        <label class="label">City</label>
-                        <div class="box-dark-element-custom max-width-90">
-                            <input class="input-custom" name="city" placeholder="No city" value="<?=htmlspecialchars($arResult['user']['city'])?>">
+                    <label class="label">City</label>
+                    <div class="field">
+                        <div class="select-custom">
+                            <select name="city">
+                                <option value=""></option>
+                                <?php foreach ($arResult['cities'] as $city): ?>
+                                    <option value="<?=$city['ID']?>"><?=$city['NAME']?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
                     </div>
                     <div class="container-column-custom">

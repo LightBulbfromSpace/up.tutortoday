@@ -30,3 +30,17 @@ INSERT INTO up_tutortoday_weekdays (NAME) VALUES
     ('Friday'),
     ('Saturday'),
     ('Sunday');
+
+INSERT INTO up_tutortoday_cities (NAME) VALUES
+    ('Moscow'),
+    ('Saint-Petersburg'),
+    ('Kaliningrad'),
+    ('Penza'),
+    ('Saratov'),
+    ('Volgograd'),
+    ('Rostov-na-Donu'),
+    ('Vladivostok'),
+    ('Kazan'),
+    ('Kostroma'),
+    ('Saransk'),
+    ('Samara');

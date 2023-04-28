@@ -67,8 +67,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         </div>
         <div class="col-md-9">
             <div class="mt-3">
-                <form method="post" class="form-inline my-2 my-lg-0" action="/search/">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Find tutor" aria-label="Search">
+                <form method="get" class="form-inline my-2 my-lg-0" action="/">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Find tutor" name="search">
                     <button class="btn btn-danger my-2 my-sm-0" type="submit">Search</button>
                 </form>
             </div>

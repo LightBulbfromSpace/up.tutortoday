@@ -36,20 +36,6 @@ CREATE TABLE IF NOT EXISTS up_tutortoday_subject (
     PRIMARY KEY (ID)
 );
 
-# CREATE TABLE IF NOT EXISTS up_tutortoday_phones (
-#     ID int unsigned auto_increment not null,
-#     USER_ID int unsigned not null,
-#     PHONE_NUMBER varchar(20),
-#     PRIMARY KEY (ID)
-# );
-#
-# CREATE TABLE IF NOT EXISTS up_tutortoday_email (
-#     ID int unsigned auto_increment not null,
-#     USER_ID int unsigned not null,
-#     EMAIL varchar(255),
-#     PRIMARY KEY (ID)
-# );
-
 CREATE TABLE IF NOT EXISTS up_tutortoday_vk (
     ID int unsigned auto_increment not null,
     USER_ID int unsigned not null,
@@ -102,5 +88,11 @@ CREATE TABLE IF NOT EXISTS up_tutortoday_free_time (
 CREATE TABLE IF NOT EXISTS up_tutortoday_weekdays (
     ID int unsigned auto_increment not null,
     NAME varchar(30) not null,
+    PRIMARY KEY (ID)
+);
+
+CREATE TABLE IF NOT EXISTS up_tutortoday_cities (
+    ID int unsigned auto_increment not null,
+    NAME varchar(60) not null,
     PRIMARY KEY (ID)
 );

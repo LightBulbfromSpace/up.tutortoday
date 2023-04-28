@@ -48,29 +48,6 @@ class TutorTodayProfileComponent extends CBitrixComponent {
         $this->arResult['user'] = $user;
     }
 
-//    protected function prepareContactInfo($contacts)
-//    {
-//        foreach ($contacts as $contact)
-//        {
-//            if ($contact['EMAIL'] !== '')
-//            {
-//                $this->arResult['email'][] = $contact['EMAIL'];
-//            }
-//            if ($contact['PHONE_NUMBER'] !== '')
-//            {
-//                $this->arResult['phone'][] = $contact['PHONE_NUMBER'];
-//            }
-//            if ($contact['VK_PROFILE'] !== '')
-//            {
-//                $this->arResult['vk'][] = $contact['VK_PROFILE'];
-//            }
-//            if ($contact['TELEGRAM_USERNAME'] !== '')
-//            {
-//                $this->arResult['telegram'][] = $contact['TELEGRAM_USERNAME'];
-//            }
-//        }
-//    }
-
     protected function fetchWeekdays()
     {
         $this->arResult['weekdays'] = DatetimeService::getAllWeekdays();

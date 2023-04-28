@@ -6,6 +6,7 @@ use Up\Tutortoday\Controller\ProfileController;
 use Up\Tutortoday\Services\DatetimeService;
 use Up\Tutortoday\Services\EducationService;
 use Up\Tutortoday\Services\ErrorService;
+use Up\Tutortoday\Services\LocationService;
 use Up\Tutortoday\Services\UserService;
 
 Loc::loadMessages(__FILE__);
@@ -25,6 +26,7 @@ class TutorTodayProfileSettingsComponent extends CBitrixComponent {
         $this->fetchWeekdays();
         $this->fetchEducationFormats();
         $this->fetchAllSubjects();
+        $this->fetchAllCities();
         $this->prepareTemplateParams();
         $this->includeComponentTemplate();
     }
@@ -67,5 +69,10 @@ class TutorTodayProfileSettingsComponent extends CBitrixComponent {
     protected function fetchAllSubjects()
     {
         $this->arResult['subjects'] = EducationService::getAllSubjects();
+    }
+
+    protected function fetchAllCities()
+    {
+        $this->arResult['cities'] = LocationService::getAllCities();
     }
 }

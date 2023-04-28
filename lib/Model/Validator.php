@@ -3,6 +3,7 @@
 namespace Up\Tutortoday\Model;
 
 use Up\Tutortoday\Services\EducationService;
+use Up\Tutortoday\Services\LocationService;
 
 class Validator
 {
@@ -65,5 +66,26 @@ class Validator
             return true;
         }
         return !((new EducationService([$ID]))->getEducationFormatByID() == null);
+    }
+
+    public static function validateCitiesIDs(array $citiesIDs, bool $required = true) : bool
+    {
+        if ($citiesIDs === [])
+        {
+            return !$required;
+        }
+        $allCities = LocationService::getAllCities();
+        $allCitiesIDs = [];
+        foreach ($allCities as $city) {
+            $allCitiesIDs[] = $city->getID();
+        }
+        foreach ($allCitiesIDs as $cityID)
+        {
+            if (!in_array($cityID, $allCitiesIDs))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

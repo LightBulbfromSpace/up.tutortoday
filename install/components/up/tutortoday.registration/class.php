@@ -3,6 +3,7 @@
 use Bitrix\Main\Localization\Loc;
 use Up\Tutortoday\Services\EducationService;
 use Up\Tutortoday\Services\ErrorService;
+use Up\Tutortoday\Services\LocationService;
 
 Loc::loadMessages(__FILE__);
 
@@ -24,6 +25,7 @@ class TutorTodayRegistrationComponent extends CBitrixComponent {
 
         $this->arResult['edFormats'] = EducationService::getAllEdFormats();
         $this->arResult['subjects'] = EducationService::getAllSubjects();
+        $this->arResult['cities'] = LocationService::getAllCities();
     }
 
     protected function prepareLocalization()

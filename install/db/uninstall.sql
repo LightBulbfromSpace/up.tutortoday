@@ -24,3 +24,4 @@ DROP TABLE IF EXISTS up_tutortoday_profile_images;
 DROP TABLE IF EXISTS up_tutortoday_free_time;
 
 DROP TABLE IF EXISTS up_tutortoday_weekdays;
+DROP TABLE IF EXISTS up_tutortoday_cities;

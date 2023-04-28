@@ -19,18 +19,9 @@ return function (RoutingConfigurator $routes) {
         return ProfileController::getAllSubjectsJSON();
     });
 
-//    $routes->post('/search/', function($name) {
-//	    MainPageController::getTutorsByName($name);
-//	});
-
-//	$routes->post('/main/filter/', function() {
-//	    MainPageController::getTutorsByFilters(getPostList());
-//	});
-
     $routes->get('/logout/', function (){
         AuthController::LogoutAction();
     });
-	//$routes->get('/filter/', new PublicPageController('/local/view/tutortoday/tutortoday-profile.php'));
 
     $routes->post('/login/', function () {
         AuthController::LoginAction();

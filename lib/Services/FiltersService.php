@@ -21,16 +21,20 @@ class FiltersService
     private array $educationFormatIDs;
     private array $subjectIDs;
     private array $cityValues;
-    private $minPrice;
+    private int $minPrice;
+    private int $maxPrice;
+    private string $search;
 
-    private $maxPrice;
+
     public function __construct(array $dict)
     {
         $this->educationFormatIDs = $dict['edFormats'] != null ? $dict['edFormats'] : [];
         $this->subjectIDs = $dict['subjects'] != null ? $dict['subjects'] : [];
         $this->cityValues = $dict['city'] != null ? $dict['city'] : [];
-        $this->minPrice = $dict['minPrice'] != null || $dict['minPrice'] != '' ? $dict['minPrice'] : 0;
-        $this->maxPrice = $dict['maxPrice'] != null || $dict['maxPrice'] != ''  ? $dict['maxPrice'] : PHP_INT_MAX;
+        $this->minPrice = $dict['minPrice'] != null || $dict['minPrice'] != '' ? (int)$dict['minPrice'] : 0;
+        $this->maxPrice = $dict['maxPrice'] != null || $dict['maxPrice'] != ''  ? (int)$dict['maxPrice'] : PHP_INT_MAX;
+        //$this->search = $dict['search'] === ''  ? null : $dict['search'];
+        var_dump($dict['search']);die;
     }
 
     public function getNumberOfFilteredUsers(): int
@@ -50,12 +54,9 @@ class FiltersService
             $tutorIDsBySubjectRaw = $tutorIDsBySubjectRaw->whereIn('SUBJECT_ID', $this->subjectIDs);
         }
 
-        if ($this->minPrice !== null || $this->maxPrice !== null)
-        {
-            $tutorIDsBySubjectRaw = $tutorIDsBySubjectRaw->whereBetween('PRICE', $this->minPrice, $this->maxPrice);
-        }
-
-        $tutorIDsBySubjectRaw = $tutorIDsBySubjectRaw->fetchCollection();
+        $tutorIDsBySubjectRaw = $tutorIDsBySubjectRaw
+            ->whereBetween('PRICE', $this->minPrice, $this->maxPrice)
+            ->fetchCollection();
 
         foreach ($tutorIDsBySubjectRaw as $ID)
         {
@@ -88,6 +89,12 @@ class FiltersService
         else
         {
             $tutorsIDs = $tutorIDsBySubject === [] ? $tutorIDsByEdFormat : $tutorIDsBySubject;
+        }
+
+
+        if ($this->search !== null)
+        {
+
         }
 
         $this->isFilterUsed = true;

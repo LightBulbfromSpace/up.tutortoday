@@ -17,6 +17,7 @@ class ErrorService
             'invalid_subject' => "Subject is invalid",
             'invalid_ed_format' => "Education format is invalid",
             'unexpected_error' => "Unexpected error",
+            'invalid_city' => "Invalid city",
             default => '',
         };
     }

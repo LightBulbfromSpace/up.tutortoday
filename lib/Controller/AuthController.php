@@ -85,6 +85,11 @@ class AuthController extends Controller
             LocalRedirect('/registration/?err=invalid_subject');
         }
 
+        if (!Validator::validateCitiesIDs([$userForm->getCityID()], false))
+        {
+            LocalRedirect('/registration/?err=invalid_city');
+        }
+
         foreach ($userForm->getEdFormatsIDs() as $edFormatID)
         {
             if (!Validator::validateEducationFormatID($edFormatID, false))

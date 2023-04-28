@@ -101,11 +101,13 @@ class UserService
             return 'Roles not found';
         }
 
+        $city = LocationService::getCityNameByID((int)$userForm->getCityID());
+
         $resultUser = $user->Update($user->getID(), [
             'SECOND_NAME' => $userForm->getMiddleName(),
             'WORK_PHONE' => $userForm->getPhoneNumber(),
             'WORK_MAILBOX' => $userForm->getWorkingEmail(),
-            'WORK_CITY' => $userForm->getCity(),
+            'WORK_CITY' => $city,
             'WORK_POSITION' => $tutorRoleID,
             'WORK_COMPANY' => 'TutorToday',
         ]);
@@ -209,12 +211,14 @@ class UserService
             ->where('USER_ID', $this->userID)
             ->fetchObject();
 
+        $city = LocationService::getCityNameByID((int)$user['WORK_CITY']);
+
         return [
             'photo' => $user['PERSONAL_PHOTO'] != null ? $user['PERSONAL_PHOTO'] : DEFAULT_PHOTO,
             'mainData' => $user,
             'role' => $role->getRole(),
             'edFormats' => $edFormats,
-            'city' => $user['WORK_CITY'],
+            'city' => $city,
             'description' => $description['DESCRIPTION'],
             'contacts'=> [
                 'phone' => $user['WORK_PHONE'],
@@ -329,7 +333,7 @@ class UserService
                 'NAME' => $userForm->getName(),
                 'LAST_NAME' => $userForm->getLastName(),
                 'SECOND_NAME' => $userForm->getMiddleName(),
-                'WORK_CITY' => $userForm->getCity(),
+                'WORK_CITY' => $userForm->getCityID(),
                 'WORK_PHONE' => $userForm->getPhoneNumber(),
                 'WORK_MAILBOX' => $userForm->getWorkingEmail(),
         ]);

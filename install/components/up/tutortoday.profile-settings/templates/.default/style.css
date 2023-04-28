@@ -166,7 +166,7 @@
     font-size: medium;
 }
 
-.box-button:hover, .select-custom select:hover, .button-plus-minus-large:hover {
+.box-button:hover, .button-plus-minus-large:hover {
     background-color: #D9D9D9;
     cursor: pointer;
 
@@ -295,6 +295,11 @@
     vertical-align: top;
     appearance: none;
     width: 90%;
+}
+
+.select-custom select:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.125em rgb(72 95 199 / 25%);
 }
 
 .container-subjects {
