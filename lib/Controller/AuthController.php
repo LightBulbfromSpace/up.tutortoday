@@ -85,9 +85,12 @@ class AuthController extends Controller
             LocalRedirect('/registration/?err=invalid_subject');
         }
 
-        if (!Validator::validateEducationFormatID($userForm->getEdFormatID()))
+        foreach ($userForm->getEdFormatsIDs() as $edFormatID)
         {
-            LocalRedirect('/registration/?err=invalid_ed_format');
+            if (!Validator::validateEducationFormatID($edFormatID, false))
+            {
+                LocalRedirect('/registration/?err=invalid_ed_format');
+            }
         }
 
         $ErrOrUserID = UserService::CreateUser($userForm);

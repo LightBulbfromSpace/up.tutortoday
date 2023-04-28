@@ -369,3 +369,8 @@ textarea::-webkit-scrollbar-thumb {
     justify-content: flex-start;
     align-items: center;
 }
+
+.form-check-custom {
+    margin-left: 1rem;
+    accent-color: #dc3545;
+}

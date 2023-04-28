@@ -75,6 +75,8 @@ class UserService
 
     public static function CreateUser(UserRegisterForm $userForm) : bool|string|array
     {
+        global $DB;
+        $DB->StartTransaction();
         $user = new \CUser();
         $resultUser = $user->Register(
             $userForm->getLogin(),
@@ -87,13 +89,15 @@ class UserService
 
         if ($resultUser['TYPE'] !== 'OK')
         {
+            $DB->rollback();
             return $resultUser;
         }
 
         $tutorRoleID = EducationService::getRoleIDbyName('tutor');
         if ($tutorRoleID === null)
         {
-            // TODO:Error handling
+            $DB->rollback();
+            return 'Roles not found';
         }
 
         $resultUser = $user->Update($user->getID(), [
@@ -105,8 +109,9 @@ class UserService
             'WORK_COMPANY' => 'TutorToday',
         ]);
 
-        if ($resultUser == false)
+        if (!$resultUser)
         {
+            $DB->rollback();
             return $resultUser;
         }
 
@@ -116,16 +121,18 @@ class UserService
         ]);
         if (!$resultRole->isSuccess())
         {
+            $DB->rollback();
             return $resultRole->getErrorMessages();
         }
 
-        $resultEdFormat = UserEdFormatTable::add([
-            'USER_ID' => $user->getID(),
-            'EDUCATION_FORMAT_ID' => $userForm->getEdFormatID(),
-        ]);
-        if (!$resultEdFormat->isSuccess())
-        {
-            return $resultEdFormat->getErrorMessages();
+        foreach ($userForm->getEdFormatsIDs() as $edFormatID) {
+            $resultEdFormat = UserEdFormatTable::add([
+                'USER_ID' => $user->getID(),
+                'EDUCATION_FORMAT_ID' => $edFormatID,
+            ]);
+            if (!$resultEdFormat->isSuccess()) {
+                return $resultEdFormat->getErrorMessages();
+            }
         }
 
         foreach ($userForm->getSubjectsIDs() as $subject)
@@ -136,6 +143,7 @@ class UserService
             ]);
             if (!$resultSubject->isSuccess())
             {
+                $DB->rollback();
                 return $resultSubject->getErrorMessages();
             }
         }
@@ -146,80 +154,13 @@ class UserService
         ]);
         if (!$resultDescription->isSuccess())
         {
+            $DB->rollback();
             return $resultDescription->getErrorMessages();
         }
 
+        $DB->Commit();
         return $user->getID();
     }
-
-
-//    public static function getUsersByPage(int $page = 1, string $role = 'Tutor')
-//    {
-//        $offset = $page * USERS_BY_PAGE;
-//
-//        $tutorRoleID = EducationService::getRoleIDbyName($role);
-//        if ($tutorRoleID === null)
-//        {
-//            // TODO:Error handling
-//        }
-//
-//        $users = UserTable::query()
-//            ->setSelect(['ID', 'NAME', 'LAST_NAME', 'SECOND_NAME', 'WORK_CITY', 'PERSONAL_PHOTO'])
-//            ->where('WORK_POSITION', $tutorRoleID)
-//            ->where('WORK_COMPANY', SITE_NAME)
-//            ->setOrder(['ID' => 'DESC'])
-//            ->setOffset($offset)
-//            ->setLimit(USERS_BY_PAGE)
-//            ->fetchCollection();
-//
-//
-//        $usersIDs = [];
-//
-//        foreach ($users as $user)
-//        {
-//            $usersIDs[] = $user['ID'];
-//        }
-//
-//        $descriptions = UserDescriptionTable::query()
-//            ->setSelect(['*'])
-//            ->whereIn('USER_ID', $usersIDs)
-//            ->fetchCollection();
-//
-//
-//        $result = [];
-//        foreach ($users as $i => $user)
-//        {
-//            $result[$i] = [
-//                'fullName' => [
-//                    'name' => $user['NAME'],
-//                    'lastName' => $user['LAST_NAME'],
-//                    'secondName' => $user['SECOND_NAME'],
-//                ],
-//                'city' => $user['WORK_CITY'],
-//                //TODO: change work with photo!!!
-//                'photo' => $user['PERSONAL_PHOTO'] != null ? $user['PERSONAL_PHOTO'] : DEFAULT_PHOTO,
-//            ];
-//            foreach ($descriptions as $description)
-//            {
-//                if ($user->getID() === $description->getUserId())
-//                {
-//                    $result[$i]['description'] = $description['DESCRIPTION'];
-//                    break;
-//                }
-//            }
-//        }
-//        return $result;
-//    }
-
-    // Photo
-    // Full name
-    // Contacts (email, phone, telegram, vk)
-    // Education format
-    // City
-    // Role
-    // Subjects
-    // Description
-    // Feedbacks (in public part)
 
     public function getUserByID()
     {
@@ -243,15 +184,10 @@ class UserService
             return false;
         }
 
-        $edFormat = UserEdFormatTable::query()
+        $edFormats = UserEdFormatTable::query()
             ->setSelect(['USER_ID', 'EDUCATION_FORMAT'])
             ->where('USER_ID', $this->userID)
-            ->fetchObject();
-
-        if ($edFormat == null)
-        {
-            return false;
-        }
+            ->fetchCollection();
 
         $VKs = VkTable::query()
             ->setSelect(['USER_ID', 'VK_PROFILE'])
@@ -276,7 +212,7 @@ class UserService
             'photo' => $user['PERSONAL_PHOTO'] != null ? $user['PERSONAL_PHOTO'] : DEFAULT_PHOTO,
             'mainData' => $user,
             'role' => $role->getRole(),
-            'edFormat' => $edFormat->getEducationFormat(),
+            'edFormats' => $edFormats,
             'city' => $user['WORK_CITY'],
             'description' => $description['DESCRIPTION'],
             'contacts'=> [
@@ -365,7 +301,11 @@ class UserService
             {
                 if ($user['ID'] === $subject['USER_ID'])
                 {
-                    $result[$i]['subjects'][] = $subject['SUBJECT'];
+                    $result[$i]['subjects'][] = [
+                        'NAME' => $subject['SUBJECT']['NAME'],
+                        'ID' => $subject['SUBJECT']['ID'],
+                        'PRICE' => $subject['PRICE'],
+                    ];
                 }
             }
             foreach ($edFormats as $edFormat)
@@ -405,15 +345,33 @@ class UserService
             return 'description update error';
         }
 
-        $edFormatResult = UserEdFormatTable::update([
-            'USER_ID' => $this->userID,
-            'EDUCATION_FORMAT_ID' =>$userForm->getEdFormatID()
-        ], [
-            'EDUCATION_FORMAT_ID' => $userForm->getEdFormatID(),
-        ]);
-        if (!$edFormatResult->isSuccess())
+        $existingEdFormats = UserEdFormatTable::query()
+            ->setSelect(['*'])
+            ->where('USER_ID', $this->userID)
+            ->fetchCollection();
+
+        foreach ($existingEdFormats as $format)
         {
-            return 'description update error';
+            $edFormatResult = UserEdFormatTable::delete([
+                'USER_ID' => $format['USER_ID'],
+                'EDUCATION_FORMAT_ID' => $format['EDUCATION_FORMAT_ID'],
+            ]);
+            if (!$edFormatResult->isSuccess())
+            {
+                return 'education format update error';
+            }
+        }
+
+        foreach ($userForm->getEdFormatsIDs() as $edFormatID)
+        {
+            $edFormatResult = UserEdFormatTable::add([
+                'USER_ID' => $this->userID,
+                'EDUCATION_FORMAT_ID' => $edFormatID
+            ]);
+            if (!$edFormatResult->isSuccess())
+            {
+                return 'education format error';
+            }
         }
 
         foreach ($userForm->getExistingSubjectsPrices() as $subject)

@@ -112,7 +112,7 @@
     border-radius: 6px;
     box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%), 0 0 0 1px rgb(10 10 10 / 0.1%);
     color: #ffffff;
-    padding: 0.5rem;
+    padding: 0.5rem 0.75rem;
     margin: 0.25rem 0.5rem 0 0;
 }
 
@@ -120,6 +120,13 @@
     border-top: solid #D9D9D9 1px;
     margin: 20px 0;
 }
+
+.vbr {
+    border-left: solid #D9D9D9 1px;
+    margin: 0 0.5rem;
+    height: 100%;
+}
+
 a:link { text-decoration: none; }
 a:visited { text-decoration: none; }
 a:hover { text-decoration: none; }
@@ -145,7 +152,12 @@ body::-webkit-scrollbar-thumb {
 }
 
 .pagination-link.is-current-custom {
-    background-color: #dc3545;;
-    border-color: #dc3545;;
+    background-color: #dc3545;
+    border-color: #dc3545;
     color: #fff;
+}
+
+.card-title-custom {
+    font-size: 17px;
+    font-weight: 500;
 }

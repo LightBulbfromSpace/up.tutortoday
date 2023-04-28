@@ -84,6 +84,61 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             </div>
         </div>
 
+        <div class="field is-grouped">
+            <label class="label"></label>
+            <div class="control">
+                <button class="button is-dark" type="button" onclick="showSubjects()">Select subjects</button>
+            </div>
+            <label class="label"></label>
+            <div class="control">
+                <button class="button is-dark" type="button" onclick="showEdFormats()">Select educational formats</button>
+            </div>
+        </div>
+
+        <div class="popup-form-custom" id="popup-form-subjects-custom">
+            <div class="box">
+                <div class="field">
+                    <label class="is-justified-center bold">Subject</label>
+                    <div class="checkbox-container-custom">
+                        <?php foreach ($arResult['subjects'] as $subject): ?>
+                        <label class="checkbox checkbox-elem-custom">
+                            <input type="checkbox" class="field checkbox-custom" value="<?=$subject->getID()?>" name="subjects[]">
+                            <?=$subject->getName()?>
+                        </label>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                <div class="field is-justified-center">
+                    <label class="label"></label>
+                    <div class="control">
+                        <button class="button is-dark" type="button" onclick="closeSubjects()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="popup-form-custom popup-small-form-custom" id="popup-form-ed-formats-custom">
+            <div class="box">
+                <div class="field">
+                    <label class="is-justified-center bold">Education Format</label>
+                    <div class="checkbox-container-custom">
+                        <?php foreach ($arResult['edFormats'] as $edFormat): ?>
+                            <label class="checkbox checkbox-elem-custom">
+                                <input type="checkbox" class="field checkbox-custom" value="<?=$edFormat->getID()?>" name="edFormats[]">
+                                <?=$edFormat->getName()?>
+                            </label>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                <div class="is-justified-center">
+                    <label class="label"></label>
+                    <div class="control">
+                        <button class="button is-dark" type="button" onclick="closeEdFormats()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="field">
             <label class="label">Profile description</label>
             <div class="control">
@@ -91,47 +146,18 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             </div>
         </div>
 
-        <div class="field is-grouped">
-            <label class="label"></label>
-            <div class="control">
-                <button class="button is-dark" type="button" onclick="showPopupForm()">Select subjects</button>
-            </div>
-        </div>
-
-        <div class="popup-form-custom">
-            <div class="box">
-                <div class="field">
-                    <label class="label">Subject</label>
-                    <div class="checkbox-container-custom">
-                        <?php foreach ($arResult['subjects'] as $subject): ?>
-                        <label class="checkbox checkbox-elem-custom">
-                            <input type="checkbox" class="field" value="<?=$subject->getID()?>" name="subjects[]">
-                            <?=$subject->getName()?>
-                        </label>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-                <div class="field is-grouped">
-                    <label class="label"></label>
-                    <div class="control">
-                        <button class="button is-dark" type="button" onclick="closePopupForm()">Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="field">
-            <label class="label">Education format</label>
-            <div class="control">
-                <div class="select">
-                    <select name="edFormat">
-                        <?php foreach ($arResult['edFormats'] as $edFormat): ?>
-                            <option value="<?=$edFormat->getID()?>"><?=$edFormat->getName()?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-            </div>
-        </div>
+<!--        <div class="field">-->
+<!--            <label class="label">Education format</label>-->
+<!--            <div class="control">-->
+<!--                <div class="select">-->
+<!--                    <select name="edFormat">-->
+<!--                        --><?php //foreach ($arResult['edFormats'] as $edFormat): ?>
+<!--                            <option value="--><?php //=$edFormat->getID()?><!--">--><?php //=$edFormat->getName()?><!--</option>-->
+<!--                        --><?php //endforeach; ?>
+<!--                    </select>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
 
         <?=bitrix_sessid_post()?>
 

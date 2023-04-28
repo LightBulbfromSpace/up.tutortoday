@@ -83,9 +83,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                         </div>
                         <div class="col-md-8">
                             <div class="card-body-custom">
-                                <h2 class="card-title">
-                                    <?=htmlspecialchars($tutor['fullName']['lastName'])?>&nbsp;&nbsp;
-                                    <?=htmlspecialchars($tutor['fullName']['name'])?>&nbsp;&nbsp;
+                                <h2 class="card-title-custom">
+                                    <?=htmlspecialchars($tutor['fullName']['lastName'])?>&nbsp;
+                                    <?=htmlspecialchars($tutor['fullName']['name'])?>&nbsp;
                                     <?=htmlspecialchars($tutor['fullName']['secondName'])?></h2>
                                 <div class="br"></div>
                                 <p class="card-text">
@@ -98,18 +98,22 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 </p>
                                 <div class="container-subjects">
                                     <?php if($tutor['subjects'] == null): ?>
-                                        <div class="box-dark-element-custom">No subjects</div>
+                                        <div class="box-darker-element-custom">No subjects</div>
                                     <?php endif; ?>
                                     <?php foreach ($tutor['subjects'] as $subject): ?>
-                                        <div class="box-dark-element-custom"><?=$subject['NAME']?></div>
+                                        <div class="box-darker-element-custom container-row-custom is-justified-center">
+                                            <div><?=$subject['NAME']?></div>
+                                            <div class="vbr"></div>
+                                            <div><?=$subject['PRICE'] == 0 ? '-' : $subject['PRICE']?></div>
+                                        </div>
                                     <?php endforeach; ?>
                                 </div>
                                 <div class="container-subjects">
                                     <?php if($tutor['edFormat'] == null): ?>
-                                        <div class="box-darker-element-custom">No education format</div>
+                                        <div class="box-dark-element-custom">No education format</div>
                                     <?php endif; ?>
                                     <?php foreach ($tutor['edFormat'] as $edFormat): ?>
-                                        <div class="box-darker-element-custom"><?=$edFormat['NAME']?></div>
+                                        <div class="box-dark-element-custom"><?=$edFormat['NAME']?></div>
                                     <?php endforeach; ?>
                                 </div>
                                 <p class="card-text">

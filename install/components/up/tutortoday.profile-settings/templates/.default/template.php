@@ -80,12 +80,21 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <div class="container-column-custom">
                         <label class="label">Education format</label>
                         <div class="control">
-                            <div class="select-custom">
-                                <select name="education_format">
+                            <div class="box">
+                                <div name="education_format">
                                     <?php foreach ($arResult['edFormats'] as $edFormat): ?>
-                                        <option class="box" name="edFormat" value="<?=$edFormat['ID']?>"><?=$edFormat['NAME']?></option>
+                                        <div class="form-check-custom">
+                                            <input class="form-check-input" name="edFormats[]"
+                                                   type="checkbox" value="<?=$edFormat['ID']?>"
+                                                   <?php if ($arResult['user']['edFormatsIDs'] !== null): ?>
+                                                   <?=in_array($edFormat['ID'], $arResult['user']['edFormatsIDs']) ? 'checked' : ''?>
+                                                   <?php endif; ?>>
+                                            <label class="form-check-label" for="<?= $edFormat['NAME']?>">
+                                                <?= $edFormat['NAME']?>
+                                            </label>
+                                        </div>
                                     <?php endforeach; ?>
-                                </select>
+                                </div>
                             </div>
                         </div>
                     </div>

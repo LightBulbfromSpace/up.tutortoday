@@ -54,6 +54,10 @@
     margin: auto;
 }
 
+.popup-small-form-custom {
+    top: 800px;
+}
+
 .checkbox-container-custom {
     display: flex;
     flex-direction: column;
@@ -64,6 +68,10 @@
     padding: 5px 0;
 }
 /* subject checkbox: end */
+
+.checkbox-custom {
+    accent-color: #dc3545;
+}
 
 #overlay {
     position: fixed;
@@ -85,4 +93,13 @@ body::-webkit-scrollbar-thumb {
     background-color: #D9D9D9;
     border-radius: 20px;
     border: none;
+}
+
+.is-justified-center {
+    display: flex;
+    justify-content: center;
+}
+
+.bold {
+    font-weight: 600;
 }

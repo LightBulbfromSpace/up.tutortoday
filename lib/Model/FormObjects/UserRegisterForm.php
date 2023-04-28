@@ -22,7 +22,7 @@ class UserRegisterForm
 
     private array $existingSubjectsPrices = [];
 
-    private int $edFormatID;
+    private array $edFormatsIDs = [];
     private string $description;
     private string $city;
     private int $roleID;
@@ -39,7 +39,7 @@ class UserRegisterForm
         $this->email = $post['email'] ?? '';
         $this->workingEmail = $post['workingEmail'];
         $this->phoneNumber = $post['phoneNumber'];
-        $this->edFormatID = $post['edFormat'] ?? 1;
+        $this->edFormatsIDs = $post['edFormats'] ?? [];
         $this->description = $post['description'];
         $this->city = $post['city'];
         $this->roleID = $post['roleID'] ?? 1;
@@ -108,9 +108,9 @@ class UserRegisterForm
         return $this->phoneNumber;
     }
 
-    public function getEdFormatID(): int
+    public function getEdFormatsIDs(): array
     {
-        return $this->edFormatID;
+        return $this->edFormatsIDs;
     }
 
     public function getSubjectsIDs(): array

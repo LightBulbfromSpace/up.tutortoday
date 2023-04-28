@@ -78,9 +78,16 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         <div class="container-row-custom">
             <div class="container-column-custom">
                 <div class="container-column-custom">
-                    <label class="label">Education format</label>
+                    <label class="label">Education formats</label>
                     <div class="box">
-                        <?=$arResult['user']['edFormat']['NAME']?>
+                        <?php if(count($arResult['user']['edFormats']) === 0): ?>
+                            No formats selected
+                        <?php endif; ?>
+                        <?php foreach ($arResult['user']['edFormats'] as $edFormat): ?>
+                            <div class="box-dark-element-custom">
+                                <?=$edFormat['EDUCATION_FORMAT']['NAME']?>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
                 <div class="container-column-custom">

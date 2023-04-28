@@ -32,6 +32,10 @@ class TutorTodayProfileSettingsComponent extends CBitrixComponent {
     public function prepareTemplateParams()
     {
         $this->arResult['isOwner'] = (new ProfileController($this->arResult['ID']))->isOwnerOfProfile();
+        foreach ($this->arResult['user']['edFormats'] as $edFormat)
+        {
+            $this->arResult['user']['edFormatsIDs'][] = $edFormat['EDUCATION_FORMAT']['ID'];
+        }
     }
 
     public function onPrepareComponentParams($arParams)
