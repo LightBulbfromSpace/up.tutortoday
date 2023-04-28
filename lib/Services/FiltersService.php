@@ -18,9 +18,9 @@ class FiltersService
 
 
     private bool $isFilterUsed;
-    private array $educationFormatIDs;
-    private array $subjectIDs;
-    private array $cityValues;
+    private array $educationFormatIDs = [];
+    private array $subjectIDs = [];
+    private array $citiesIDs = [];
     private int $minPrice;
     private int $maxPrice;
     private string $search;
@@ -30,11 +30,10 @@ class FiltersService
     {
         $this->educationFormatIDs = $dict['edFormats'] != null ? $dict['edFormats'] : [];
         $this->subjectIDs = $dict['subjects'] != null ? $dict['subjects'] : [];
-        $this->cityValues = $dict['city'] != null ? $dict['city'] : [];
+        $this->citiesIDs = $dict['cities'] != null ? $dict['cities'] : [];
         $this->minPrice = $dict['minPrice'] != null || $dict['minPrice'] != '' ? (int)$dict['minPrice'] : 0;
         $this->maxPrice = $dict['maxPrice'] != null || $dict['maxPrice'] != ''  ? (int)$dict['maxPrice'] : PHP_INT_MAX;
         //$this->search = $dict['search'] === ''  ? null : $dict['search'];
-        var_dump($dict['search']);die;
     }
 
     public function getNumberOfFilteredUsers(): int
@@ -44,30 +43,25 @@ class FiltersService
 
     public function filterTutors(int $offset = 0, int $limit = 50) : void
 	{
-        $tutorIDsBySubject = null;
-        $tutorIDsBySubjectRaw = UserSubjectTable::query()
-            ->setSelect(['USER_ID', 'PRICE'])
-            ->setOrder(['USER_ID' => 'DESC']);
+        $tutorIDsBySubject = [];
+        if ($this->subjectIDs !== [] || $this->minPrice > 0 || $this->maxPrice < PHP_INT_MAX) {
 
-        if ($this->subjectIDs !== []) {
+            $tutorIDsBySubjectRaw = UserSubjectTable::query()
+                ->setSelect(['USER_ID', 'PRICE'])
+                ->setOrder(['USER_ID' => 'DESC'])
+                ->whereIn('SUBJECT_ID', $this->subjectIDs)
+                ->whereBetween('PRICE', $this->minPrice, $this->maxPrice)
+                ->fetchCollection();
 
-            $tutorIDsBySubjectRaw = $tutorIDsBySubjectRaw->whereIn('SUBJECT_ID', $this->subjectIDs);
+            foreach ($tutorIDsBySubjectRaw as $ID)
+            {
+                $tutorIDsBySubject[] = $ID['USER_ID'];
+            }
         }
 
-        $tutorIDsBySubjectRaw = $tutorIDsBySubjectRaw
-            ->whereBetween('PRICE', $this->minPrice, $this->maxPrice)
-            ->fetchCollection();
+        $tutorIDsBySubject = $tutorIDsBySubject !== [] ? array_unique($tutorIDsBySubject): [];
 
-        foreach ($tutorIDsBySubjectRaw as $ID)
-        {
-            $tutorIDsBySubject[] = $ID['USER_ID'];
-        }
-
-        $tutorIDsBySubject = $tutorIDsBySubject != null ? array_unique($tutorIDsBySubject): [];
-
-        $tutorIDsByEdFormat = null;
-        $tutorIDsByEdFormatRaw = [];
-
+        $tutorIDsByEdFormat = [];
         if ($this->educationFormatIDs !== [])
         {
             $tutorIDsByEdFormatRaw = UserEdFormatTable::query()
@@ -75,31 +69,72 @@ class FiltersService
                 ->whereIn('EDUCATION_FORMAT_ID', $this->educationFormatIDs)
                 ->setOrder(['USER_ID' => 'DESC'])
                 ->fetchCollection();
+
+            foreach ($tutorIDsByEdFormatRaw as $ID)
+            {
+                $tutorIDsByEdFormat[] = $ID['USER_ID'];
+            }
         }
 
-        foreach ($tutorIDsByEdFormatRaw as $ID)
+        $tutorIDsByCities = [];
+        if ($this->citiesIDs !== [])
         {
-            $tutorIDsByEdFormat[] = $ID['USER_ID'];
+            $tutorIDsByCitiesRaw = UserTable::query()
+                ->setSelect(['ID'])
+                ->setOrder(['ID' => 'DESC'])
+                ->whereIn('WORK_CITY', $this->citiesIDs)
+                ->fetchCollection();
+
+            foreach ($tutorIDsByCitiesRaw as $ID)
+            {
+                $tutorIDsByCities[] = $ID['ID'];
+            }
         }
 
-        if ($tutorIDsBySubject != null && $tutorIDsByEdFormat != null)
+        $intersections = [];
+
+        if (($this->subjectIDs !== []  || $this->minPrice > 0 || $this->maxPrice < PHP_INT_MAX)
+            && $this->citiesIDs !== [] )
         {
-            $tutorsIDs = array_intersect($tutorIDsBySubject, $tutorIDsByEdFormat);
+            $intersections[] = array_intersect($tutorIDsBySubject, $tutorIDsByCities);
+        }
+
+        if ($this->educationFormatIDs !== [] && $this->citiesIDs !== [])
+        {
+            $intersections[] = array_intersect($tutorIDsByEdFormat, $tutorIDsByCities);
+        }
+
+        if (($this->subjectIDs !== [] || $this->minPrice > 0 || $this->maxPrice < PHP_INT_MAX)
+            && $this->educationFormatIDs !== [])
+        {
+            $intersections[] = array_intersect($tutorIDsBySubject, $tutorIDsByEdFormat);
+        }
+
+        $tutorsIDs = [];
+
+        if ($intersections === [])
+        {
+            if ($tutorIDsBySubject !== [])
+            {
+                $tutorsIDs = $tutorIDsBySubject;
+            }
+            if ($tutorIDsByEdFormat !== [])
+            {
+                $tutorsIDs = $tutorIDsByEdFormat;
+            }
+            if ($tutorIDsByCities !== [])
+            {
+                $tutorsIDs = $tutorIDsByCities;
+            }
         }
         else
         {
-            $tutorsIDs = $tutorIDsBySubject === [] ? $tutorIDsByEdFormat : $tutorIDsBySubject;
-        }
-
-
-        if ($this->search !== null)
-        {
-
+            $tutorsIDs = array_intersect(...$intersections);
         }
 
         $this->isFilterUsed = true;
 
-        if ($tutorsIDs == null)
+        if ($tutorsIDs === [])
         {
             $this->filteredTutors = [];
             return;
@@ -113,6 +148,7 @@ class FiltersService
 
         $this->filteredTutors = $service->getUsersByPage($offset, $limit);
 	}
+
     public function getTutorsByName($name)
 	{
 		$tutors = UserTable::query()->setSelect(['*'])
@@ -130,5 +166,23 @@ class FiltersService
     public function isFilterUsed(): bool
     {
         return $this->isFilterUsed;
+    }
+
+    private function intersection(array $intersections)
+    {
+        if (count($intersections) < 2)
+        {
+            return $intersections;
+        }
+
+        $intersectionsLen = count($intersections);
+
+        for ($i = 0; $i < $intersectionsLen - 1; $i++)
+        {
+            $intersections[$i] = array_intersect($intersections[$i], $intersections[$i+1]);
+        }
+        unset($intersections[$intersectionsLen-1]);
+
+        return $this->intersection($intersections);
     }
 }

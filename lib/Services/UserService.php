@@ -9,6 +9,7 @@ use Bitrix\Main\UrlPreview\Parser\Vk;
 use Bitrix\Main\UserTable;
 use Up\Tutortoday\Model\FormObjects\UserForm;
 use Up\Tutortoday\Model\FormObjects\UserRegisterForm;
+use Up\Tutortoday\Model\Tables\CitiesTable;
 use Up\Tutortoday\Model\Tables\FeedbacksTable;
 use Up\Tutortoday\Model\Tables\FreeTimeTable;
 use Up\Tutortoday\Model\Tables\RolesTable;
@@ -280,6 +281,8 @@ class UserService
             ->whereIn('USER_ID', $fetchedUserIDs)
             ->fetchCollection();
 
+        $cities = LocationService::getAllCities();
+
         $result = [];
 
         foreach ($users as $i => $user)
@@ -292,7 +295,6 @@ class UserService
                     'lastName' => $user['LAST_NAME'],
                     'secondName' => $user['SECOND_NAME'],
                 ],
-                'city' => $user['WORK_CITY'],
             ];
             foreach ($descriptions as $description)
             {
@@ -320,7 +322,14 @@ class UserService
                     $result[$i]['edFormat'][] = $edFormat['EDUCATION_FORMAT'];
                 }
             }
-
+            foreach ($cities as $city)
+            {
+                if($user['WORK_CITY'] === $city['ID'])
+                {
+                    $result[$i]['city'][] = $city;
+                    break;
+                }
+            }
         }
 
         return $result;
@@ -483,14 +492,20 @@ class UserService
 
         //profile images
 
-        $VKs = VkTable::query()->setSelect(['*'])->where('USER_ID', $this->userID)->fetchCollection();
+        $VKs = VkTable::query()
+            ->setSelect(['*'])
+            ->where('USER_ID', $this->userID)
+            ->fetchCollection();
         foreach ($VKs as $VK)
         {
             VkTable::delete([
                 'ID' => $VK['ID'],
             ]);
         }
-        $telegramUsernames = TelegramTable::query()->setSelect(['*'])->where('USER_ID', $this->userID)->fetchCollection();
+        $telegramUsernames = TelegramTable::query()
+            ->setSelect(['*'])
+            ->where('USER_ID', $this->userID)
+            ->fetchCollection();
         foreach ($telegramUsernames as $telegramUsername)
         {
             TelegramTable::delete([

@@ -6,6 +6,7 @@ use Bitrix\Main\Type\ParameterDictionary;
 use Up\Tutortoday\Controller\MainPageController;
 use Up\Tutortoday\Services\ErrorService;
 use Up\Tutortoday\Services\EducationService;
+use Up\Tutortoday\Services\LocationService;
 
 Loc::loadMessages(__FILE__);
 
@@ -19,6 +20,7 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
 	    $this->fetchEducationFormatsFilters();
         $this->fetchLoggedInUser();
         $this->fetchTutors($this->arResult['page'], $this->arResult['filters']);
+        $this->fetchAllCities();
         $this->prepareTemplateParams();
         $this->includeComponentTemplate();
     }
@@ -82,5 +84,10 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
     {
         global $USER;
         $this->arResult['loggedInUser'] = $USER->GetID();
+    }
+
+    protected function fetchAllCities()
+    {
+        $this->arResult['cities'] = LocationService::getAllCities();
     }
 }

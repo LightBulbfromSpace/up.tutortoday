@@ -36,7 +36,6 @@ class MainPageController
     }
     public function getTutorsByPage(int $pageFromNull = 0, array $filters = null) : array
     {
-
         if (count($filters) !== 0)
         {
             $filter = new FiltersService($filters);

@@ -38,16 +38,33 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                             Subjects
                         </button>
                         <div class="dropdown-menu" aria-labelledby="subject-dropdown">
-                                <div class="form-group">
-	                                <?php foreach ($arResult['subjects'] as $subject) : ?>
+                            <div class="form-group">
+                                <?php foreach ($arResult['subjects'] as $subject) : ?>
+                                <div class="form-check form-check-custom">
+                                    <input class="form-check-input" name="subjects[]" type="checkbox" value="<?= $subject['ID']?>">
+                                    <label class="form-check-label" for="<?= $subject['NAME']?>">
+                                        <?= $subject['NAME']?>
+                                    </label>
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="subject-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            City
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="subject-dropdown">
+                            <div class="form-group">
+                                <?php foreach ($arResult['cities'] as $city) : ?>
                                     <div class="form-check form-check-custom">
-                                        <input class="form-check-input" name="subjects[]" type="checkbox" value="<?= $subject['ID']?>">
-                                        <label class="form-check-label" for="<?= $subject['NAME']?>">
-	                                        <?= $subject['NAME']?>
+                                        <input class="form-check-input" name="cities[]" type="checkbox" value="<?= $city['ID']?>">
+                                        <label class="form-check-label" for="<?= $city['NAME']?>">
+                                            <?= $city['NAME']?>
                                         </label>
                                     </div>
-	                                <?php endforeach; ?>
-                                </div>
+                                <?php endforeach; ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -94,7 +111,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                     <?php if($tutor['city'] == ''): ?>
                                         No city
                                     <?php endif; ?>
-                                    <?=htmlspecialchars($tutor['city'])?>
+                                    <?=htmlspecialchars($tutor['city']['NAME'])?>
                                 </p>
                                 <div class="container-subjects">
                                     <?php if($tutor['subjects'] == null): ?>

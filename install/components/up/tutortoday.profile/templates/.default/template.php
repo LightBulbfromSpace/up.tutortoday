@@ -133,10 +133,3 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         </div>
     </div>
 </div>
-<!--<script type="text/javascript" src="/local/components/up/tutortoday.profile/templates/.default/scripts.js">-->
-<!--   for (let i = 1; i < 8; i++) {-->
-<!--        BX.bind(BX('weekday-' + i), 'click', () => {-->
-<!--            getTime(--><?php ////=$arResult['user']['mainData']['ID']?><!--//, i)-->
-<!--//        })-->
-<!--//    }-->
-<!--//</script>-->
