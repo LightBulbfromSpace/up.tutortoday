@@ -142,6 +142,7 @@ class UserService
             $resultSubject = UserSubjectTable::add([
                 'USER_ID' => $user->getID(),
                 'SUBJECT_ID' => $subject,
+                'PRICE' => 0,
             ]);
             if (!$resultSubject->isSuccess())
             {
