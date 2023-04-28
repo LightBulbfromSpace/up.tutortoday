@@ -233,15 +233,24 @@
 }
 
 .delete-form-container {
-    width: 50vw;
-    height: 30vh;
-    margin-left: 25vw;
-    margin-top: 40vh;
+    position: absolute;
+    top: 50%;  /* position the top  edge of the element at the middle of the parent */
+    left: 50%; /* position the left edge of the element at the middle of the parent */
+
+    transform: translate(-50%, -50%);
 }
 
 .button-delete-form-container {
     display: flex;
     flex-direction: row;
+}
+
+.text-delete-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0;
 }
 
 .textarea-custom {
@@ -397,4 +406,8 @@ textarea::-webkit-scrollbar-thumb {
     width: 100%;
     height: 100%;
     z-index: 0;
+}
+
+.bold {
+    font-weight: 600;
 }

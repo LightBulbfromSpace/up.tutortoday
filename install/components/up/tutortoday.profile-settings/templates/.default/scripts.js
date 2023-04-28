@@ -206,11 +206,15 @@ function openDeleteProfileForm(userID) {
     formElem.style.alignItems = 'center'
 
     formElem.innerHTML = `<div class="bold">Delete profile</div>
-                              <div>Are you sure that you want to delete your profile? This action cannot be canceled.</div>
+                              <div class="text-delete-form-container">
+                                  <div>Are you sure that you want to delete your profile?</div>
+                                  <div>This action cannot be canceled.</div>
+                              </div>
                               <div class="button-delete-form-container">
                                   <button class="button-plus-minus button-small-custom container-button-custom" type="submit">Delete</button>
                                   <button class="link-button container-button-custom" type="button" onclick="closeDeleteProfileForm()">Cancel</button>
                               </div>
+                              <input type="hidden" name="sessid" id="sessid" value="` + BX.bitrix_sessid() + `">
     `
     formElem.style.position = 'absolute'
     formElem.style.margin = '0 auto'

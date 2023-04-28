@@ -55,6 +55,6 @@ return function (RoutingConfigurator $routes) {
         ProfileController::deleteTime(getPostList());
     });
     $routes->post('/profile/{id}/delete/', function ($id) {
-        (new ProfileController($id))->deleteProfile();
+        (new ProfileController((int)$id))->deleteProfile();
     });
 };

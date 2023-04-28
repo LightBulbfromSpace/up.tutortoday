@@ -9,6 +9,7 @@ use Bitrix\Main\UrlPreview\Parser\Vk;
 use Bitrix\Main\UserTable;
 use Up\Tutortoday\Model\FormObjects\UserForm;
 use Up\Tutortoday\Model\FormObjects\UserRegisterForm;
+use Up\Tutortoday\Model\Tables\FeedbacksTable;
 use Up\Tutortoday\Model\Tables\FreeTimeTable;
 use Up\Tutortoday\Model\Tables\RolesTable;
 use Up\Tutortoday\Model\Tables\SubjectTable;
@@ -436,8 +437,61 @@ class UserService
 
     public function deleteUser()
     {
-        UserTable::delete($this->userID);
-        UserDescriptionTable::delete($this->userID);
-        //delete from user_role, user_subjects, user_ed_format ...
+        \CUser::Delete($this->userID);
+        $roles = UserRoleTable::query()->setSelect(['*'])->where('USER_ID', $this->userID)->fetchCollection();
+        foreach ($roles as $role)
+        {
+            UserRoleTable::delete([
+                'USER_ID' => $role['USER_ID'],
+                'ROLE_ID' => $role['ROLE_ID'],
+            ]);
+        }
+        $subjects = UserSubjectTable::query()->setSelect(['*'])->where('USER_ID', $this->userID)->fetchCollection();
+        foreach ($subjects as $subject)
+        {
+            UserSubjectTable::delete([
+                'USER_ID' => $subject['USER_ID'],
+                'SUBJECT_ID' => $subject['SUBJECT_ID'],
+            ]);
+        }
+        $edFormats = UserEdFormatTable::query()->setSelect(['*'])->where('USER_ID', $this->userID)->fetchCollection();
+        foreach ($edFormats as $edFormat)
+        {
+            UserEdFormatTable::delete([
+                'USER_ID' => $edFormat['USER_ID'],
+                'EDUCATION_FORMAT_ID' => $edFormat['EDUCATION_FORMAT_ID'],
+            ]);
+        }
+        $feedbacks = FeedbacksTable::query()->setSelect(['*'])->where('TUTOR_ID', $this->userID)->fetchCollection();
+        foreach ($feedbacks as $feedback)
+        {
+            FeedbacksTable::delete([
+                'ID' => $feedback['ID'],
+            ]);
+        }
+        $freeTime = FreeTimeTable::query()->setSelect(['*'])->where('USER_ID', $this->userID)->fetchCollection();
+        foreach ($freeTime as $hour)
+        {
+            FreeTimeTable::delete([
+                'ID' => $hour['ID'],
+            ]);
+        }
+
+        //profile images
+
+        $VKs = VkTable::query()->setSelect(['*'])->where('USER_ID', $this->userID)->fetchCollection();
+        foreach ($VKs as $VK)
+        {
+            VkTable::delete([
+                'ID' => $VK['ID'],
+            ]);
+        }
+        $telegramUsernames = TelegramTable::query()->setSelect(['*'])->where('USER_ID', $this->userID)->fetchCollection();
+        foreach ($telegramUsernames as $telegramUsername)
+        {
+            TelegramTable::delete([
+                'ID' => $telegramUsername['ID'],
+            ]);
+        }
     }
 }

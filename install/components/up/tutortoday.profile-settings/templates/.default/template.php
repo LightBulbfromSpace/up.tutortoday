@@ -70,7 +70,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <a class="link-button" href="/profile/<?=$arResult['user']['mainData']['ID']?>/">Back</a>
                 </div>
                 <div class="save-button-container">
-                    <button type="button" class="button-plus-minus button-small-custom container-margin-top-bottom" onclick="openDeleteProfileForm()">Delete Profile</button>
+                    <button type="button" class="button-plus-minus button-small-custom container-margin-top-bottom" onclick="openDeleteProfileForm(<?=$arResult['user']['mainData']['ID']?>)">Delete Profile</button>
                     <button type="submit" class="button-plus-minus button-small-custom container-margin-top-bottom" onclick="submitForms()">Save Changes</button>
                 </div>
             </div>
