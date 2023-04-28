@@ -324,9 +324,9 @@ class UserService
             }
             foreach ($cities as $city)
             {
-                if($user['WORK_CITY'] === $city['ID'])
+                if((int)$user['WORK_CITY'] === (int)$city['ID'])
                 {
-                    $result[$i]['city'][] = $city;
+                    $result[$i]['city'] = $city;
                     break;
                 }
             }

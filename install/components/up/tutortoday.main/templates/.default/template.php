@@ -107,8 +107,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 <div class="br"></div>
                                 <p class="card-text">
                                     <strong>City:</strong>
-                                    &nbsp;
-                                    <?php if($tutor['city'] == ''): ?>
+                                    <?php if($tutor['city'] == null): ?>
                                         No city
                                     <?php endif; ?>
                                     <?=htmlspecialchars($tutor['city']['NAME'])?>
