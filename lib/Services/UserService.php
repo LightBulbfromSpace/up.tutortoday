@@ -22,7 +22,7 @@ use Up\Tutortoday\Model\Validator;
 
 class UserService
 {
-    private $userID = 0;
+    private $userID;
     private array $userIDs = [];
     private int $numberOfAllAvailableUsers = 0;
     private bool $fetchAllAvailableUsers = false;
@@ -432,5 +432,12 @@ class UserService
         //role update
 
         return true;
+    }
+
+    public function deleteUser()
+    {
+        UserTable::delete($this->userID);
+        UserDescriptionTable::delete($this->userID);
+        //delete from user_role, user_subjects, user_ed_format ...
     }
 }

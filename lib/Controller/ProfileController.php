@@ -37,6 +37,19 @@ class ProfileController
         return true;
     }
 
+    public function deleteProfile()
+    {
+        if(!check_bitrix_sessid())
+        {
+            return 'invalid csrf token';
+        }
+        if(!$this->isOwnerOfProfile())
+        {
+            return 'permitted: not owner';
+        }
+        (new UserService($this->userID))->deleteUser();
+    }
+
     public static function createTime(ParameterDictionary $post)
     {
         if(!check_bitrix_sessid())

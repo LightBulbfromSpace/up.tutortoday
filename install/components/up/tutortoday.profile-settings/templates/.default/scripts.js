@@ -192,3 +192,45 @@ function deleteTime(timeID) {
         },
     })
 }
+
+function openDeleteProfileForm(userID) {
+    let formElem = document.createElement('form')
+    formElem.id = 'delete-profile-form'
+    formElem.action = '/profile/'+ userID + '/delete/'
+    formElem.method = 'post'
+    formElem.style.zIndex = '36'
+    formElem.classList.add('box', 'delete-form-container')
+    formElem.style.display = 'flex'
+    formElem.style.flexDirection = 'column'
+    formElem.style.justifyContent = 'space-between'
+    formElem.style.alignItems = 'center'
+
+    formElem.innerHTML = `<div class="bold">Delete profile</div>
+                              <div>Are you sure that you want to delete your profile? This action cannot be canceled.</div>
+                              <div class="button-delete-form-container">
+                                  <button class="button-plus-minus button-small-custom container-button-custom" type="submit">Delete</button>
+                                  <button class="link-button container-button-custom" type="button" onclick="closeDeleteProfileForm()">Cancel</button>
+                              </div>
+    `
+    formElem.style.position = 'absolute'
+    formElem.style.margin = '0 auto'
+    document.getElementById('delete-form-area').appendChild(formElem)
+    turnOnOverlay()
+}
+
+function closeDeleteProfileForm() {
+    let form = document.getElementById('delete-profile-form')
+    form.remove()
+    turnOffOverlay()
+}
+
+function turnOnOverlay() {
+    document.getElementById("overlay").style.background = 'rgba(0, 0, 0, 0.5)';
+    document.getElementById("overlay").style.zIndex = '35';
+}
+
+function turnOffOverlay() {
+    document.getElementById("overlay").style.background = 'rgba(0, 0, 0, 0)';
+    document.getElementById("overlay").style.zIndex = '0';
+
+}

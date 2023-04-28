@@ -228,6 +228,22 @@
     margin: 20px 0;
 }
 
+.container-button-custom {
+    margin: 0 0.5rem;
+}
+
+.delete-form-container {
+    width: 50vw;
+    height: 30vh;
+    margin-left: 25vw;
+    margin-top: 40vh;
+}
+
+.button-delete-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
 .textarea-custom {
     display: block;
     padding: calc(0.75em - 1px);
@@ -373,4 +389,12 @@ textarea::-webkit-scrollbar-thumb {
 .form-check-custom {
     margin-left: 1rem;
     accent-color: #dc3545;
+}
+
+#overlay {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.0);
+    width: 100%;
+    height: 100%;
+    z-index: 0;
 }

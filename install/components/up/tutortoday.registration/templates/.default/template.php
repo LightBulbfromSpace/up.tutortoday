@@ -146,19 +146,6 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             </div>
         </div>
 
-<!--        <div class="field">-->
-<!--            <label class="label">Education format</label>-->
-<!--            <div class="control">-->
-<!--                <div class="select">-->
-<!--                    <select name="edFormat">-->
-<!--                        --><?php //foreach ($arResult['edFormats'] as $edFormat): ?>
-<!--                            <option value="--><?php //=$edFormat->getID()?><!--">--><?php //=$edFormat->getName()?><!--</option>-->
-<!--                        --><?php //endforeach; ?>
-<!--                    </select>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-
         <?=bitrix_sessid_post()?>
 
         <div class="field is-grouped is-justify-content-center">

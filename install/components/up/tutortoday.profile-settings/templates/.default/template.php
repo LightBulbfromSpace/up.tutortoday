@@ -9,6 +9,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
 
 <script type="text/javascript" src="/local/components/up/tutortoday.profile-settings/templates/.default/scripts.js"></script>
+<div id="delete-form-area"></div>
 <form method="post" action="/profile/<?=$arResult['user']['mainData']['ID']?>/settings/">
     <?=bitrix_sessid_post()?>
     <div class="container-custom">
@@ -62,12 +63,14 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 </div>
             </div>
         </div>
+
         <div class="container-large-custom">
             <div class="container-row-custom">
                 <div class="save-button-container">
                     <a class="link-button" href="/profile/<?=$arResult['user']['mainData']['ID']?>/">Back</a>
                 </div>
                 <div class="save-button-container">
+                    <button type="button" class="button-plus-minus button-small-custom container-margin-top-bottom" onclick="openDeleteProfileForm()">Delete Profile</button>
                     <button type="submit" class="button-plus-minus button-small-custom container-margin-top-bottom" onclick="submitForms()">Save Changes</button>
                 </div>
             </div>
@@ -80,21 +83,19 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <div class="container-column-custom">
                         <label class="label">Education format</label>
                         <div class="control">
-                            <div class="box">
-                                <div name="education_format">
-                                    <?php foreach ($arResult['edFormats'] as $edFormat): ?>
-                                        <div class="form-check-custom">
-                                            <input class="form-check-input" name="edFormats[]"
-                                                   type="checkbox" value="<?=$edFormat['ID']?>"
-                                                   <?php if ($arResult['user']['edFormatsIDs'] !== null): ?>
-                                                   <?=in_array($edFormat['ID'], $arResult['user']['edFormatsIDs']) ? 'checked' : ''?>
-                                                   <?php endif; ?>>
-                                            <label class="form-check-label" for="<?= $edFormat['NAME']?>">
-                                                <?= $edFormat['NAME']?>
-                                            </label>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
+                            <div class="box max-width-90">
+                                <?php foreach ($arResult['edFormats'] as $edFormat): ?>
+                                    <div class="form-check-custom">
+                                        <input class="form-check-input" name="edFormats[]"
+                                               type="checkbox" value="<?=$edFormat['ID']?>"
+                                               <?php if ($arResult['user']['edFormatsIDs'] !== null): ?>
+                                               <?=in_array($edFormat['ID'], $arResult['user']['edFormatsIDs']) ? 'checked' : ''?>
+                                               <?php endif; ?>>
+                                        <label class="form-check-label" for="<?= $edFormat['NAME']?>">
+                                            <?= $edFormat['NAME']?>
+                                        </label>
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
                         </div>
                     </div>
