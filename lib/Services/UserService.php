@@ -102,13 +102,11 @@ class UserService
             return 'Roles not found';
         }
 
-        $city = LocationService::getCityNameByID((int)$userForm->getCityID());
-
         $resultUser = $user->Update($user->getID(), [
             'SECOND_NAME' => $userForm->getMiddleName(),
             'WORK_PHONE' => $userForm->getPhoneNumber(),
             'WORK_MAILBOX' => $userForm->getWorkingEmail(),
-            'WORK_CITY' => $city,
+            'WORK_CITY' => $userForm->getCityID(),
             'WORK_POSITION' => $tutorRoleID,
             'WORK_COMPANY' => 'TutorToday',
         ]);

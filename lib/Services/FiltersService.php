@@ -33,7 +33,7 @@ class FiltersService
         $this->citiesIDs = $dict['cities'] != null ? $dict['cities'] : [];
         $this->minPrice = $dict['minPrice'] != null || $dict['minPrice'] != '' ? (int)$dict['minPrice'] : 0;
         $this->maxPrice = $dict['maxPrice'] != null || $dict['maxPrice'] != ''  ? (int)$dict['maxPrice'] : PHP_INT_MAX;
-        //$this->search = $dict['search'] === ''  ? null : $dict['search'];
+        //$this->search = $dict['search'];
     }
 
     public function getNumberOfFilteredUsers(): int

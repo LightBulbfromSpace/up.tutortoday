@@ -27,6 +27,15 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 </div>
                 <div class="box-invisible-custom role-container-custom"><div>I'm a</div>&nbsp;<div class="box-small-dark-custom"><?=$arResult['user']['role']['NAME']?></div></div>
                 <div class="br"></div>
+                <label class="label">Password change</label>
+                <div class="box-dark-element-custom">
+                    <input type="password" class="input-custom" placeholder="Password" id="password">
+                </div>
+                <div class="box-dark-element-custom">
+                    <input type="password" class="input-custom" placeholder="Confirm password" id="passwordConfirm">
+                </div>
+                <button type="button" class="button-plus-minus button-large-custom" onclick="updatePassword()">Save</button>
+                <div class="br"></div>
                 <div class="container-contacts">
                     <label class="label">Email</label>
                     <div class="box-dark-element-custom">

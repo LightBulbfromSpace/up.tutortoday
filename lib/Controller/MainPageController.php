@@ -60,16 +60,4 @@ class MainPageController
 
         return $tutors;
     }
-
-
-//	public static function getTutorsByFilters(ParameterDictionary $post)
-//	{
-//		if(!check_bitrix_sessid())
-//		{
-//			return null;
-//		}
-//        $filter = new FiltersService($post);
-//        $filter->getTutorsByFilters();
-//		return $filter;
-//	}
 }

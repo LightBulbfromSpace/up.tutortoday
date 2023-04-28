@@ -65,9 +65,11 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
         }
         $controller = new MainPageController();
         $this->arResult['tutors'] = $controller->getTutorsByPage($page - 1, $filters);
+
         $maxPage = (int)ceil($controller->getNumberOfUsers() / USERS_BY_PAGE);
-        $this->arResult['currentPage'] = $page;
         $this->arResult['maxPage'] = $maxPage !== 0 ? $maxPage : 1;
+
+        $this->arResult['currentPage'] = $page;
     }
 
 	protected function fetchSubjectFilters()

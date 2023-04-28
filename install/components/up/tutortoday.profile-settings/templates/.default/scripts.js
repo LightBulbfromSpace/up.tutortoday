@@ -238,3 +238,25 @@ function turnOffOverlay() {
     document.getElementById("overlay").style.zIndex = '0';
 
 }
+
+function updatePassword() {
+    let password = document.getElementById('password')
+    let confirmPassword =  document.getElementById('passwordConfirm')
+    BX.ajax({
+        url: '/profile/settings/changePassword/',
+        data: {
+            password: password,
+            confirmPassword: confirmPassword,
+            sessid: BX.bitrix_sessid(),
+        },
+        method: 'POST',
+        dataType: 'json',
+        timeout: 10,
+        onsuccess: (res) => {
+            console.log(res)
+        },
+        onfailure: (e) => {
+            console.log(e)
+        },
+    })
+}
