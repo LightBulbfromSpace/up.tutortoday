@@ -4,9 +4,16 @@ namespace Up\Tutortoday\Services;
 
 class ErrorService
 {
-    public static function getErrorTextByGetCode($code) : string
+    private string $code;
+
+    public function __construct(string $errCode)
     {
-        return match ($code) {
+        $this->code = $errCode;
+    }
+
+    public function getErrorTextByGetCode() : string
+    {
+        return match ($this->code) {
             'empty_field' => "Required fields can't be empty",
             'auth' => "Invalid login or password",
             'pass_too_short' => "Password is too short",
@@ -18,7 +25,18 @@ class ErrorService
             'invalid_ed_format' => "Education format is invalid",
             'unexpected_error' => "Unexpected error",
             'invalid_city' => "Invalid city",
-            default => '',
+            'invalid_csrf' => "Invalid CSRF token",
+            'perm_denied' => "Permission denied",
+            'ok' => 'Success',
+            default => "Undefined error",
         };
+    }
+
+    public function getMessage()
+    {
+        return [
+            'TYPE' => $this->code === 'ok' ? 'OK' : 'ERROR',
+            'MESSAGE' => $this->getErrorTextByGetCode(),
+        ];
     }
 }

@@ -7,6 +7,7 @@ use Up\Tutortoday\Model\FormObjects\UserForm;
 use Up\Tutortoday\Model\FormObjects\UserRegisterForm;
 use Up\Tutortoday\Model\Tables\UserTable;
 use Up\Tutortoday\Services\EducationService;
+use Up\Tutortoday\Services\ErrorService;
 use Up\Tutortoday\Services\ImagesService;
 use Up\Tutortoday\Services\DatetimeService;
 use Up\Tutortoday\Services\UserService;
@@ -19,6 +20,29 @@ class ProfileController
     public function __construct(int $userID)
     {
         $this->userID = $userID;
+    }
+
+    public function updatePassword(ParameterDictionary $post)
+    {
+        if(!check_bitrix_sessid())
+        {
+            return (new ErrorService('invalid_csrf'))->getMessage();
+        }
+        if (!$this->isOwnerOfProfile())
+        {
+            return (new ErrorService('perm_denied'))->getMessage();
+        }
+        if ($post['newPassword'] == '' || $post['passwordConfirm'] == '' || $post['oldPassword'] == '')
+        {
+            return (new ErrorService('empty_field'))->getMessage();
+        }
+        $result = (new UserService($this->userID))
+            ->UpdatePassword($post['oldPassword'], $post['newPassword'], $post['passwordConfirm']);
+        if ($result['TYPE'] === 'OK')
+        {
+            return (new ErrorService('ok'))->getErrorTextByGetCode();
+        }
+        return $result;
     }
 
     public function isOwnerOfProfile() : bool

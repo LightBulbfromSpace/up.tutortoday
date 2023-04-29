@@ -239,14 +239,17 @@ function turnOffOverlay() {
 
 }
 
-function updatePassword() {
-    let password = document.getElementById('password')
-    let confirmPassword =  document.getElementById('passwordConfirm')
+function updatePassword(userID) {
+    let oldPassword = document.getElementById('oldPassword').value
+    let password = document.getElementById('newPassword').value
+    let confirmPassword =  document.getElementById('passwordConfirm').value
+    console.log(oldPassword, password, confirmPassword)
     BX.ajax({
-        url: '/profile/settings/changePassword/',
+        url: '/profile/' + userID + '/settings/changePassword/',
         data: {
-            password: password,
-            confirmPassword: confirmPassword,
+            oldPassword: oldPassword,
+            newPassword: password,
+            passwordConfirm: confirmPassword,
             sessid: BX.bitrix_sessid(),
         },
         method: 'POST',
@@ -254,9 +257,31 @@ function updatePassword() {
         timeout: 10,
         onsuccess: (res) => {
             console.log(res)
+            displayResult(res)
         },
         onfailure: (e) => {
             console.log(e)
         },
     })
+}
+
+function displayResult(result) {
+    let msgContainer = document.getElementById('msg-container')
+    while (msgContainer.lastChild) {
+        msgContainer.lastChild.remove()
+    }
+    let msg = document.createElement('article');
+    msg.style.margin = '0.75rem 0'
+    msg.classList.add('message')
+    if (result['TYPE'] === 'OK') {
+        msg.classList.add('is-success')
+    } else {
+        msg.classList.add('is-danger')
+    }
+    msg.innerHTML = `<div class="message-body">`
+        +
+        result['MESSAGE']
+        +
+        `</div>`
+    msgContainer.appendChild(msg)
 }

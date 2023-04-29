@@ -48,4 +48,7 @@ return function (RoutingConfigurator $routes) {
     $routes->post('/profile/{id}/delete/', function ($id) {
         (new ProfileController((int)$id))->deleteProfile();
     });
+    $routes->post('/profile/{id}/settings/changePassword/', function ($id) {
+        return (new ProfileController((int)$id))->updatePassword(getPostList());
+    });
 };

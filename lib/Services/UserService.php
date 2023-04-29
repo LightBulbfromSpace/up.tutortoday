@@ -7,6 +7,7 @@ use Bitrix\Main\ORM\Fields\Relations\Reference;
 use Bitrix\Main\ORM\Query\Join;
 use Bitrix\Main\UrlPreview\Parser\Vk;
 use Bitrix\Main\UserTable;
+use CUser;
 use Up\Tutortoday\Model\FormObjects\UserForm;
 use Up\Tutortoday\Model\FormObjects\UserRegisterForm;
 use Up\Tutortoday\Model\Tables\CitiesTable;
@@ -33,6 +34,18 @@ class UserService
     {
         $this->userID = $userID;
         $this->userIDs = $userIDs;
+    }
+
+    public function UpdatePassword(string $oldPassword, string $newPassword, string $passwordConfirm)
+    {
+        global $USER;
+        return $USER->ChangePassword(
+            $USER->GetLogin(), '',
+            $newPassword, $passwordConfirm,
+            false, '',
+            0, true,
+            '', $oldPassword
+        );
     }
 
     public function getNumberOfAllAvailableUsers(): int
