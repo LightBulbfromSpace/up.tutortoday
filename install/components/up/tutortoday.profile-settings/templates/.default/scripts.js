@@ -63,11 +63,11 @@ function closeTimepicker() {
     document.getElementById('timepicker-form').style.display = 'none';
 }
 
-function submitForms() {
-    document.getElementById('full-name-form').submit();
-    document.getElementById('description-form').submit();
-    document.getElementById('ed-format-form').submit();
-}
+// function submitForms() {
+//     document.getElementById('full-name-form').submit();
+//     document.getElementById('description-form').submit();
+//     document.getElementById('ed-format-form').submit();
+// }
 
 function closeSubjectForm() {
     document.getElementById('add-subject-area').lastChild.remove()
@@ -243,7 +243,6 @@ function updatePassword(userID) {
     let oldPassword = document.getElementById('oldPassword').value
     let password = document.getElementById('newPassword').value
     let confirmPassword =  document.getElementById('passwordConfirm').value
-    console.log(oldPassword, password, confirmPassword)
     BX.ajax({
         url: '/profile/' + userID + '/settings/changePassword/',
         data: {
@@ -284,4 +283,85 @@ function displayResult(result) {
         +
         `</div>`
     msgContainer.appendChild(msg)
+}
+
+function openAddPhotoForm(imgSrc) {
+    let formContainer = document.createElement('div')
+    formContainer.classList.add('add-form-photo-dark-frame')
+    formContainer.innerHTML = `<form class="add-photo-container" id="add-photo-form" enctype="multipart/form-data" action="/profile/settings/updatePhotoPreview/" method="post">
+                                   <input type="hidden" name="sessid" id="sessid" value="` + BX.bitrix_sessid() + `" onclick="ToPreviewButton()">
+                                   <img src="` + imgSrc + `" class="img-rounded img-fixed-size add-photo-img" alt="profile photo" id="photo-add-photo-form">
+                                   <button type="button" class="photo-button">Open</button>
+                                   <input type="file" name="photo" id="file-input">
+                                   <div class="add-form-button-container">
+                                       <button type="button" class="button-plus-minus add-form-button" onclick="closeAddPhotoForm()">Cancel</button>
+                                       <button type="button" class="button-plus-minus add-form-button" id="preview-confirm-button" onclick="updatePhoto()">Preview</button>
+                                   </div>
+                               </form>`
+    document.getElementById('add-photo-form-area').appendChild(formContainer)
+    turnOnOverlay()
+}
+
+function closeAddPhotoForm() {
+    document.getElementById('add-photo-form-area').lastChild.remove()
+    turnOffOverlay()
+}
+
+function updatePhoto() {
+    let fileUpload = document.getElementById('file-input')
+    let bxFormData = new BX.ajax.FormData()
+    bxFormData.append("photo", fileUpload.files[0])
+    bxFormData.append("sessid", BX.bitrix_sessid())
+    bxFormData.send(
+        '/profile/settings/updatePhotoPreview/',
+        (res) => {
+            console.log(res)
+            loadPhoto(res)
+            BX.setCookie('avatarSrc', res)
+            ToConfirmButton()
+        },
+        null,
+        (e) => {
+            console.log(e)
+        })
+}
+
+function updatePhotoConfirm() {
+    BX.ajax({
+        url: '/profile/settings/updatePhotoConfirm/',
+        method: 'POST',
+        data: {
+            imgSrc: BX.getCookie('avatarSrc'),
+            sessid: BX.bitrix_sessid(),
+        },
+        dataType: 'json',
+        timeout: 10,
+        onsuccess: (res) => {
+            console.log(res)
+            ToPreviewButton()
+            if (res === null)
+            {
+                document.getElementById('profilePhoto').src = BX.getCookie('avatarSrc')
+            }
+        },
+        onfailure: (e) => {
+            console.log(e)
+        },
+    })
+}
+
+function loadPhoto(path) {
+    document.getElementById('photo-add-photo-form').src = path
+}
+
+function ToConfirmButton() {
+    let button = document.getElementById('preview-confirm-button')
+    button.onclick = updatePhotoConfirm
+    button.innerText = 'Confirm'
+}
+
+function ToPreviewButton() {
+    let button = document.getElementById('preview-confirm-button')
+    button.onclick = updatePhoto
+    button.innerText = 'Preview'
 }

@@ -15,10 +15,10 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <form method="get" action="/">
                 <div class="col-md-9 mt-3">
                     <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="subject-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="ed-format-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Education Format
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="subject-dropdown">
+                        <div class="dropdown-menu" aria-labelledby="ed-format-dropdown">
                             <div class="form-group">
 	                            <?php foreach ($arResult['edFormats'] as $edFormat) : ?>
                                     <div class="form-check form-check-custom">

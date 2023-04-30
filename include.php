@@ -10,7 +10,7 @@ use Bitrix\Main\Type\ParameterDictionary;
 const SITE_NAME = 'TutorToday';
 const USERS_BY_PAGE = 3;
 
-const DEFAULT_PHOTO = "/local/templates/tutortoday/images/default/no_photo.png";
+const DEFAULT_PHOTO = "/local/modules/up.tutortoday/images/default/no_photo.png";
 const MODULE_ROOT = __DIR__;
 
 function request(): Request

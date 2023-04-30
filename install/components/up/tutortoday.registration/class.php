@@ -20,7 +20,7 @@ class TutorTodayRegistrationComponent extends CBitrixComponent {
         $this->arResult['isErr'] = $arParams['err'] != null;
         if ($this->arResult['isErr'])
         {
-            $this->arResult['errText'] = (new ErrorService($arParams['err']))->getErrorTextByGetCode();
+            $this->arResult['errText'] = (new ErrorService($arParams['err']))->getLastErrorText();
         }
 
         $this->arResult['edFormats'] = EducationService::getAllEdFormats();

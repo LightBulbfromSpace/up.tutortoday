@@ -47,6 +47,104 @@
     border-radius: 50%;
 }
 
+.img-fixed-size {
+    max-width: 80%;
+    max-height: 80%;
+}
+
+.add-photo-img {
+    z-index: 50;
+    margin-bottom: 3rem;
+}
+
+.photo-container:hover .profile-photo {
+    filter: brightness(0.75);
+    transition-duration: 0.1s;
+}
+
+input[type="file"] {
+    width: 70%;
+    height: 60%;
+    opacity: 0; /* make transparent */
+    z-index: 50; /* move under anything else */
+    position: absolute; /* don't let it take up space */
+    top: 10%;  /* position the top  edge of the element at the middle of the parent */
+    /*left: 75%; !* position the left edge of the element at the middle of the parent *!*/
+    /*transform: translate(-50%, -50%);*/
+}
+
+/*input[type="file"]:hover {*/
+/*    background-color: rgba(10 10 10 / 10%);*/
+/*    opacity: 1;*/
+/*    border-radius: 50%;*/
+/*    color: rgba(0 0 0 / 0);*/
+/*}*/
+
+.add-form-button-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.add-form-button {
+    min-width: 60%;
+    margin: 1rem;
+}
+
+.photo-button {
+    display: none;
+}
+
+.photo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.photo-container:hover .photo-button {
+    display: block;
+    position: absolute;
+    z-index: 10;
+    background-color: #fff;
+    border-color: #dbdbdb;
+    border-width: 2px;
+    border-radius: 6px;
+    color: #363636;
+    cursor: pointer;
+    padding: calc(0.5em - 1px) 1em;
+    text-align: center;
+    white-space: nowrap;
+}
+.add-photo-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    z-index: 40;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%), 0 0 0 1px rgb(10 10 10 / 2%);
+    color: #4a4a4a;
+    padding: 1.25rem;
+}
+
+
+.add-form-photo-dark-frame {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    z-index: 40;
+    top: 55%;  /* position the top  edge of the element at the middle of the parent */
+    left: 50%; /* position the left edge of the element at the middle of the parent */
+    transform: translate(-50%, -50%);
+
+    background-color: #D9D9D9;
+    border-radius: 6px;
+    box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%), 0 0 0 1px rgb(10 10 10 / 2%);
+    color: #4a4a4a;
+    padding: 1.25rem;
+}
+
 .box-dark-element-custom {
     background-color: #D9D9D9;
     border-radius: 6px;
@@ -318,7 +416,7 @@
     margin: 15px 0;
 }
 
-.formfield{
+.formfield {
     display: inline-flex;
     align-items: center;
     justify-content: space-between;

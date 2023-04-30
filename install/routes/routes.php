@@ -6,6 +6,7 @@ use Up\Tutortoday\Controller\AuthController;
 use Up\Tutortoday\Controller\MainPageController;
 use Up\Tutortoday\Controller\ProfileController;
 use Up\Tutortoday\Services\EducationService;
+use Up\Tutortoday\Services\ErrorService;
 
 return function (RoutingConfigurator $routes) {
     $routes->get('/', new PublicPageController('/local/view/tutortoday/tutortoday-main.php'));
@@ -33,7 +34,8 @@ return function (RoutingConfigurator $routes) {
         return ProfileController::getUserTimeByDayID(getPostList());
     });
     $routes->post('/profile/{id}/settings/', function ($id) {
-        ProfileController::updateUser($id);
+        global $USER;
+        (new ProfileController((int)$USER->GetID()))->updateUser();
     });
 
     $routes->post('/profile/settings/deleteSubject/', function () {
@@ -46,9 +48,21 @@ return function (RoutingConfigurator $routes) {
         ProfileController::deleteTime(getPostList());
     });
     $routes->post('/profile/{id}/delete/', function ($id) {
-        (new ProfileController((int)$id))->deleteProfile();
+        global $USER;
+        (new ProfileController((int)$USER->GetID()))->deleteProfile();
     });
     $routes->post('/profile/{id}/settings/changePassword/', function ($id) {
-        return (new ProfileController((int)$id))->updatePassword(getPostList());
+        global $USER;
+        return (new ProfileController((int)$USER->GetID()))->updatePassword(getPostList());
+    });
+
+    $routes->post('/profile/settings/updatePhotoPreview/', function () {
+        global $USER;
+        return (new ProfileController((int)$USER->GetID()))->updatePhotoTmp($_FILES['photo']);
+    });
+
+    $routes->post('/profile/settings/updatePhotoConfirm/', function () {
+        global $USER;
+        return (new ProfileController((int)$USER->GetID()))->updateProfilePhoto(getPostList());
     });
 };

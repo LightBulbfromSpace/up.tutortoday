@@ -525,4 +525,12 @@ class UserService
             ]);
         }
     }
+
+    public function saveProfilePhoto(string $imgSrc)
+    {
+        $imgSrc = str_replace('\\', '/', $imgSrc);
+        UserTable::update($this->userID, [
+            'PERSONAL_PHOTO' => $imgSrc,
+        ]);
+    }
 }

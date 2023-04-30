@@ -10,12 +10,16 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
 <script type="text/javascript" src="/local/components/up/tutortoday.profile-settings/templates/.default/scripts.js"></script>
 <div id="delete-form-area"></div>
+<div id="add-photo-form-area"></div>
 <form method="post" action="/profile/<?=$arResult['user']['mainData']['ID']?>/settings/">
     <?=bitrix_sessid_post()?>
     <div class="container-custom">
         <div class="container-narrow-custom">
             <div class="box">
-                <img src="<?=$arResult['user']['photo']?>" class="img-rounded" alt="avatar">
+                <div class="photo-container">
+                    <img src="<?=$arResult['user']['photo']?>" id="profilePhoto" class="img-rounded profile-photo" alt="avatar">
+                    <button type="button" class="photo-button" onclick="openAddPhotoForm('<?=$arResult['user']['photo']?>')">Open</button>
+                </div>
                 <div class="box-dark-element-custom">
                     <input class="input-custom" name="name" placeholder="No name" value="<?=htmlspecialchars($arResult['user']['mainData']['NAME'])?>">
                 </div>
@@ -192,3 +196,10 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         </div>
     </div>
 </form>
+<script type="text/javascript">
+    let input = document.getElementById('file-input')
+    BX.bind(input, 'input', () => {
+        console.log('here')
+        updatePhoto()
+    })
+</script>
