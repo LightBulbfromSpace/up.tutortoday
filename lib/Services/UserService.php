@@ -260,7 +260,7 @@ class UserService
         {
             return false;
         }
-        if ($this->userID === 0 && $this->userIDs === [])
+        if ($this->userID === 0 && $this->userIDs === [] && !$this->fetchAllAvailableUsers)
         {
             $this->numOfFetchedUsers = 0;
             return [];

@@ -59,7 +59,6 @@ class MainPageController
         $userService->setFetchAllAvailableUsers($areAllUsers);
 
         $tutors = $userService->getUsersByPage($pageFromNull * USERS_BY_PAGE, USERS_BY_PAGE);
-
         $this->numberOfUsers = $userService->getNumOfFetchedUsers();
 
         if ($tutors === false)
