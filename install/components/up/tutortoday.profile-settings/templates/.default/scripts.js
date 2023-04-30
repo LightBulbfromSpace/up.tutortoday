@@ -362,9 +362,13 @@ function closeAddPhotoForm() {
 
 function updatePhoto() {
     let fileUpload = document.getElementById('file-input')
+    if (fileUpload.files[0] == null)
+    {
+        return
+    }
     let bxFormData = new BX.ajax.FormData()
-    bxFormData.append("photo", fileUpload.files[0])
     bxFormData.append("sessid", BX.bitrix_sessid())
+    bxFormData.append("photo", fileUpload.files[0])
     bxFormData.send(
         '/profile/settings/updatePhotoPreview/',
         (res) => {
