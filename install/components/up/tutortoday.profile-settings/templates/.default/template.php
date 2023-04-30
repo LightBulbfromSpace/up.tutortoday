@@ -34,13 +34,13 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <div id="msg-container"></div>
                     <label class="label">Password change</label>
                     <div class="box-dark-element-custom">
-                        <input type="password" class="input-custom" placeholder="Old password" id="oldPassword">
+                        <input type="password" class="input-custom" placeholder="Old password" id="oldPassword" autocomplete="off">
                     </div>
                     <div class="box-dark-element-custom">
-                        <input type="password" class="input-custom" placeholder="Password" id="newPassword">
+                        <input type="password" class="input-custom" placeholder="Password" id="newPassword" autocomplete="off">
                     </div>
                     <div class="box-dark-element-custom">
-                        <input type="password" class="input-custom" placeholder="Confirm password" id="passwordConfirm">
+                        <input type="password" class="input-custom" placeholder="Confirm password" id="passwordConfirm" autocomplete="off">
                     </div>
                     <button type="button" class="button-plus-minus button-large-custom" onclick="updatePassword(<?=$arResult['user']['mainData']['ID']?>)">Save</button>
                 <div class="br"></div>
