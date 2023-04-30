@@ -17,8 +17,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         <div class="container-narrow-custom">
             <div class="box">
                 <div class="photo-container">
-                    <img src="<?=$arResult['user']['photo']?>" id="profilePhoto" class="img-rounded profile-photo" alt="avatar">
-                    <button type="button" class="photo-button" onclick="openAddPhotoForm('<?=$arResult['user']['photo']?>')">Open</button>
+                    <img src="<?=$arResult['user']['photo']?>" id="profilePhoto" class="img-rounded img-fixed-size profile-photo" alt="avatar">
+                    <button type="button" class="photo-button" onclick="openAddPhotoForm(<?=$arResult['user']['mainData']['ID']?>)">Open</button>
                 </div>
                 <div class="box-dark-element-custom">
                     <input class="input-custom" name="name" placeholder="No name" value="<?=htmlspecialchars($arResult['user']['mainData']['NAME'])?>">

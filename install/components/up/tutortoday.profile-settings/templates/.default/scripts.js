@@ -1,3 +1,32 @@
+
+function getUserID() {
+    // let result =  BX.ajax({
+    //     url: '/profile/getID/',
+    //     data: {
+    //         sessid: BX.bitrix_sessid(),
+    //     },
+    //     method: 'POST',
+    //     dataType: 'json',
+    //     timeout: 10,
+    //     onsuccess: function (res) {
+    //         console.log(res)
+    //     },
+    //     onfailure: e => {
+    //         console.error(e)
+    //     }
+    // })
+
+    return BX.ajax.post(
+        '/profile/getID/',
+        {
+            sessid: BX.bitrix_sessid(),
+        },
+        function (res) {
+            return res
+        });
+
+    // return result
+}
 function getTime(userID, dayID) {
     BX.ajax({
         url: '/profile/weekday/',
@@ -285,12 +314,33 @@ function displayResult(result) {
     msgContainer.appendChild(msg)
 }
 
-function openAddPhotoForm(imgSrc) {
+function openAddPhotoForm(userID) {
+    BX.ajax({
+        url: '/profile/settings/getProfilePhoto/',
+        method: 'POST',
+        data: {
+            userID: userID,
+            sessid: BX.bitrix_sessid(),
+        },
+        dataType: 'json',
+        timeout: 10,
+        onsuccess: (res) => {
+            console.log(res)
+            displayAddPhotoForm(res)
+        },
+        onfailure: (e) => {
+            console.log(e)
+        },
+    })
+}
+
+function displayAddPhotoForm(imgSrc) {
     let formContainer = document.createElement('div')
     formContainer.classList.add('add-form-photo-dark-frame')
     formContainer.innerHTML = `<form class="add-photo-container" id="add-photo-form" enctype="multipart/form-data" action="/profile/settings/updatePhotoPreview/" method="post">
                                    <input type="hidden" name="sessid" id="sessid" value="` + BX.bitrix_sessid() + `" onclick="ToPreviewButton()">
                                    <img src="` + imgSrc + `" class="img-rounded img-fixed-size add-photo-img" alt="profile photo" id="photo-add-photo-form">
+                                   <div>Click on photo to choose new one</div>
                                    <button type="button" class="photo-button">Open</button>
                                    <input type="file" name="photo" id="file-input">
                                    <div class="add-form-button-container">
@@ -303,7 +353,10 @@ function openAddPhotoForm(imgSrc) {
 }
 
 function closeAddPhotoForm() {
-    document.getElementById('add-photo-form-area').lastChild.remove()
+    let area = document.getElementById('add-photo-form-area')
+    while (area.lastChild) {
+        document.getElementById('add-photo-form-area').lastChild.remove()
+    }
     turnOffOverlay()
 }
 
@@ -338,11 +391,11 @@ function updatePhotoConfirm() {
         timeout: 10,
         onsuccess: (res) => {
             console.log(res)
-            ToPreviewButton()
-            if (res === null)
+            if (res === true)
             {
                 document.getElementById('profilePhoto').src = BX.getCookie('avatarSrc')
             }
+            closeAddPhotoForm()
         },
         onfailure: (e) => {
             console.log(e)

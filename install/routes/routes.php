@@ -63,6 +63,14 @@ return function (RoutingConfigurator $routes) {
 
     $routes->post('/profile/settings/updatePhotoConfirm/', function () {
         global $USER;
-        return (new ProfileController((int)$USER->GetID()))->updateProfilePhoto(getPostList());
+        return json_encode((new ProfileController((int)$USER->GetID()))->updateProfilePhoto(getPostList()));
+    });
+    $routes->post('/profile/getID/', function () {
+        global $USER;
+        return $USER->GetID();
+    });
+    $routes->post('/profile/settings/getProfilePhoto/', function () {
+        global $USER;
+        return json_encode((new ProfileController((int)$USER->GetID()))->getProfilePhoto());
     });
 };

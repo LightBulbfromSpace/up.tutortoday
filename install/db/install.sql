@@ -70,9 +70,9 @@ CREATE TABLE IF NOT EXISTS up_tutortoday_profile_images (
     ID int unsigned auto_increment not null,
     USER_ID int unsigned not null,
     LINK varchar(255) not null,
-    WIDTH int unsigned not null,
-    HEIGHT int unsigned not null,
-    EXTENSION varchar(10) not null,
+    WIDTH int unsigned,
+    HEIGHT int unsigned,
+    EXTENSION varchar(10),
     PRIMARY KEY (ID)
 );
 

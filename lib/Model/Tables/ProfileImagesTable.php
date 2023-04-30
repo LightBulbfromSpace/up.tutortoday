@@ -71,17 +71,17 @@ class ProfileImagesTable extends DataManager
             (new IntegerField('WIDTH',
                 []
             ))->configureTitle(Loc::getMessage('PROFILE_IMAGES_ENTITY_WIDTH_FIELD'))
-                ->configureRequired(true),
+                ->configureRequired(false),
             (new IntegerField('HEIGHT',
                 []
             ))->configureTitle(Loc::getMessage('PROFILE_IMAGES_ENTITY_HEIGHT_FIELD'))
-                ->configureRequired(true),
+                ->configureRequired(false),
             (new StringField('EXTENSION',
                 [
                     'validation' => [__CLASS__, 'validateExtension']
                 ]
             ))->configureTitle(Loc::getMessage('PROFILE_IMAGES_ENTITY_EXTENSION_FIELD'))
-                ->configureRequired(true),
+                ->configureRequired(false),
         ];
     }
 

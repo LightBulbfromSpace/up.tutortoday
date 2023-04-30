@@ -13,7 +13,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 <div class="container-custom">
     <div class="container-narrow-custom">
         <div class="box">
-            <img src="<?=$arResult['user']['photo']?>" class="img-rounded" alt="avatar">
+            <img src="<?=$arResult['user']['photo']?>" class="img-rounded img-fixed-size" alt="avatar">
             <div class="box-dark-element-custom">
                 <?=htmlspecialchars($arResult['user']['mainData']['NAME'])?>
                 <?=htmlspecialchars($arResult['user']['mainData']['LAST_NAME'])?>

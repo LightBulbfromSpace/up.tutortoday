@@ -13,6 +13,7 @@ use Up\Tutortoday\Model\FormObjects\UserRegisterForm;
 use Up\Tutortoday\Model\Tables\CitiesTable;
 use Up\Tutortoday\Model\Tables\FeedbacksTable;
 use Up\Tutortoday\Model\Tables\FreeTimeTable;
+use Up\Tutortoday\Model\Tables\ProfileImagesTable;
 use Up\Tutortoday\Model\Tables\RolesTable;
 use Up\Tutortoday\Model\Tables\SubjectTable;
 use Up\Tutortoday\Model\Tables\TelegramTable;
@@ -226,8 +227,13 @@ class UserService
 
         $city = LocationService::getCityNameByID((int)$user['WORK_CITY']);
 
+        $photo = ProfileImagesTable::query()
+            ->setSelect(['LINK'])
+            ->where('USER_ID', $this->userID)
+            ->fetchObject();
+
         return [
-            'photo' => $user['PERSONAL_PHOTO'] != null ? $user['PERSONAL_PHOTO'] : DEFAULT_PHOTO,
+            'photo' => $photo != null ? $photo['LINK'] : DEFAULT_PHOTO,
             'mainData' => $user,
             'role' => $role->getRole(),
             'edFormats' => $edFormats,
@@ -295,6 +301,8 @@ class UserService
 
         $cities = LocationService::getAllCities();
 
+        $photos = (new ImagesService())->getProfileImages($this->userIDs);
+
         $result = [];
 
         foreach ($users as $i => $user)
@@ -340,6 +348,13 @@ class UserService
                 {
                     $result[$i]['city'] = $city;
                     break;
+                }
+            }
+            foreach ($photos as $photo)
+            {
+                if ($user['ID'] === $photo['USER_ID'])
+                {
+                    $result[$i]['photo'] = $photo['LINK'];
                 }
             }
         }
@@ -502,7 +517,17 @@ class UserService
             ]);
         }
 
-        //profile images
+        $images = ProfileImagesTable::query()
+            ->setSelect(['ID'])
+            ->where('USER_ID', $this->userID)
+            ->fetchCollection();
+
+        foreach ($images as $image)
+        {
+            ProfileImagesTable::delete([
+                'ID' => $image['ID'],
+            ]);
+        }
 
         $VKs = VkTable::query()
             ->setSelect(['*'])
@@ -529,8 +554,26 @@ class UserService
     public function saveProfilePhoto(string $imgSrc)
     {
         $imgSrc = str_replace('\\', '/', $imgSrc);
-        UserTable::update($this->userID, [
-            'PERSONAL_PHOTO' => $imgSrc,
-        ]);
+
+        $service = (new ImagesService($this->userID));
+
+        $photo = $service->getProfileImage();
+        if ($photo !== null) {
+            ProfileImagesTable::update($photo['ID'], [
+                'LINK' => $imgSrc,
+            ]);
+        }
+        else
+        {
+            ProfileImagesTable::add([
+                'USER_ID' => $this->userID,
+                'LINK' => $imgSrc,
+            ]);
+        }
+
+        $name = preg_replace('#/.+/#', '', $imgSrc);
+        $service->clearTrash($name);
+
+        return true;
     }
 }

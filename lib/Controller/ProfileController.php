@@ -153,7 +153,7 @@ class ProfileController
         {
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
-        $result = (new ImagesService($this->userID))->saveProfileImage($photo);
+        $result = (new ImagesService($this->userID))->saveImageToStorage($photo);
         if ($result === null)
         {
             return (new ErrorService($result))->getLastError();
@@ -167,8 +167,16 @@ class ProfileController
         {
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
+        return (new UserService($this->userID))->saveProfilePhoto($post['imgSrc']);
+    }
 
-        (new UserService($this->userID))->saveProfilePhoto($post['imgSrc']);
-        return json_encode(true);
+    public function getProfilePhoto()
+    {
+        if (!check_bitrix_sessid())
+        {
+            return (new ErrorService('invalid_csrf'))->getLastError();
+        }
+        $result = (new ImagesService($this->userID))->getProfileImage();
+        return $result == null ? DEFAULT_PHOTO : $result['LINK'];
     }
 }

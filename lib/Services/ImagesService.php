@@ -5,6 +5,7 @@ namespace Up\Tutortoday\Services;
 use Bitrix\Main\File\Image;
 use Bitrix\Main\FileTable;
 use Bitrix\Main\UserTable;
+use DirectoryIterator;
 use Up\Tutortoday\Model\Tables\ProfileImagesTable;
 
 //error_reporting(E_ALL); // or E_STRICT
@@ -13,8 +14,7 @@ use Up\Tutortoday\Model\Tables\ProfileImagesTable;
 
 class ImagesService
 {
-    private const STORAGE_ROOT = MODULE_ROOT . 'images/';
-    //private const STORAGE_ROOT = '/home/user/images/';
+    private const STORAGE_ROOT = MODULE_ROOT . '/images/';
     private int $userID;
     private ErrorService $errors;
 
@@ -89,7 +89,7 @@ class ImagesService
         return true;
     }
 
-    public function saveProfileImage($photo)
+    public function saveImageToStorage($photo)
     {
         if ($photo['type'] !== 'image/png' && $photo['type'] !== 'image/jpg' && $photo['type'] !== 'image/jpeg')
         {
@@ -134,5 +134,31 @@ class ImagesService
 
 
         return str_replace(MODULE_ROOT, '/local/modules/up.tutortoday', $filepath);
+    }
+
+    public function getProfileImage() {
+        return ProfileImagesTable::query()
+            ->setSelect(['*'])
+            ->where('USER_ID', $this->userID)
+            ->fetchObject();
+    }
+
+    public function getProfileImages(array $userIDs)
+    {
+        return ProfileImagesTable::query()
+            ->setSelect(['*'])
+            ->whereIn('USER_ID', $userIDs)
+            ->fetchCollection();
+    }
+
+    public function clearTrash(string $profilePhoto)
+    {
+        $dir = new DirectoryIterator(self::STORAGE_ROOT . $this->userID);
+        foreach ($dir as $fileinfo) {
+            if ($fileinfo->isDot() || $fileinfo->getFilename() === $profilePhoto) {
+                continue;
+            }
+            unlink($dir->getPath() . '/' . $fileinfo->getFilename());
+        }
     }
 }
