@@ -113,6 +113,6 @@ class AuthController extends Controller
     public static function LogoutAction()
     {
         session()->clear();
-        LocalRedirect('/');
+        LocalRedirect('/login/');
     }
 }

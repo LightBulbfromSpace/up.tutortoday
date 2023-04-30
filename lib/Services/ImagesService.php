@@ -89,6 +89,23 @@ class ImagesService
         return true;
     }
 
+    protected function syncDBWithStorage($photoEntities)
+    {
+        $existingEntities = [];
+        foreach ($photoEntities as $photoEntity)
+        {
+            if (!file_exists(MODULE_ROOT . '/../../../' . $photoEntity['LINK']))
+            {
+                ProfileImagesTable::delete($photoEntity['ID']);
+            }
+            else
+            {
+                $existingEntities[] = $photoEntity;
+            }
+        }
+        return $existingEntities;
+    }
+
     public function saveImageToStorage($photo)
     {
         if ($photo['type'] !== 'image/png' && $photo['type'] !== 'image/jpg' && $photo['type'] !== 'image/jpeg')
@@ -137,18 +154,21 @@ class ImagesService
     }
 
     public function getProfileImage() {
-        return ProfileImagesTable::query()
+        $photo =  ProfileImagesTable::query()
             ->setSelect(['*'])
             ->where('USER_ID', $this->userID)
             ->fetchObject();
+        return $this->syncDBWithStorage([$photo])[0];
     }
 
     public function getProfileImages(array $userIDs)
     {
-        return ProfileImagesTable::query()
+        $photos =  ProfileImagesTable::query()
             ->setSelect(['*'])
             ->whereIn('USER_ID', $userIDs)
             ->fetchCollection();
+
+        return $this->syncDBWithStorage($photos);
     }
 
     public function clearTrash(string $profilePhoto)
