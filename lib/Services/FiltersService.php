@@ -13,7 +13,7 @@ use Up\Tutortoday\Model\Tables\UserSubjectTable;
 
 class FiltersService
 {
-    private mixed $filteredTutors;
+    //private mixed $filteredTutors;
     private int $numberOfUsersByFilters = 0;
 
 
@@ -23,7 +23,6 @@ class FiltersService
     private array $citiesIDs = [];
     private int $minPrice;
     private int $maxPrice;
-    private string $search;
 
 
     public function __construct(array $dict)
@@ -33,7 +32,6 @@ class FiltersService
         $this->citiesIDs = $dict['cities'] != null ? $dict['cities'] : [];
         $this->minPrice = $dict['minPrice'] != null || $dict['minPrice'] != '' ? (int)$dict['minPrice'] : 0;
         $this->maxPrice = $dict['maxPrice'] != null || $dict['maxPrice'] != ''  ? (int)$dict['maxPrice'] : PHP_INT_MAX;
-        //$this->search = $dict['search'];
     }
 
     public function getNumberOfFilteredUsers(): int
@@ -41,7 +39,7 @@ class FiltersService
         return $this->numberOfUsersByFilters;
     }
 
-    public function filterTutors(int $offset = 0, int $limit = 50) : void
+    public function filterTutors() : array
 	{
         $tutorIDsBySubject = [];
         if ($this->subjectIDs !== [] || $this->minPrice > 0 || $this->maxPrice < PHP_INT_MAX) {
@@ -134,34 +132,36 @@ class FiltersService
 
         $this->isFilterUsed = true;
 
-        if ($tutorsIDs === [])
-        {
-            $this->filteredTutors = [];
-            return;
-        }
+//        if ($tutorsIDs === [])
+//        {
+//            $this->filteredTutors = [];
+//            return;
+//        }
 
         $this->numberOfUsersByFilters = count($tutorsIDs);
-        $tutorsIDs = array_slice($tutorsIDs, $offset, $limit);
-        $service = new UserService(0, $tutorsIDs);
-        $service->setRoles(['tutor']);
-        $service->setFetchAllAvailableUsers(false);
+//        $tutorsIDs = array_slice($tutorsIDs, $offset, $limit);
+//        $service = new UserService(0, $tutorsIDs);
+//        $service->setRoles(['tutor']);
+//        $service->setFetchAllAvailableUsers(false);
+//
+//        $this->filteredTutors = $service->getUsersByPage($offset, $limit);
 
-        $this->filteredTutors = $service->getUsersByPage($offset, $limit);
+        return $tutorsIDs;
 	}
 
-    public function getTutorsByName($name)
-	{
-		$tutors = UserTable::query()->setSelect(['*'])
-			->where(Query::expr()->concat("SURNAME", "NAME", "MIDDLE_NAME"), 'like', $name);
+//    public function getTutorsByName($name)
+//	{
+//		$tutors = UserTable::query()->setSelect(['*'])
+//			->where(Query::expr()->concat("SURNAME", "NAME", "MIDDLE_NAME"), 'like', $name);
+//
+//        $this->isFilterUsed = true;
+//		$this->filteredTutors = $tutors->fetchCollection();
+//	}
 
-        $this->isFilterUsed = true;
-		$this->filteredTutors = $tutors->fetchCollection();
-	}
-
-    public function getFilteredTutors() : mixed
-    {
-        return $this->filteredTutors;
-    }
+//    public function getFilteredTutors() : mixed
+//    {
+//        return $this->filteredTutors;
+//    }
 
     public function isFilterUsed(): bool
     {

@@ -6,6 +6,7 @@ use Bitrix\Main\Type\ParameterDictionary;
 use Bitrix\Main\UserTable;
 use Up\Tutortoday\Services\DatetimeService;
 use Up\Tutortoday\Services\FiltersService;
+use Up\Tutortoday\Services\SearchService;
 use Up\Tutortoday\Services\UserService;
 
 class MainPageController
@@ -34,24 +35,32 @@ class MainPageController
     {
         $this->rolesIDs = $roleIDs;
     }
-    public function getTutorsByPage(int $pageFromNull = 0, array $filters = null) : array
+    public function getTutorsByPage(int $pageFromNull = 0, array $filters = null, $search = null) : array
     {
-        if (count($filters) !== 0)
+        $result = [];
+        $areAllUsers = true;
+        if ($search !== null)
+        {
+            $searchService = new SearchService($search);
+            $result = $searchService->generalSearch();
+            $this->numberOfUsers = $searchService->getNumberOfUsers();
+            $areAllUsers = false;
+        }
+        else if (count($filters) !== 0)
         {
             $filter = new FiltersService($filters);
-            $filter->filterTutors($pageFromNull * USERS_BY_PAGE, USERS_BY_PAGE);
-
+            $result = $filter->filterTutors();
             $this->numberOfUsers = $filter->getNumberOfFilteredUsers();
-
-            return $filter->getFilteredTutors();
+            $areAllUsers = false;
         }
-        $service = new UserService();
-        $service->setRoles($this->rolesIDs);
-        $service->setFetchAllAvailableUsers(true);
 
-        $tutors = $service->getUsersByPage($pageFromNull * USERS_BY_PAGE, USERS_BY_PAGE);
+        $userService = new UserService(0, $result);
+        $userService->setRoles(['tutor']);
+        $userService->setFetchAllAvailableUsers($areAllUsers);
 
-        $this->numberOfUsers = $service->getNumberOfAllAvailableUsers();
+        $tutors = $userService->getUsersByPage($pageFromNull * USERS_BY_PAGE, USERS_BY_PAGE);
+
+        $this->numberOfUsers = $userService->getNumOfFetchedUsers();
 
         if ($tutors === false)
         {

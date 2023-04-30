@@ -19,7 +19,11 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
 	    $this->fetchSubjectFilters();
 	    $this->fetchEducationFormatsFilters();
         $this->fetchLoggedInUser();
-        $this->fetchTutors($this->arResult['page'], $this->arResult['filters']);
+        $this->fetchTutors(
+            $this->arResult['page'],
+            $this->arResult['filters'],
+            $this->arResult['search'],
+        );
         $this->fetchAllCities();
         $this->prepareTemplateParams();
         $this->includeComponentTemplate();
@@ -32,6 +36,11 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
         {
             if ($item === '')
             {
+                continue;
+            }
+            if ($key === 'search')
+            {
+                $this->arResult['search'] = $item;
                 continue;
             }
             $filters[$key] = $item;
@@ -57,14 +66,14 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
     {
     }
 
-    protected function fetchTutors($page, array $filters = null)
+    protected function fetchTutors($page, array $filters = null, $search = null)
     {
         if (!is_numeric($page) || $page < 1 || $page == null)
         {
             $page = 1;
         }
         $controller = new MainPageController();
-        $this->arResult['tutors'] = $controller->getTutorsByPage($page - 1, $filters);
+        $this->arResult['tutors'] = $controller->getTutorsByPage($page - 1, $filters, $search);
 
         $maxPage = (int)ceil($controller->getNumberOfUsers() / USERS_BY_PAGE);
         $this->arResult['maxPage'] = $maxPage !== 0 ? $maxPage : 1;

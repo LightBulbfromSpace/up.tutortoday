@@ -28,13 +28,18 @@ class UserService
 {
     private $userID;
     private array $userIDs = [];
-    private int $numberOfAllAvailableUsers = 0;
+    private int $numOfFetchedUsers = 0;
     private bool $fetchAllAvailableUsers = false;
     private array $roleIDs = [1];
     public function __construct(int $userID = 0, array $userIDs = [])
     {
         $this->userID = $userID;
         $this->userIDs = $userIDs;
+    }
+
+    public function getNumOfFetchedUsers(): int
+    {
+        return $this->numOfFetchedUsers;
     }
 
     public function UpdatePassword(string $oldPassword, string $newPassword, string $passwordConfirm)
@@ -49,7 +54,7 @@ class UserService
         );
     }
 
-    public function getNumberOfAllAvailableUsers(): int
+    public function CountAllAvailableUsers(): int
     {
         return UserTable::query()
             ->setSelect(['ID'])
@@ -255,28 +260,34 @@ class UserService
         {
             return false;
         }
+        if ($this->userID === 0 && $this->userIDs === [])
+        {
+            $this->numOfFetchedUsers = 0;
+            return [];
+        }
+
+        $queryForCount = UserTable::query()
+            ->setSelect(['ID'])
+            ->whereIn('WORK_POSITION', $this->roleIDs)
+            ->where('WORK_COMPANY', SITE_NAME);
 
         $query = UserTable::query()
-            ->setSelect(['ID', 'NAME', 'LAST_NAME', 'SECOND_NAME', 'WORK_CITY', 'PERSONAL_PHOTO'])
+            ->setSelect(['ID', 'NAME', 'LAST_NAME', 'SECOND_NAME', 'WORK_CITY'])
             ->whereIn('WORK_POSITION', $this->roleIDs)
             ->where('WORK_COMPANY', SITE_NAME)
-            ->setOrder(['ID' => 'DESC']);
+            ->setOrder(['ID' => 'DESC'])
+            ->setOffset($offset)
+            ->setLimit($limit);
 
         if (!$this->fetchAllAvailableUsers)
         {
+            $queryForCount->whereIn('ID', $this->userIDs);
             $query->whereIn('ID', $this->userIDs);
-        }
-        else
-        {
-            $query->setOffset($offset)->setLimit($limit);
         }
 
         $users = $query->fetchCollection();
 
-        if ($users == null)
-        {
-            return false;
-        }
+        $this->numOfFetchedUsers = $queryForCount->fetchCollection()->count();
 
         $fetchedUserIDs = [];
         foreach ($users as $user)
