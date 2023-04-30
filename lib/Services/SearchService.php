@@ -12,7 +12,7 @@ use Up\Tutortoday\Model\Tables\UserSubjectTable;
 class SearchService
 {
     private string $search;
-    private int $numberOfUsers;
+    private int $numberOfUsers = 0;
 
     public function __construct(string $userSearch)
     {
@@ -24,8 +24,18 @@ class SearchService
         return $this->numberOfUsers;
     }
 
+    public function prepareSearchInput()
+    {
+        $this->search = trim($this->search, " \t\n\r\0\x0B+");
+    }
+
     public function generalSearch()
     {
+        $this->prepareSearchInput();
+        if ($this->search === '')
+        {
+            return [];
+        }
         $usersByCities = $this->searchInCities();
         $usersByEdFormat = $this->searchInEducationFormats();
         $usersBySubjects = $this->searchInSubjects();

@@ -13,10 +13,7 @@ use Up\Tutortoday\Model\Tables\UserSubjectTable;
 
 class FiltersService
 {
-    //private mixed $filteredTutors;
     private int $numberOfUsersByFilters = 0;
-
-
     private bool $isFilterUsed;
     private array $educationFormatIDs = [];
     private array $subjectIDs = [];
@@ -132,36 +129,9 @@ class FiltersService
 
         $this->isFilterUsed = true;
 
-//        if ($tutorsIDs === [])
-//        {
-//            $this->filteredTutors = [];
-//            return;
-//        }
-
         $this->numberOfUsersByFilters = count($tutorsIDs);
-//        $tutorsIDs = array_slice($tutorsIDs, $offset, $limit);
-//        $service = new UserService(0, $tutorsIDs);
-//        $service->setRoles(['tutor']);
-//        $service->setFetchAllAvailableUsers(false);
-//
-//        $this->filteredTutors = $service->getUsersByPage($offset, $limit);
-
         return $tutorsIDs;
 	}
-
-//    public function getTutorsByName($name)
-//	{
-//		$tutors = UserTable::query()->setSelect(['*'])
-//			->where(Query::expr()->concat("SURNAME", "NAME", "MIDDLE_NAME"), 'like', $name);
-//
-//        $this->isFilterUsed = true;
-//		$this->filteredTutors = $tutors->fetchCollection();
-//	}
-
-//    public function getFilteredTutors() : mixed
-//    {
-//        return $this->filteredTutors;
-//    }
 
     public function isFilterUsed(): bool
     {
