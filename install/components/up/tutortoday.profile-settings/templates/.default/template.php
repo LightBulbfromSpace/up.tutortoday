@@ -20,6 +20,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <img src="<?=$arResult['user']['photo']?>" id="profilePhoto" class="img-rounded img-fixed-size profile-photo" alt="avatar">
                     <button type="button" class="photo-button" onclick="openAddPhotoForm()">Open</button>
                 </div>
+                <button type="button" class="button-plus-minus button-large-custom container-margin-top" onclick="deleteProfilePhoto()">Delete</button>
+                <div class="br"></div>
                 <div class="box-dark-element-custom">
                     <input class="input-custom" name="name" placeholder="No name" value="<?=htmlspecialchars($arResult['user']['mainData']['NAME'])?>">
                 </div>
@@ -42,7 +44,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <div class="box-dark-element-custom">
                         <input type="password" class="input-custom" placeholder="Confirm password" id="passwordConfirm" autocomplete="off">
                     </div>
-                    <button type="button" class="button-plus-minus button-large-custom" onclick="updatePassword(<?=$arResult['user']['mainData']['ID']?>)">Save</button>
+                    <button type="button" class="button-plus-minus button-large-custom" onclick="updatePassword()">Save</button>
                 <div class="br"></div>
                 <div class="container-contacts">
                     <label class="label">Email</label>

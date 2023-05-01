@@ -268,12 +268,12 @@ function turnOffOverlay() {
 
 }
 
-function updatePassword(userID) {
+function updatePassword() {
     let oldPassword = document.getElementById('oldPassword').value
     let password = document.getElementById('newPassword').value
     let confirmPassword =  document.getElementById('passwordConfirm').value
     BX.ajax({
-        url: '/profile/' + userID + '/settings/changePassword/',
+        url: '/profile/settings/changePassword/',
         data: {
             oldPassword: oldPassword,
             newPassword: password,
@@ -420,6 +420,27 @@ function updatePhotoConfirm() {
 
 function loadPhoto(path) {
     document.getElementById('photo-add-photo-form').src = path
+}
+
+function deleteProfilePhoto() {
+    BX.ajax.post(
+        '/profile/settings/deleteProfilePhoto/',
+        {
+            sessid: BX.bitrix_sessid(),
+        },
+        (res) => {
+            console.log(res)
+        },
+    )
+    BX.ajax.post(
+        '/profile/settings/getProfilePhoto/',
+        {
+            sessid: BX.bitrix_sessid(),
+        },
+        (res) => {
+            document.getElementById('profilePhoto').src = res.replace(/["\\]/g, '')
+        }
+    )
 }
 
 function ToConfirmButton() {

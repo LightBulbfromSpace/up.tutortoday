@@ -263,4 +263,18 @@ class ImagesService
     {
         return self::STORAGE_ROOT . $this->userID . '/tmp/';
     }
+
+    public function deleteProfilePhoto()
+    {
+        $photos = ProfileImagesTable::query()
+            ->setSelect(['ID'])
+            ->where('USER_ID', $this->userID)
+            ->fetchCollection();
+        foreach ($photos as $photo)
+        {
+            ProfileImagesTable::delete($photo['ID']);
+        }
+
+        return true;
+    }
 }

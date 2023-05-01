@@ -190,4 +190,13 @@ class ProfileController
         $service->clearTrash($service->getTmpDir());
         return true;
     }
+
+    public function deleteProfilePhoto()
+    {
+        if (!check_bitrix_sessid())
+        {
+            return (new ErrorService('invalid_csrf'))->getLastError();
+        }
+        return (new ImagesService($this->userID))->deleteProfilePhoto();
+    }
 }

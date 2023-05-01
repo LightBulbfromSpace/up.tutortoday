@@ -51,7 +51,7 @@ return function (RoutingConfigurator $routes) {
         global $USER;
         (new ProfileController((int)$USER->GetID()))->deleteProfile();
     });
-    $routes->post('/profile/{id}/settings/changePassword/', function ($id) {
+    $routes->post('/profile/settings/changePassword/', function () {
         global $USER;
         return (new ProfileController((int)$USER->GetID()))->updatePassword(getPostList());
     });
@@ -76,5 +76,9 @@ return function (RoutingConfigurator $routes) {
     $routes->post('/profile/settings/cancelPhotoUpdate/', function () {
         global $USER;
         return json_encode((new ProfileController((int)$USER->GetID()))->cancelProfilePhotoUpdate());
+    });
+    $routes->post('/profile/settings/deleteProfilePhoto/', function () {
+        global $USER;
+        return json_encode((new ProfileController((int)$USER->GetID()))->deleteProfilePhoto());
     });
 };

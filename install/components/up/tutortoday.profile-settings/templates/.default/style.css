@@ -186,6 +186,11 @@ input[type="file"] {
     border-top: solid #D9D9D9 1px;
     margin: 20px 0;
 }
+
+.container-margin-top {
+    margin-top: 1rem;
+}
+
 .container-narrow-custom {
     flex: 1;
 }
