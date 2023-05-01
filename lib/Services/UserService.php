@@ -114,19 +114,12 @@ class UserService
             return $resultUser;
         }
 
-        $tutorRoleID = EducationService::getRoleIDbyName('tutor');
-        if ($tutorRoleID === null)
-        {
-            $DB->rollback();
-            return 'Roles not found';
-        }
-
         $resultUser = $user->Update($user->getID(), [
             'SECOND_NAME' => $userForm->getMiddleName(),
             'WORK_PHONE' => $userForm->getPhoneNumber(),
             'WORK_MAILBOX' => $userForm->getWorkingEmail(),
             'WORK_CITY' => $userForm->getCityID(),
-            'WORK_POSITION' => $tutorRoleID,
+            'WORK_POSITION' => $userForm->getRoleID(),
             'WORK_COMPANY' => 'TutorToday',
         ]);
 

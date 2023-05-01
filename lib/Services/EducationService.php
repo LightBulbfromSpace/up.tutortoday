@@ -30,6 +30,12 @@ class EducationService
     {
         return SubjectTable::query()->setSelect(['*'])->fetchCollection();
     }
+
+    public static function getAllRoles()
+    {
+        return RolesTable::query()->setSelect(['*'])->fetchCollection();
+    }
+
     public function getSubjectsByIDs(array $ID)
     {
         $subject = SubjectTable::query()->setSelect(['*'])->whereIn('ID', $this->usersIDs);

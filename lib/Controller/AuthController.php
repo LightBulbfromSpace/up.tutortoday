@@ -98,6 +98,11 @@ class AuthController extends Controller
             }
         }
 
+        if (!Validator::validateRole($userForm->getRoleID()))
+        {
+            LocalRedirect('/registration/?err=invalid_role');
+        }
+
         $ErrOrUserID = UserService::CreateUser($userForm);
         if (!is_numeric($ErrOrUserID))
         {

@@ -185,6 +185,10 @@ class ImagesService
 
     public function clearTrash(string $absoluteDirPath, array $exceptionFileNames = [])
     {
+        if (!file_exists($absoluteDirPath) && !is_dir($absoluteDirPath))
+        {
+            return;
+        }
         $dir = new DirectoryIterator($absoluteDirPath);
         foreach ($dir as $fileinfo) {
             if ($fileinfo->isDot() || in_array($fileinfo->getFilename(), $exceptionFileNames))

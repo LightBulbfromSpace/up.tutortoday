@@ -144,6 +144,18 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             </div>
         </div>
 
+        <label class="label">I'm a</label>
+        <div class="field">
+            <div class="select-custom">
+                <select name="role">
+                    <?php foreach ($arResult['roles'] as $role): ?>
+                        <option value="<?=$role['ID']?>"><?=$role['NAME']?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <p class="help">Important! Role cannot be changed in future.</p>
+        </div>
+
         <div class="field">
             <label class="label">Profile description</label>
             <div class="control">

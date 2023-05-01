@@ -88,4 +88,17 @@ class Validator
         }
         return true;
     }
+
+    public static function validateRole(int $RoleID)
+    {
+        $roles = EducationService::getAllRoles();
+        foreach ($roles as $role)
+        {
+            if ((int)$role['ID'] === $RoleID)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

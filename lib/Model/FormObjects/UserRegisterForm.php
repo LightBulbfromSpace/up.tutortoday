@@ -42,7 +42,7 @@ class UserRegisterForm
         $this->edFormatsIDs = $post['edFormats'] ?? [];
         $this->description = $post['description'];
         $this->cityID = !is_numeric($post['city']) ? null : (int)$post['city'];
-        $this->roleID = $post['roleID'] ?? 1;
+        $this->roleID = (int)$post['role'] ?? 1;
         $this->subjectsIDs = $post['subjects'] ?? [];
         foreach ($post['subjectsPrices'] as $ID => $subjectPrice)
         {

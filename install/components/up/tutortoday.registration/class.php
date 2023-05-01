@@ -26,6 +26,7 @@ class TutorTodayRegistrationComponent extends CBitrixComponent {
         $this->arResult['edFormats'] = EducationService::getAllEdFormats();
         $this->arResult['subjects'] = EducationService::getAllSubjects();
         $this->arResult['cities'] = LocationService::getAllCities();
+        $this->arResult['roles'] = EducationService::getAllRoles();
     }
 
     protected function prepareLocalization()
