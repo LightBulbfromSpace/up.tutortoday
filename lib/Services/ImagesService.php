@@ -116,12 +116,17 @@ class ImagesService
             return null;
         }
 
+
         if (!file_exists(self::STORAGE_ROOT . $this->userID)) {
-            mkdir(self::STORAGE_ROOT . $this->userID, 0666, true);
+            mkdir(self::STORAGE_ROOT . $this->userID, 0777, true);
         }
 
         if (!file_exists(self::STORAGE_ROOT . $this->userID . '/tmp/')) {
-            mkdir(self::STORAGE_ROOT  . $this->userID . '/tmp/', 0666, true);
+            mkdir(self::STORAGE_ROOT  . $this->userID . '/tmp/', 0777, true);
+        }
+
+        if (!file_exists(self::STORAGE_ROOT . $this->userID . '/avatar/')) {
+            mkdir(self::STORAGE_ROOT  . $this->userID . '/avatar/', 0777, true);
         }
 
         $name = (new \DateTime())->getTimestamp();
@@ -130,6 +135,7 @@ class ImagesService
         $filepathTmp = self::STORAGE_ROOT . "$this->userID/tmp/$name.$this->extension";
         $filepath = self::STORAGE_ROOT . "/$this->userID/$name.$this->extension";
 
+        //return [$photo['tmp_name'], $filepath];
         $result = move_uploaded_file($photo['tmp_name'], $filepath);
         if (!$result)
         {

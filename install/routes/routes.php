@@ -81,4 +81,12 @@ return function (RoutingConfigurator $routes) {
         global $USER;
         return json_encode((new ProfileController((int)$USER->GetID()))->deleteProfilePhoto());
     });
+    $routes->post('/profile/feedbacks/add/', function () {
+        global $USER;
+        return json_encode((new ProfileController((int)$USER->GetID()))->addFeedback(getPostList()));
+    });
+    $routes->post('/profile/feedbacks/', function () {
+        global $USER;
+        return (new ProfileController((int)$USER->GetID()))->getFeedbacks(getPostList());
+    });
 };

@@ -26,14 +26,14 @@ use Up\Tutortoday\Model\Validator;
 
 class UserService
 {
-    private $userID;
+    private $observedUserID;
     private array $userIDs = [];
     private int $numOfFetchedUsers = 0;
     private bool $fetchAllAvailableUsers = false;
     private array $roleIDs = [1];
     public function __construct(int $userID = 0, array $userIDs = [])
     {
-        $this->userID = $userID;
+        $this->observedUserID = $userID;
         $this->userIDs = $userIDs;
     }
 
@@ -177,11 +177,11 @@ class UserService
         return $user->getID();
     }
 
-    public function getUserByID()
+    public function getUserByID(int $observerID = 0)
     {
         $user = UserTable::query()
             ->setSelect(['*'])
-            ->where('ID', $this->userID)
+            ->where('ID', $this->observedUserID)
             ->fetchObject();
 
         if ($user == null)
@@ -191,7 +191,7 @@ class UserService
 
         $role = UserRoleTable::query()
             ->setSelect(['USER_ID', 'ROLE'])
-            ->where('USER_ID', $this->userID)
+            ->where('USER_ID', $this->observedUserID)
             ->fetchObject();
 
         if ($role == null)
@@ -201,31 +201,43 @@ class UserService
 
         $edFormats = UserEdFormatTable::query()
             ->setSelect(['USER_ID', 'EDUCATION_FORMAT'])
-            ->where('USER_ID', $this->userID)
+            ->where('USER_ID', $this->observedUserID)
             ->fetchCollection();
 
         $VKs = VkTable::query()
             ->setSelect(['USER_ID', 'VK_PROFILE'])
-            ->where('USER_ID', $this->userID)
+            ->where('USER_ID', $this->observedUserID)
             ->fetchCollection();
 
         $telegrams = TelegramTable::query()
             ->setSelect(['USER_ID', 'TELEGRAM_USERNAME'])
-            ->where('USER_ID', $this->userID)
+            ->where('USER_ID', $this->observedUserID)
             ->fetchCollection();
         $subjects = UserSubjectTable::query()
             ->setSelect(['USER_ID', 'SUBJECT', 'PRICE'])
-            ->where('USER_ID', $this->userID)
+            ->where('USER_ID', $this->observedUserID)
             ->fetchCollection();
 
         $description = UserDescriptionTable::query()
             ->setSelect(['USER_ID', 'DESCRIPTION'])
-            ->where('USER_ID', $this->userID)
+            ->where('USER_ID', $this->observedUserID)
             ->fetchObject();
 
         $city = LocationService::getCityNameByID((int)$user['WORK_CITY']);
 
-        $photo = (new ImagesService($this->userID))->getProfileImage();
+        $photo = (new ImagesService($this->observedUserID))->getProfileImage();
+        $feedbacks = [];
+
+        $observer = UserRoleTable::query()
+            ->setSelect(['USER_ID', 'ROLE'])
+            ->where('USER_ID', $observerID)
+            ->fetchObject();
+
+        if ($observer['ROLE']['NAME'] !== 'tutor' && $observerID !== 0)
+        {
+            $feedbacks = (new FeedbackService($observerID))->getByPage($this->observedUserID, 0);
+        }
+
 
         return [
             'photo' => $photo != null ? $photo['LINK'] : DEFAULT_PHOTO,
@@ -241,6 +253,11 @@ class UserService
                 'telegram' => $telegrams,
             ],
             'subjects' => $subjects,
+            'feedbacks' => $feedbacks ?? [],
+            'observer' => [
+                'ID' => $observer['USER_ID'],
+                'role' => $observer['ROLE'],
+            ]
         ];
     }
 
@@ -250,7 +267,7 @@ class UserService
         {
             return false;
         }
-        if ($this->userID === 0 && $this->userIDs === [] && !$this->fetchAllAvailableUsers)
+        if ($this->observedUserID === 0 && $this->userIDs === [] && !$this->fetchAllAvailableUsers)
         {
             $this->numOfFetchedUsers = 0;
             return [];
@@ -366,7 +383,7 @@ class UserService
     public function UpdateUser(UserRegisterForm $userForm)
     {
         $user = new \CUser();
-        $userResult = $user->update($this->userID, [
+        $userResult = $user->update($this->observedUserID, [
                 'NAME' => $userForm->getName(),
                 'LAST_NAME' => $userForm->getLastName(),
                 'SECOND_NAME' => $userForm->getMiddleName(),
@@ -379,7 +396,7 @@ class UserService
             return $userResult;
         }
 
-        $descriptionResult = UserDescriptionTable::update($this->userID, [
+        $descriptionResult = UserDescriptionTable::update($this->observedUserID, [
             'DESCRIPTION' => $userForm->getDescription()
         ]);
         if (!$descriptionResult->isSuccess())
@@ -389,7 +406,7 @@ class UserService
 
         $existingEdFormats = UserEdFormatTable::query()
             ->setSelect(['*'])
-            ->where('USER_ID', $this->userID)
+            ->where('USER_ID', $this->observedUserID)
             ->fetchCollection();
 
         foreach ($existingEdFormats as $format)
@@ -407,7 +424,7 @@ class UserService
         foreach ($userForm->getEdFormatsIDs() as $edFormatID)
         {
             $edFormatResult = UserEdFormatTable::add([
-                'USER_ID' => $this->userID,
+                'USER_ID' => $this->observedUserID,
                 'EDUCATION_FORMAT_ID' => $edFormatID
             ]);
             if (!$edFormatResult->isSuccess())
@@ -422,7 +439,7 @@ class UserService
                 continue;
             }
             $subjAddResult = UserSubjectTable::update([
-                'USER_ID' => $this->userID,
+                'USER_ID' => $this->observedUserID,
                 'SUBJECT_ID' =>$subject['ID'],
                 ], [
                     'PRICE' => $subject['price'],
@@ -437,7 +454,7 @@ class UserService
 
         $existingSubjectsIDs = UserSubjectTable::query()
             ->setSelect(['SUBJECT_ID'])
-            ->where('USER_ID', $this->userID)
+            ->where('USER_ID', $this->observedUserID)
             ->fetchCollection();
 
         if ($existingSubjectsIDs != null)
@@ -459,13 +476,20 @@ class UserService
                 }
             }
         }
+
+        $addedSubjectsIDs = [];
         foreach ($subjectsToAdd as $subj)
         {
+            if (in_array($subj['ID'], $addedSubjectsIDs))
+            {
+                continue;
+            }
             $subjAddResult = UserSubjectTable::add([
-                'USER_ID' => $this->userID,
+                'USER_ID' => $this->observedUserID,
                 'SUBJECT_ID' => $subj['ID'],
                 'PRICE' => $subj['price'],
             ]);
+            $addedSubjectsIDs[] = $subj['ID'];
             if (!$subjAddResult->isSuccess())
             {
                 return $subjAddResult->getErrorMessages();
@@ -477,8 +501,8 @@ class UserService
 
     public function deleteUser()
     {
-        \CUser::Delete($this->userID);
-        $roles = UserRoleTable::query()->setSelect(['*'])->where('USER_ID', $this->userID)->fetchCollection();
+        \CUser::Delete($this->observedUserID);
+        $roles = UserRoleTable::query()->setSelect(['*'])->where('USER_ID', $this->observedUserID)->fetchCollection();
         foreach ($roles as $role)
         {
             UserRoleTable::delete([
@@ -486,7 +510,7 @@ class UserService
                 'ROLE_ID' => $role['ROLE_ID'],
             ]);
         }
-        $subjects = UserSubjectTable::query()->setSelect(['*'])->where('USER_ID', $this->userID)->fetchCollection();
+        $subjects = UserSubjectTable::query()->setSelect(['*'])->where('USER_ID', $this->observedUserID)->fetchCollection();
         foreach ($subjects as $subject)
         {
             UserSubjectTable::delete([
@@ -494,7 +518,7 @@ class UserService
                 'SUBJECT_ID' => $subject['SUBJECT_ID'],
             ]);
         }
-        $edFormats = UserEdFormatTable::query()->setSelect(['*'])->where('USER_ID', $this->userID)->fetchCollection();
+        $edFormats = UserEdFormatTable::query()->setSelect(['*'])->where('USER_ID', $this->observedUserID)->fetchCollection();
         foreach ($edFormats as $edFormat)
         {
             UserEdFormatTable::delete([
@@ -502,14 +526,14 @@ class UserService
                 'EDUCATION_FORMAT_ID' => $edFormat['EDUCATION_FORMAT_ID'],
             ]);
         }
-        $feedbacks = FeedbacksTable::query()->setSelect(['*'])->where('TUTOR_ID', $this->userID)->fetchCollection();
+        $feedbacks = FeedbacksTable::query()->setSelect(['*'])->where('TUTOR_ID', $this->observedUserID)->fetchCollection();
         foreach ($feedbacks as $feedback)
         {
             FeedbacksTable::delete([
                 'ID' => $feedback['ID'],
             ]);
         }
-        $freeTime = FreeTimeTable::query()->setSelect(['*'])->where('USER_ID', $this->userID)->fetchCollection();
+        $freeTime = FreeTimeTable::query()->setSelect(['*'])->where('USER_ID', $this->observedUserID)->fetchCollection();
         foreach ($freeTime as $hour)
         {
             FreeTimeTable::delete([
@@ -519,7 +543,7 @@ class UserService
 
         $images = ProfileImagesTable::query()
             ->setSelect(['ID'])
-            ->where('USER_ID', $this->userID)
+            ->where('USER_ID', $this->observedUserID)
             ->fetchCollection();
 
         foreach ($images as $image)
@@ -531,7 +555,7 @@ class UserService
 
         $VKs = VkTable::query()
             ->setSelect(['*'])
-            ->where('USER_ID', $this->userID)
+            ->where('USER_ID', $this->observedUserID)
             ->fetchCollection();
         foreach ($VKs as $VK)
         {
@@ -541,7 +565,7 @@ class UserService
         }
         $telegramUsernames = TelegramTable::query()
             ->setSelect(['*'])
-            ->where('USER_ID', $this->userID)
+            ->where('USER_ID', $this->observedUserID)
             ->fetchCollection();
         foreach ($telegramUsernames as $telegramUsername)
         {
@@ -553,7 +577,7 @@ class UserService
 
     public function saveProfilePhoto()
     {
-        $service = (new ImagesService($this->userID));
+        $service = (new ImagesService($this->observedUserID));
         $file = $service->getLastTmpFile();
         if ($file === null)
         {
@@ -561,7 +585,7 @@ class UserService
         }
         $service->clearTrash($service->getAvatarDir());
 
-        $name = preg_replace('#/.+/#', '', $file);
+        $name = preg_replace('#.+[\\\/]#', '', $file);
         $newPlace = $service->saveProfileImage($name);
 
         $service->clearTrash($service->getTmpDir());

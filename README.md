@@ -42,6 +42,7 @@ local/components/up -> local/modules/up.tutortoday/install/components/up
 local/templates/tutortoday -> local/modules/up.tutortoday/install/templates/tutortoday
 local/routes/routes.php -> local/modules/up.tutortoday/install/routes/routes.php
 local/view/ -> local/modules/up.tutortoday/install/view
+local/js/ -> local/modules/up.tutortoday/install/js/up/
 ```
 
 ## Examples of TutorToday

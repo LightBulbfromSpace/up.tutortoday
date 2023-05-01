@@ -153,7 +153,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <?php endforeach; ?>
                 </select>
             </div>
-            <p class="help">Important! Role cannot be changed in future.</p>
+            <p class="help">Attention! Role cannot be changed in future.</p>
         </div>
 
         <div class="field">

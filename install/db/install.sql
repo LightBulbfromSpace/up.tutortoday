@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS up_tutortoday_telegram(
 CREATE TABLE IF NOT EXISTS up_tutortoday_feedbacks (
     ID int unsigned auto_increment not null,
     TUTOR_ID int unsigned not null,
+    STUDENT_ID int unsigned not null,
     TITLE varchar(100) not null,
     DESCRIPTION text,
     STARS_NUMBER int,

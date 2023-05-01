@@ -7,6 +7,7 @@ use Bitrix\Main\Localization\Loc,
     Bitrix\Main\ORM\Fields\IntegerField;
 use Bitrix\Main\ORM\Fields\Relations\Reference;
 use Bitrix\Main\ORM\Query\Join;
+use Bitrix\Main\UserTable;
 
 Loc::loadMessages(__FILE__);
 
@@ -49,7 +50,7 @@ class UserRoleTable extends DataManager
                 ->configureAutocomplete(true),
             (new Reference(
                 'USER',
-                \CUser::class,
+                UserTable::class,
                 Join::on('this.USER_ID', 'ref.ID')
             )),
             (new IntegerField('ROLE_ID',

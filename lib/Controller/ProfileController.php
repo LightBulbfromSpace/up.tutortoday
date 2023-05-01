@@ -3,10 +3,13 @@
 namespace Up\Tutortoday\Controller;
 
 use Bitrix\Main\Type\ParameterDictionary;
+use Up\Tutortoday\Model\FormObjects\FeedbackForm;
 use Up\Tutortoday\Model\FormObjects\UserForm;
 use Up\Tutortoday\Model\FormObjects\UserRegisterForm;
+use Up\Tutortoday\Model\Validator;
 use Up\Tutortoday\Services\EducationService;
 use Up\Tutortoday\Services\ErrorService;
+use Up\Tutortoday\Services\FeedbackService;
 use Up\Tutortoday\Services\ImagesService;
 use Up\Tutortoday\Services\DatetimeService;
 use Up\Tutortoday\Services\UserService;
@@ -198,5 +201,30 @@ class ProfileController
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
         return (new ImagesService($this->userID))->deleteProfilePhoto();
+    }
+
+    public function addFeedback(ParameterDictionary $post)
+    {
+        if (!check_bitrix_sessid())
+        {
+            return (new ErrorService('invalid_csrf'))->getLastError();
+        }
+        $feedbackForm = new FeedbackForm($post);
+        if(strlen($feedbackForm->getTitle()) > 100)
+        {
+            return (new ErrorService('too_long'))->getLastError();
+        }
+        return (new FeedbackService($this->userID))->add($feedbackForm);
+    }
+
+    public function getFeedbacks(ParameterDictionary $post)
+    {
+        if (!check_bitrix_sessid())
+        {
+            return (new ErrorService('invalid_csrf'))->getLastError();
+        }
+        return (new FeedbackService($this->userID))->getByPage(
+            $post['tutorID'], $post['page'], $post['tutorsPerPage']
+        );
     }
 }

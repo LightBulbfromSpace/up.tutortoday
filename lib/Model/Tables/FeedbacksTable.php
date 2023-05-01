@@ -9,6 +9,7 @@ use Bitrix\Main\Localization\Loc,
     Bitrix\Main\ORM\Fields\Validators\LengthValidator;
 use Bitrix\Main\ORM\Fields\Relations\Reference;
 use Bitrix\Main\ORM\Query\Join;
+use Bitrix\Main\UserTable;
 
 Loc::loadMessages(__FILE__);
 
@@ -58,8 +59,17 @@ class FeedbacksTable extends DataManager
                 ->configureRequired(true),
             (new Reference(
                 'TUTOR',
-                \CUser::class,
+                UserTable::class,
                 Join::on('this.TUTOR_ID', 'ref.ID')
+            )),
+            (new IntegerField('STUDENT_ID',
+                []
+            ))->configureTitle(Loc::getMessage('FEEDBACKS_ENTITY_STUDENT_ID_FIELD'))
+                ->configureRequired(true),
+            (new Reference(
+                'STUDENT',
+                UserTable::class,
+                Join::on('this.STUDENT_ID', 'ref.ID')
             )),
             (new StringField('TITLE',
                 [

@@ -6,9 +6,11 @@
 global $USER;
 
 \Bitrix\Main\UI\Extension::load('main.core');
+\Bitrix\Main\UI\Extension::load('up.feedbacks');
 
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="/local/components/up/tutortoday.profile/templates/.default/scripts.js"></script>
 <div class="container-custom">
     <div class="container-narrow-custom">
@@ -75,61 +77,111 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <?php endif; ?>
             <?=htmlspecialchars($arResult['user']['description'])?>
         </div>
-        <div class="container-row-custom">
-            <div class="container-column-custom">
+        <div class="container-large-column-custom">
+            <div class="container-row-custom">
                 <div class="container-column-custom">
-                    <label class="label">Education formats</label>
-                    <div class="box">
-                        <?php if(count($arResult['user']['edFormats']) === 0): ?>
-                            No formats selected
-                        <?php endif; ?>
-                        <?php foreach ($arResult['user']['edFormats'] as $edFormat): ?>
-                            <div class="box-dark-element-custom">
-                                <?=$edFormat['EDUCATION_FORMAT']['NAME']?>
-                            </div>
+                    <label class="label">Days of week</label>
+                    <div class="box-stretched-custom">
+                        <?php foreach ($arResult['weekdays'] as $weekday): ?>
+                            <button class="box-button" onclick="getTime(<?=$arResult['user']['mainData']['ID']?>, <?=$weekday['ID']?>)" id="weekday-<?=$weekday['ID']?>"><?=$weekday['NAME']?></button>
                         <?php endforeach; ?>
                     </div>
                 </div>
                 <div class="container-column-custom">
-                    <label class="label">City</label>
-                    <div class="box">
-                        <?php if($arResult['user']['city'] == ''): ?>
-                            No city selected
-                        <?php endif; ?>
-                        <?=htmlspecialchars($arResult['user']['city'])?>
+                    <div class="container-column-custom">
+                        <label class="label">Available time</label>
+                        <div class="box-stretched-custom is-aligned-center" id="free-time-area">
+                            <div>Select the weekday</div>
+                        </div>
+                    </div>
+                    <div class="container-column-custom">
+                        <label class="label">Subjects</label>
+                        <div class="box">
+                            <?php if(count($arResult['user']['subjects']) === 0): ?>
+                                No subjects selected
+                            <?php endif; ?>
+                            <?php foreach ($arResult['user']['subjects'] as $subject): ?>
+                                <div class="box-dark-element-custom">
+                                    <?=$subject['SUBJECT']['NAME']?>
+                                </div>
+                                <div class="box-invisible-custom">
+                                    <?=$subject['PRICE']?> rub/hour
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
                 </div>
                 <div class="container-column-custom">
-                    <label class="label">Subjects</label>
-                    <div class="box">
-                        <?php if(count($arResult['user']['subjects']) === 0): ?>
-                            No subjects selected
-                        <?php endif; ?>
-                        <?php foreach ($arResult['user']['subjects'] as $subject): ?>
-                            <div class="box-dark-element-custom">
-                                <?=$subject['SUBJECT']['NAME']?>
-                            </div>
-                            <div class="box-invisible-custom">
-                                <?=$subject['PRICE']?> rub/hour
-                            </div>
-                        <?php endforeach; ?>
+                    <div class="container-column-custom">
+                        <label class="label">Education formats</label>
+                        <div class="box">
+                            <?php if(count($arResult['user']['edFormats']) === 0): ?>
+                                No formats selected
+                            <?php endif; ?>
+                            <?php foreach ($arResult['user']['edFormats'] as $edFormat): ?>
+                                <div class="box-dark-element-custom">
+                                    <?=$edFormat['EDUCATION_FORMAT']['NAME']?>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
+                    <div class="container-column-custom">
+                        <label class="label">City</label>
+                        <div class="box">
+                            <?php if($arResult['user']['city'] == ''): ?>
+                                No city selected
+                            <?php endif; ?>
+                            <?=htmlspecialchars($arResult['user']['city'])?>
+                        </div>
+                    </div>
+
                 </div>
+
             </div>
-            <div class="container-column-custom">
-                <label class="label">Days of week</label>
-                <div class="box-stretched-custom">
-                    <?php foreach ($arResult['weekdays'] as $weekday): ?>
-                        <button class="box-button" onclick="getTime(<?=$arResult['user']['mainData']['ID']?>, <?=$weekday['ID']?>)" id="weekday-<?=$weekday['ID']?>"><?=$weekday['NAME']?></button>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-            <div class="container-column-custom">
-                <label class="label">Available time</label>
-                <div class="box-stretched-custom is-aligned-center" id="free-time-area">
-                    <div>No time selected</div>
-                </div>
+            <div class="feedbacks-container" id="feedbacks-container">
+                <?php if ($arResult['user']['observer']['role']['NAME'] !== 'tutor'): ?>
+
+                    <?php if ($USER->GetID() === null): ?>
+                        <div class="box">Only logged-in users can see and send feedbacks</div>
+                    <?php else: ?>
+                        <?php if ($arResult['user']['role']['NAME'] === 'tutor'): ?>
+                            <button type="button" id="add-close-feedback-button" class="box-button">Add feedback</button>
+                            <div id="feedback-form-area"></div>
+                            <?php if (count($arResult['user']['feedbacks']) === 0): ?>
+                                <div class="box">No feedbacks yet</div>
+                            <?php endif; ?>
+                            <div id="feedbacks-area">
+                                <?php foreach ($arResult['user']['feedbacks'] as $feedback): ?>
+                                <div class="feedback-card-container">
+                                    <a class="feedback-card-user-info-container" href="/profile/<?=$feedback['student']['ID']?>/">
+                                        <img src="<?=$feedback['student']['photo']?>" class="photo-small img-rounded" alt="avatar">
+                                        <div class="help"><?=$feedback['student']['surname']?></div>
+                                        <div class="help"><?=$feedback['student']['name']?></div>
+                                    </a>
+                                    <div class="box feedback-card-custom">
+                                        <div class="title-custom"><?=$feedback['title']?></div>
+                                        <div class="br"></div>
+                                        <div><?=$feedback['description']?></div>
+                                    </div>
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+                    <?php endif; ?>
+
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
+<script>
+    BX.ready(
+        window.TutortodayFeedbacks = new BX.Up.Tutortoday.Feedbacks({
+            rootNodeID: 'feedbacks-container',
+            formID: 'feedback-form-area',
+            feedbacksRootID: 'feedbacks-area',
+            feedbackReceiverID: <?=$arResult['user']['mainData']['ID']?>,
+            toggleButtonID: 'add-close-feedback-button',
+        })
+    )
+</script>

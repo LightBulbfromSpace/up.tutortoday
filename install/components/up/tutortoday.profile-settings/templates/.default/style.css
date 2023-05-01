@@ -204,6 +204,7 @@ input[type="file"] {
 .container-row-custom {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
 }
 
 .container-margin-top-bottom {
@@ -263,9 +264,9 @@ input[type="file"] {
     box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%), 0 0 0 1px rgb(10 10 10 / 2%);
     color: #4a4a4a;
     display: block;
-    padding: 1.25rem;
+    padding: 0.5rem;
     width: 150px;
-    margin: 15px 0;
+    margin: 8px 0;
     font-size: medium;
 }
 

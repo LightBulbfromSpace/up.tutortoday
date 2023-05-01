@@ -173,7 +173,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <label class="label">Available time</label>
                     <div class="container-time-custom">
                         <div class="box-time-custom is-aligned-center" id="free-time-area">
-                            <div>No time selected</div>
+                            <div>Select the weekday</div>
                         </div>
                         <div class="box-time-custom is-aligned-center">
                             <button type="button" class="button-plus-minus button-large-custom" id="add-time-button" onclick="showTimepicker()">+</button>
