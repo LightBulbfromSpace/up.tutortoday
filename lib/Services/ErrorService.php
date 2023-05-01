@@ -47,6 +47,7 @@ class ErrorService
     {
         return [
             'TYPE' => $this->errorCodes[$i] === 'ok' ? 'OK' : 'ERROR',
+            'CODE' => $this->errorCodes[$i],
             'MESSAGE' => $this->getLastErrorText(),
         ];
     }

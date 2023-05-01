@@ -63,7 +63,7 @@ return function (RoutingConfigurator $routes) {
 
     $routes->post('/profile/settings/updatePhotoConfirm/', function () {
         global $USER;
-        return json_encode((new ProfileController((int)$USER->GetID()))->updateProfilePhoto(getPostList()));
+        return json_encode((new ProfileController((int)$USER->GetID()))->updateProfilePhoto());
     });
     $routes->post('/profile/getID/', function () {
         global $USER;
@@ -72,5 +72,9 @@ return function (RoutingConfigurator $routes) {
     $routes->post('/profile/settings/getProfilePhoto/', function () {
         global $USER;
         return json_encode((new ProfileController((int)$USER->GetID()))->getProfilePhoto());
+    });
+    $routes->post('/profile/settings/cancelPhotoUpdate/', function () {
+        global $USER;
+        return json_encode((new ProfileController((int)$USER->GetID()))->cancelProfilePhotoUpdate());
     });
 };

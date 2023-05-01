@@ -47,7 +47,7 @@ Loc::loadMessages(__FILE__);
                 <a class="nav-link" href="#">Contacts</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/registration/">Become a tutor</a>
+                <a class="nav-link" href="/registration/">Registration</a>
             </li>
         </ul>
     </div>

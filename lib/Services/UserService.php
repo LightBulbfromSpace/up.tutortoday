@@ -232,10 +232,7 @@ class UserService
 
         $city = LocationService::getCityNameByID((int)$user['WORK_CITY']);
 
-        $photo = ProfileImagesTable::query()
-            ->setSelect(['LINK'])
-            ->where('USER_ID', $this->userID)
-            ->fetchObject();
+        $photo = (new ImagesService($this->userID))->getProfileImage();
 
         return [
             'photo' => $photo != null ? $photo['LINK'] : DEFAULT_PHOTO,
@@ -481,7 +478,6 @@ class UserService
                 return $subjAddResult->getErrorMessages();
             }
         }
-        //role update
 
         return true;
     }
@@ -562,29 +558,24 @@ class UserService
         }
     }
 
-    public function saveProfilePhoto(string $imgSrc)
+    public function saveProfilePhoto()
     {
-        $imgSrc = str_replace('\\', '/', $imgSrc);
-
         $service = (new ImagesService($this->userID));
-
-        $photo = $service->getProfileImage();
-        if ($photo !== null) {
-            ProfileImagesTable::update($photo['ID'], [
-                'LINK' => $imgSrc,
-            ]);
-        }
-        else
+        $file = $service->getLastTmpFile();
+        if ($file === null)
         {
-            ProfileImagesTable::add([
-                'USER_ID' => $this->userID,
-                'LINK' => $imgSrc,
-            ]);
+            (new ErrorService('file_not_found'))->getLastError();
         }
+        $service->clearTrash($service->getAvatarDir());
 
-        $name = preg_replace('#/.+/#', '', $imgSrc);
-        $service->clearTrash($name);
+        $name = preg_replace('#/.+/#', '', $file);
+        $newPlace = $service->saveProfileImage($name);
 
-        return true;
+        $service->clearTrash($service->getTmpDir());
+        if (!$service->getErrors()->isNoErrors())
+        {
+            return $service->getErrors()->getLastError();
+        }
+        return ['TYPE' => 'OK', 'MESSAGE' => $service::cutPathToProjectRoot($newPlace)];
     }
 }

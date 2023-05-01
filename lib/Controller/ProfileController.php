@@ -161,13 +161,13 @@ class ProfileController
         return $result;
     }
 
-    public function updateProfilePhoto(ParameterDictionary $post)
+    public function updateProfilePhoto()
     {
         if (!check_bitrix_sessid())
         {
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
-        return (new UserService($this->userID))->saveProfilePhoto($post['imgSrc']);
+        return (new UserService($this->userID))->saveProfilePhoto();
     }
 
     public function getProfilePhoto()
@@ -178,5 +178,16 @@ class ProfileController
         }
         $result = (new ImagesService($this->userID))->getProfileImage();
         return $result == null ? DEFAULT_PHOTO : $result['LINK'];
+    }
+
+    public function cancelProfilePhotoUpdate()
+    {
+        if (!check_bitrix_sessid())
+        {
+            return (new ErrorService('invalid_csrf'))->getLastError();
+        }
+        $service = (new ImagesService($this->userID));
+        $service->clearTrash($service->getTmpDir());
+        return true;
     }
 }

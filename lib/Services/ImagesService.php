@@ -17,7 +17,6 @@ class ImagesService
     private const STORAGE_ROOT = MODULE_ROOT . '/images/';
     private int $userID;
     private ErrorService $errors;
-
     private string $extension;
 
     public function getErrors(): ErrorService
@@ -29,6 +28,11 @@ class ImagesService
     {
         $this->errors = new ErrorService('');
         $this->userID = $userID;
+    }
+
+    public static function cutPathToProjectRoot($filepath)
+    {
+        return str_replace(MODULE_ROOT, '/local/modules/up.tutortoday', $filepath);
     }
 
     protected function editProfileImage(string $srcFilepath, string $destFilepath) : bool|string
@@ -89,21 +93,19 @@ class ImagesService
         return true;
     }
 
-    protected function syncDBWithStorage($photoEntities)
+    protected function syncDBWithStorage()
     {
-        $existingEntities = [];
+        $photoEntities = ProfileImagesTable::query()
+            ->setSelect(['ID', 'LINK'])
+            ->where('USER_ID', $this->userID)
+            ->fetchCollection();
         foreach ($photoEntities as $photoEntity)
         {
             if (!file_exists(MODULE_ROOT . '/../../../' . $photoEntity['LINK']))
             {
                 ProfileImagesTable::delete($photoEntity['ID']);
             }
-            else
-            {
-                $existingEntities[] = $photoEntity;
-            }
         }
-        return $existingEntities;
     }
 
     public function saveImageToStorage($photo)
@@ -115,11 +117,11 @@ class ImagesService
         }
 
         if (!file_exists(self::STORAGE_ROOT . $this->userID)) {
-            mkdir(self::STORAGE_ROOT . $this->userID, 0777, true);
+            mkdir(self::STORAGE_ROOT . $this->userID, 0666, true);
         }
 
         if (!file_exists(self::STORAGE_ROOT . $this->userID . '/tmp/')) {
-            mkdir(self::STORAGE_ROOT  . $this->userID . '/tmp/', 0777, true);
+            mkdir(self::STORAGE_ROOT  . $this->userID . '/tmp/', 0666, true);
         }
 
         $name = (new \DateTime())->getTimestamp();
@@ -128,21 +130,21 @@ class ImagesService
         $filepathTmp = self::STORAGE_ROOT . "$this->userID/tmp/$name.$this->extension";
         $filepath = self::STORAGE_ROOT . "/$this->userID/$name.$this->extension";
 
-        $result = move_uploaded_file($photo['tmp_name'], $filepathTmp);
+        $result = move_uploaded_file($photo['tmp_name'], $filepath);
         if (!$result)
         {
             $this->errors->addError('err_move_tmp');
             return null;
         }
 
-        $isImageEdited = $this->editProfileImage($filepathTmp, $filepath);
+        $isImageEdited = $this->editProfileImage($filepath, $filepathTmp);
         if (!$isImageEdited)
         {
             $this->errors->addError('err_img_edit');
             return null;
         }
 
-        $deleteResult = unlink($filepathTmp);
+        $deleteResult = unlink($filepath);
         if (!$deleteResult)
         {
             $this->errors->addError('err_img_delete');
@@ -150,15 +152,21 @@ class ImagesService
         }
 
 
-        return str_replace(MODULE_ROOT, '/local/modules/up.tutortoday', $filepath);
+        return self::cutPathToProjectRoot($filepathTmp);
+    }
+
+    public function getAvatarDir()
+    {
+        return self::STORAGE_ROOT . $this->userID . '/avatar/';
     }
 
     public function getProfileImage() {
-        $photo =  ProfileImagesTable::query()
+        $this->syncDBWithStorage();
+        $this->clearTrash($this->getTmpDir());
+        return ProfileImagesTable::query()
             ->setSelect(['*'])
             ->where('USER_ID', $this->userID)
             ->fetchObject();
-        return $this->syncDBWithStorage([$photo])[0];
     }
 
     public function getProfileImages(array $userIDs)
@@ -167,18 +175,92 @@ class ImagesService
             ->setSelect(['*'])
             ->whereIn('USER_ID', $userIDs)
             ->fetchCollection();
+        if ($photos->count() === 0)
+        {
+            return null;
+        }
 
-        return $this->syncDBWithStorage($photos);
+        return $photos;
     }
 
-    public function clearTrash(string $profilePhoto)
+    public function clearTrash(string $absoluteDirPath, array $exceptionFileNames = [])
     {
-        $dir = new DirectoryIterator(self::STORAGE_ROOT . $this->userID);
+        $dir = new DirectoryIterator($absoluteDirPath);
         foreach ($dir as $fileinfo) {
-            if ($fileinfo->isDot() || $fileinfo->getFilename() === $profilePhoto) {
+            if ($fileinfo->isDot() || in_array($fileinfo->getFilename(), $exceptionFileNames))
+            {
                 continue;
             }
             unlink($dir->getPath() . '/' . $fileinfo->getFilename());
         }
+    }
+
+    public function saveProfileImage(string $name)
+    {
+        $avatarDir = self::STORAGE_ROOT . $this->userID . '/avatar/';
+        $tmpDir = self::STORAGE_ROOT . $this->userID . '/tmp/';
+        if (!file_exists($avatarDir)) {
+            mkdir($avatarDir, 0766, true);
+        }
+
+        $result = rename($tmpDir . $name, $avatarDir . $name);
+        if (!$result)
+        {
+            $this->errors->addError('err_confirm_tmp');
+        }
+
+        $link = self::cutPathToProjectRoot($avatarDir . $name);
+        $photo = $this->getProfileImage();
+        if ($photo !== null) {
+            ProfileImagesTable::update($photo['ID'], [
+                'LINK' => $link,
+            ]);
+        }
+        else
+        {
+            ProfileImagesTable::add([
+                'USER_ID' => $this->userID,
+                'LINK' => $link,
+            ]);
+        }
+        return $avatarDir . $name;
+    }
+
+    public function getTmpFiles()
+    {
+        $result = [];
+        $tmpDir = self::STORAGE_ROOT . $this->userID . '/tmp/';
+        $dir = new DirectoryIterator($tmpDir);
+        foreach ($dir as $file)
+        {
+            if ($file->isDot())
+            {
+                continue;
+            }
+            $result[] = $file->getPath() . '/' . $file->getFilename();
+        }
+        return $result;
+    }
+
+    public function getLastTmpFile()
+    {
+        $files = $this->getTmpFiles();
+        $maxTimestamp = 0;
+        $lastFile = null;
+        foreach ($files as $file)
+        {
+            $creationTime = filectime($file);
+            if ($creationTime > $maxTimestamp)
+            {
+                $maxTimestamp = $creationTime;
+                $lastFile = $file;
+            }
+        }
+        return $lastFile;
+    }
+
+    public function getTmpDir()
+    {
+        return self::STORAGE_ROOT . $this->userID . '/tmp/';
     }
 }

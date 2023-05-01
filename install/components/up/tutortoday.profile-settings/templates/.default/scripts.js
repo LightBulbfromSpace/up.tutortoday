@@ -314,18 +314,17 @@ function displayResult(result) {
     msgContainer.appendChild(msg)
 }
 
-function openAddPhotoForm(userID) {
+function openAddPhotoForm() {
     BX.ajax({
         url: '/profile/settings/getProfilePhoto/',
         method: 'POST',
         data: {
-            userID: userID,
             sessid: BX.bitrix_sessid(),
         },
         dataType: 'json',
         timeout: 10,
         onsuccess: (res) => {
-            console.log(res)
+            console.log('openAddPhotoForm', res)
             displayAddPhotoForm(res)
         },
         onfailure: (e) => {
@@ -344,7 +343,7 @@ function displayAddPhotoForm(imgSrc) {
                                    <button type="button" class="photo-button">Open</button>
                                    <input type="file" name="photo" id="file-input">
                                    <div class="add-form-button-container">
-                                       <button type="button" class="button-plus-minus add-form-button" onclick="closeAddPhotoForm()">Cancel</button>
+                                       <button type="button" class="button-plus-minus add-form-button" onclick="cancelPhotoUpdate()">Cancel</button>
                                        <button type="button" class="button-plus-minus add-form-button" id="preview-confirm-button" onclick="updatePhoto()">Preview</button>
                                    </div>
                                </form>`
@@ -352,6 +351,19 @@ function displayAddPhotoForm(imgSrc) {
     turnOnOverlay()
 }
 
+
+function cancelPhotoUpdate() {
+    BX.ajax.post(
+        '/profile/settings/cancelPhotoUpdate/',
+        {
+            sessid: BX.bitrix_sessid(),
+        },
+        (res) => {
+            console.log(res)
+        },
+    );
+    closeAddPhotoForm()
+}
 function closeAddPhotoForm() {
     let area = document.getElementById('add-photo-form-area')
     while (area.lastChild) {
@@ -388,16 +400,15 @@ function updatePhotoConfirm() {
         url: '/profile/settings/updatePhotoConfirm/',
         method: 'POST',
         data: {
-            imgSrc: BX.getCookie('avatarSrc'),
             sessid: BX.bitrix_sessid(),
         },
         dataType: 'json',
         timeout: 10,
         onsuccess: (res) => {
-            console.log(res)
-            if (res === true)
+            console.log('updatePhotoConfirm', res)
+            if (res['TYPE'] === 'OK')
             {
-                document.getElementById('profilePhoto').src = BX.getCookie('avatarSrc')
+                document.getElementById('profilePhoto').src = res['MESSAGE']
             }
             closeAddPhotoForm()
         },

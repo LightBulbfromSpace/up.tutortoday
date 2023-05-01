@@ -61,11 +61,6 @@ class MainPageController
         $tutors = $userService->getUsersByPage($pageFromNull * USERS_BY_PAGE, USERS_BY_PAGE);
         $this->numberOfUsers = $userService->getNumOfFetchedUsers();
 
-        if ($tutors === false)
-        {
-            //TODO: Error handling
-        }
-
         return $tutors;
     }
 }
