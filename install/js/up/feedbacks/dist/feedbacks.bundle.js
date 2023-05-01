@@ -10,11 +10,13 @@ this.BX.Up = this.BX.Up || {};
 	var _feedbacksPerLoad = /*#__PURE__*/new WeakMap();
 	var _page = /*#__PURE__*/new WeakMap();
 	var _sendForm = /*#__PURE__*/new WeakSet();
+	var _sanitize = /*#__PURE__*/new WeakSet();
 	var Feedbacks = /*#__PURE__*/function () {
 	  function Feedbacks() {
 	    var _this = this;
 	    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	    babelHelpers.classCallCheck(this, Feedbacks);
+	    _classPrivateMethodInitSpec(this, _sanitize);
 	    _classPrivateMethodInitSpec(this, _sendForm);
 	    _classPrivateFieldInitSpec(this, _feedbacksPerLoad, {
 	      writable: true,
@@ -132,7 +134,7 @@ this.BX.Up = this.BX.Up || {};
 	        console.log(i);
 	        var elem = document.createElement('div');
 	        elem.classList.add('feedback-card-container');
-	        elem.innerHTML = "<a class=\"feedback-card-user-info-container\" href=\"/profile/".concat(feedbacks[i]['student']['ID'], "/\">\n\t\t\t\t\t\t\t\t\t<img src=\"").concat(feedbacks[i]['student']['photo'], "\" class=\"photo-small img-rounded\" alt=\"avatar\">\n\t\t\t\t\t\t\t\t\t<div class=\"help\">").concat(feedbacks[i]['student']['surname'], "</div>\n\t\t\t\t\t\t\t\t\t<div class=\"help\">").concat(feedbacks[i]['student']['name'], "</div>\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t<div class=\"box feedback-card-custom\">\n\t\t\t\t\t\t\t\t\t<div class=\"title-custom\">").concat(feedbacks[i]['title'], "</div>\n\t\t\t\t\t\t\t\t\t<div class=\"br\"></div>\n\t\t\t\t\t\t\t\t\t<div>").concat(feedbacks[i]['description'], "</div>\n\t\t\t\t\t\t\t\t</div>");
+	        elem.innerHTML = "<a class=\"feedback-card-user-info-container\" href=\"/profile/".concat(feedbacks[i]['student']['ID'], "/\">\n\t\t\t\t\t\t\t\t\t<img src=\"").concat(_classPrivateMethodGet(this, _sanitize, _sanitize2).call(this, feedbacks[i]['student']['photo']), "\" class=\"photo-small img-rounded\" alt=\"avatar\">\n\t\t\t\t\t\t\t\t\t<div class=\"help\">").concat(_classPrivateMethodGet(this, _sanitize, _sanitize2).call(this, feedbacks[i]['student']['surname']), "</div>\n\t\t\t\t\t\t\t\t\t<div class=\"help\">").concat(_classPrivateMethodGet(this, _sanitize, _sanitize2).call(this, feedbacks[i]['student']['name']), "</div>\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t<div class=\"box feedback-card-custom\">\n\t\t\t\t\t\t\t\t\t<div class=\"title-custom\">").concat(_classPrivateMethodGet(this, _sanitize, _sanitize2).call(this, feedbacks[i]['title']), "</div>\n\t\t\t\t\t\t\t\t\t<div class=\"br\"></div>\n\t\t\t\t\t\t\t\t\t<div>").concat(_classPrivateMethodGet(this, _sanitize, _sanitize2).call(this, feedbacks[i]['description']), "</div>\n\t\t\t\t\t\t\t\t</div>");
 	        this.feedbacksRootID.appendChild(elem);
 	      }
 	    }
@@ -164,6 +166,20 @@ this.BX.Up = this.BX.Up || {};
 	    onfailure: function reject(e) {
 	      console.log(e);
 	    }
+	  });
+	}
+	function _sanitize2(string) {
+	  var map = {
+	    '&': '&amp;',
+	    '<': '&lt;',
+	    '>': '&gt;',
+	    '"': '&quot;',
+	    "'": '&#x27;',
+	    "/": '&#x2F;'
+	  };
+	  var reg = /[&<>"'/]/ig;
+	  return string.replace(reg, function (match) {
+	    return map[match];
 	  });
 	}
 

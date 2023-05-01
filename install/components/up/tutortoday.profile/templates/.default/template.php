@@ -155,13 +155,13 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 <div class="feedback-card-container">
                                     <a class="feedback-card-user-info-container" href="/profile/<?=$feedback['student']['ID']?>/">
                                         <img src="<?=$feedback['student']['photo']?>" class="photo-small img-rounded" alt="avatar">
-                                        <div class="help"><?=$feedback['student']['surname']?></div>
-                                        <div class="help"><?=$feedback['student']['name']?></div>
+                                        <div class="help"><?=htmlspecialchars($feedback['student']['surname'])?></div>
+                                        <div class="help"><?=htmlspecialchars($feedback['student']['name'])?></div>
                                     </a>
                                     <div class="box feedback-card-custom">
-                                        <div class="title-custom"><?=$feedback['title']?></div>
+                                        <div class="title-custom"><?=htmlspecialchars($feedback['title'])?></div>
                                         <div class="br"></div>
-                                        <div><?=$feedback['description']?></div>
+                                        <div><?=htmlspecialchars($feedback['description'])?></div>
                                     </div>
                                 </div>
                                 <?php endforeach; ?>

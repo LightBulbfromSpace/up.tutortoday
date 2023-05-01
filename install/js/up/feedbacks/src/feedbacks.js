@@ -175,16 +175,29 @@ export class Feedbacks
 			let elem = document.createElement('div')
 			elem.classList.add('feedback-card-container')
 			elem.innerHTML = `<a class="feedback-card-user-info-container" href="/profile/${feedbacks[i]['student']['ID']}/">
-									<img src="${feedbacks[i]['student']['photo']}" class="photo-small img-rounded" alt="avatar">
-									<div class="help">${feedbacks[i]['student']['surname']}</div>
-									<div class="help">${feedbacks[i]['student']['name']}</div>
+									<img src="${this.#sanitize(feedbacks[i]['student']['photo'])}" class="photo-small img-rounded" alt="avatar">
+									<div class="help">${this.#sanitize(feedbacks[i]['student']['surname'])}</div>
+									<div class="help">${this.#sanitize(feedbacks[i]['student']['name'])}</div>
 								</a>
 								<div class="box feedback-card-custom">
-									<div class="title-custom">${feedbacks[i]['title']}</div>
+									<div class="title-custom">${this.#sanitize(feedbacks[i]['title'])}</div>
 									<div class="br"></div>
-									<div>${feedbacks[i]['description']}</div>
+									<div>${this.#sanitize(feedbacks[i]['description'])}</div>
 								</div>`
 			this.feedbacksRootID.appendChild(elem)
 		}
+	}
+
+	#sanitize(string) {
+		const map = {
+			'&': '&amp;',
+			'<': '&lt;',
+			'>': '&gt;',
+			'"': '&quot;',
+			"'": '&#x27;',
+			"/": '&#x2F;',
+		};
+		const reg = /[&<>"'/]/ig;
+		return string.replace(reg, (match)=>(map[match]));
 	}
 }
