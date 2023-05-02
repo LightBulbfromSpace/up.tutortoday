@@ -595,4 +595,37 @@ class UserService
         }
         return ['TYPE' => 'OK', 'MESSAGE' => $service::cutPathToProjectRoot($newPlace)];
     }
+
+    public function getPreferences()
+    {
+        $preferences = [];
+
+        $edFormats = UserEdFormatTable::query()
+            ->setSelect(['EDUCATION_FORMAT_ID'])
+            ->where('USER_ID', $this->observedUserID)
+            ->fetchCollection();
+        foreach ($edFormats as $edFormat)
+        {
+            $preferences['edFormats'][] = $edFormat['EDUCATION_FORMAT_ID'];
+        }
+        $subjects = UserSubjectTable::query()
+            ->setSelect(['SUBJECT_ID'])
+            ->where('USER_ID', $this->observedUserID)
+            ->fetchCollection();
+        foreach ($subjects as $subject)
+        {
+            $preferences['subjects'][] = $subject['SUBJECT_ID'];
+        }
+
+        $city = UserTable::query()
+            ->setSelect(['WORK_CITY'])
+            ->where('ID', $this->observedUserID)
+            ->fetchObject();
+
+        if ($city['WORK_CITY'] !== '')
+        {
+            $preferences['cities'][] = $city['WORK_CITY'];
+        }
+        return $preferences;
+    }
 }

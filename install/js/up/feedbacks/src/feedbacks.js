@@ -4,7 +4,7 @@ export class Feedbacks
 {
 
 	sendButton
-	#feedbacksPerLoad = 5
+	#feedbacksPerLoad = 3
 	#page = 0
 
 	constructor(options = {})

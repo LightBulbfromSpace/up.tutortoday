@@ -24,7 +24,7 @@ class UserRegisterForm
 
     private array $edFormatsIDs = [];
     private string $description;
-    private ?int $cityID;
+    private string|int $cityID;
     private int $roleID;
     private array $newSubjects;
 
@@ -41,7 +41,7 @@ class UserRegisterForm
         $this->phoneNumber = $post['phoneNumber'];
         $this->edFormatsIDs = $post['edFormats'] ?? [];
         $this->description = $post['description'];
-        $this->cityID = !is_numeric($post['city']) ? null : (int)$post['city'];
+        $this->cityID = !is_numeric($post['city']) ? '' : (int)$post['city'];
         $this->roleID = (int)$post['role'] ?? 1;
         $this->subjectsIDs = $post['subjects'] ?? [];
         foreach ($post['subjectsPrices'] as $ID => $subjectPrice)
@@ -128,7 +128,7 @@ class UserRegisterForm
         return $this->description;
     }
 
-    public function getCityID(): ?int
+    public function getCityID(): string|int
     {
         return $this->cityID;
     }

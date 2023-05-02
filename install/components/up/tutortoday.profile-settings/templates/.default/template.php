@@ -22,6 +22,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 </div>
                 <button type="button" class="button-plus-minus button-large-custom container-margin-top" onclick="deleteProfilePhoto()">Delete</button>
                 <div class="br"></div>
+                <div class="label">Full name</div>
                 <div class="box-dark-element-custom">
                     <input class="input-custom" name="name" placeholder="No name" value="<?=htmlspecialchars($arResult['user']['mainData']['NAME'])?>">
                 </div>
@@ -124,7 +125,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                             <select name="city">
                                 <option value=""></option>
                                 <?php foreach ($arResult['cities'] as $city): ?>
-                                    <option value="<?=$city['ID']?>"><?=$city['NAME']?></option>
+                                    <option value="<?=$city['ID']?>" <?=$arResult['user']['city'] === $city['NAME'] ? 'selected' : ''?>><?=$city['NAME']?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>

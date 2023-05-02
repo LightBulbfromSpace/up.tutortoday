@@ -10,7 +10,7 @@ use Up\Tutortoday\Model\Tables\UserRoleTable;
 class FeedbackService
 {
 
-    const feedbacksByPage = 5;
+    const feedbacksByPage = 3;
     private int $userID;
     public function __construct(int $userID)
     {
@@ -35,7 +35,7 @@ class FeedbackService
             ->setSelect(['*', 'ROLE'])
             ->where('USER_ID', $this->userID)
             ->fetchObject();
-        //var_dump($role['ROLE']['NAME']);die;
+
         if ($role['ROLE']['NAME'] === 'tutor')
         {
             return null;

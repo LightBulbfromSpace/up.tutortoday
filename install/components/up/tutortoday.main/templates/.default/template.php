@@ -3,8 +3,9 @@
  * @var array $arResult
  */
 
-//var_dump($arResult['tutors']['mainData']);die;
 use Up\Tutortoday\Services\HTMLHelper;
+
+global $USER;
 
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
@@ -78,8 +79,16 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                         <input type="text" class="form-control" name="maxPrice" id="price-to" placeholder="Enter price">
                     </div>
                 </div>
-                <button type="submit" class="btn mt-6 ml-3 btn-danger">Find</button>
-                <a class="btn mt-6 ml-3 btn-danger" href="/">Reset</a>
+                <?php if ($USER->GetID() !== null): ?>
+                    <div class="form-check form-check-custom mt-4 ml-5">
+                        <input class="form-check-input" name="myPreferences" type="checkbox">
+                        <label class="form-check-label" for="myPreferences">
+                            Use my preferences
+                        </label>
+                    </div>
+                <?php endif; ?>
+                <button type="submit" class="btn mt-4 ml-4 btn-danger">Find</button>
+                <a class="btn mt-4 ml-4 btn-danger" href="/">Reset</a>
             </form>
         </div>
         <div class="col-md-9">

@@ -12,7 +12,22 @@ use Up\Tutortoday\Services\UserService;
 class MainPageController
 {
     private array $rolesIDs = [1];
-    private int $numberOfUsers;
+    private int $numberOfUsers = 0;
+    private int $pageFromNull = 0;
+
+    /**
+     * @param int $pageFromNull
+     */
+    public function __construct(int $pageFromNull = 0)
+    {
+        $this->pageFromNull = $pageFromNull;
+    }
+
+
+    public function setPageFromNull(int $pageFromNull): void
+    {
+        $this->pageFromNull = $pageFromNull;
+    }
 
 
     public function getNumberOfUsers(): int
@@ -35,30 +50,61 @@ class MainPageController
     {
         $this->rolesIDs = $roleIDs;
     }
-    public function getTutorsByPage(int $pageFromNull = 0, array $filters = null, $search = null) : array
+
+    public function getTutorsByPageByUserPreferences(int $userID) : array
     {
-        $result = [];
-        $areAllUsers = true;
-        if ($search !== null)
+        $filters = (new UserService($userID))->getPreferences();
+
+        return $this->getTutorsByPageByFilters($filters);
+    }
+
+    public function getTutorsByPageBySearch(string $search = '') : array
+    {
+        if ($search === '')
         {
-            $searchService = new SearchService($search);
-            $result = $searchService->generalSearch();
-            $this->numberOfUsers = $searchService->getNumberOfUsers();
-            $areAllUsers = false;
-        }
-        else if (count($filters) !== 0)
-        {
-            $filter = new FiltersService($filters);
-            $result = $filter->filterTutors();
-            $this->numberOfUsers = $filter->getNumberOfFilteredUsers();
-            $areAllUsers = false;
+            return [];
         }
 
-        $userService = new UserService(0, $result);
+        $searchService = new SearchService($search);
+        $foundUsersIDs = $searchService->generalSearch();
+        $this->numberOfUsers = $searchService->getNumberOfUsers();
+
+        $userService = new UserService(0, $foundUsersIDs);
         $userService->setRoles(['tutor']);
-        $userService->setFetchAllAvailableUsers($areAllUsers);
+        $userService->setFetchAllAvailableUsers(false);
 
-        $tutors = $userService->getUsersByPage($pageFromNull * USERS_BY_PAGE, USERS_BY_PAGE);
+        $tutors = $userService->getUsersByPage($this->pageFromNull * USERS_BY_PAGE, USERS_BY_PAGE);
+        $this->numberOfUsers = $userService->getNumOfFetchedUsers();
+
+        return $tutors;
+    }
+
+    public function getTutorsByPageByFilters(array $filters = []) : array
+    {
+        if (count($filters) === 0)
+        {
+            return [];
+        }
+
+        $filter = new FiltersService($filters);
+        $filteredUsersIDs = $filter->filterTutors();
+        $this->numberOfUsers = $filter->getNumberOfFilteredUsers();
+        $userService = new UserService(0, $filteredUsersIDs);
+        $userService->setRoles(['tutor']);
+        $userService->setFetchAllAvailableUsers(false);
+
+        $tutors = $userService->getUsersByPage($this->pageFromNull * USERS_BY_PAGE, USERS_BY_PAGE);
+        $this->numberOfUsers = $userService->getNumOfFetchedUsers();
+
+        return $tutors;
+    }
+    public function getTutorsByPage() : array
+    {
+        $userService = new UserService();
+        $userService->setRoles(['tutor']);
+        $userService->setFetchAllAvailableUsers(true);
+
+        $tutors = $userService->getUsersByPage($this->pageFromNull * USERS_BY_PAGE, USERS_BY_PAGE);
         $this->numberOfUsers = $userService->getNumOfFetchedUsers();
 
         return $tutors;

@@ -20,7 +20,7 @@ this.BX.Up = this.BX.Up || {};
 	    _classPrivateMethodInitSpec(this, _sendForm);
 	    _classPrivateFieldInitSpec(this, _feedbacksPerLoad, {
 	      writable: true,
-	      value: 5
+	      value: 3
 	    });
 	    _classPrivateFieldInitSpec(this, _page, {
 	      writable: true,
