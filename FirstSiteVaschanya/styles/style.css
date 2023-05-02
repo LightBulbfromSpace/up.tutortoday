@@ -1,0 +1,174 @@
+@import 'normalize.css';
+
+
+html{
+    display: flex;
+    justify-content: center;
+}
+
+body{
+    width: 100vw;
+}
+
+
+.link{
+    cursor: pointer;
+}
+
+.link:hover{
+    text-decoration: underline;
+}
+
+.container {
+    max-width: 1000px;
+
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    padding: 15px 0;
+
+    background-color: #478e9d;
+}
+
+.header__container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header__mainLink{}
+
+.header__links-item{
+    cursor: pointer;
+
+    font-weight: bold;
+    font-size: 15px;
+    color: #FFF;
+}
+
+.header__links-item:hover{
+    text-decoration: underline;
+}
+
+.header__links-item + .header__links-item{
+    margin-left: 10px;
+}
+
+.main{
+    margin-top: 48px;
+}
+
+.main__promo{
+    height: calc(100vh - 48px);
+
+    background-image: url("../static/mainImage.webp");
+    background-size: cover;
+    background-position: 75% 44%;
+    background-repeat: no-repeat;
+}
+
+.main__promo-wrapper{
+    height: 100%;
+    width: 100%;
+
+    background: linear-gradient(90deg, rgba(255,255,255,0.75) 0, rgba(255,255,255,0.2) 100%);
+}
+
+.main__content{
+    padding-top: 300px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.main__content-item + .main__content-item{
+    margin-top: 10px;
+}
+
+.main__content-item--title{
+
+}
+
+
+.main__content-item--subtitle{
+
+}
+
+.main__content-item--subtitle2{
+
+}
+
+.main__content-item--subtitle3{
+
+}
+
+.main__content-button{
+    display: inline-block;
+
+    margin-bottom: 40px;
+    margin-top: 30px;
+
+    background-color: #6aa93b;
+    color: #fff;
+
+    font-size: 20px;
+    padding: 20px 27px;
+    border-radius: 10px;
+}
+
+.main__content-button:hover{
+    cursor: pointer;
+}
+
+
+.footer{
+    background-color: #2b2f33;
+
+    min-height: 250px;
+    width: 100%;
+}
+
+.footer__content{
+    padding: 20px 0;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.footer__content-row{
+    display: flex;
+    flex-direction: column;
+}
+
+.footer__content-link{
+    display: inline-block;
+
+    margin-top: 15px;
+
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+}
+
+.footer__content-link + .footer__content-link{
+    margin-top: 15px;
+}
+
+.footer__content-category{
+    font-weight: bold;
+    font-size: 18px;
+    color: #FFF;
+}
+
+.footer__content-address{
+    display: flex;
+}
