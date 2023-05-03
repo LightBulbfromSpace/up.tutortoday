@@ -140,7 +140,6 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             </div>
             <div class="feedbacks-container" id="feedbacks-container">
                 <?php if ($arResult['user']['observer']['role']['NAME'] !== 'tutor'): ?>
-
                     <?php if ($USER->GetID() === null): ?>
                         <div class="box">Only logged-in users can see and send feedbacks</div>
                     <?php else: ?>
@@ -151,6 +150,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 <div class="box" id="no-feedbacks-message">No feedbacks yet</div>
                             <?php endif; ?>
                             <div id="feedbacks-area">
+                                <button class="feedback-button">&lt;</button>
+                                <div class="feedback-cards-container">
                                 <?php foreach ($arResult['user']['feedbacks'] as $i => $feedback): ?>
                                 <div class="feedback-card-container">
                                     <a class="feedback-card-user-info-container" href="/profile/<?=$feedback['student']['ID']?>/">
@@ -175,6 +176,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                     </div>
                                 </div>
                                 <?php endforeach; ?>
+                                </div>
+                                <button class="feedback-button">&gt;</button>
                             </div>
                         <?php endif; ?>
                     <?php endif; ?>
