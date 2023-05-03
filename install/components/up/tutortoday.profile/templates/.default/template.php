@@ -150,7 +150,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 <div class="box" id="no-feedbacks-message">No feedbacks yet</div>
                             <?php endif; ?>
                             <div id="feedbacks-area">
+                            <?php if (count($arResult['user']['feedbacks']) !== 0): ?>
                                 <button class="feedback-button">&lt;</button>
+                            <?php endif; ?>
                                 <div class="feedback-cards-container">
                                 <?php foreach ($arResult['user']['feedbacks'] as $i => $feedback): ?>
                                 <div class="feedback-card-container">
@@ -177,7 +179,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 </div>
                                 <?php endforeach; ?>
                                 </div>
+                            <?php if (count($arResult['user']['feedbacks']) !== 0): ?>
                                 <button class="feedback-button">&gt;</button>
+                            <?php endif; ?>
                             </div>
                         <?php endif; ?>
                     <?php endif; ?>
