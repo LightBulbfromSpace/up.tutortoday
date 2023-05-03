@@ -279,7 +279,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 #feedback-form-area {
-    width: 100%;
+    width: 80%;
 }
 
 .input-custom:focus, .input-custom:focus-visible,
@@ -406,6 +406,14 @@ body::-webkit-scrollbar-thumb {
 
 .fa-star:focus, .fa-star:focus-visible {
     outline: none;
+}
+
+.stars-button-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
 }
 
 /* stars rating */

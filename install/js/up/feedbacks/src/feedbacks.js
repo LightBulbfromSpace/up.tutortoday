@@ -82,7 +82,7 @@ export class Feedbacks
 		this.form.innerHTML = `<div class="container-feedback-custom">
 										  <input type="text" class="input-custom" id="feedback-title" placeholder="Title" maxlength="100">
 										  <textarea class="textarea-custom" id="feedback-description" placeholder="Description"></textarea>
-										  <div class="container-row-custom">
+										  <div class="stars-button-container">
 											  <div class="stars-container">
 												  <button id="s5" class="fa fa-star"></button>
 												  <button id="s4" class="fa fa-star"></button>
