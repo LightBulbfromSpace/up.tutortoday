@@ -3,197 +3,90 @@
  * @var array $arResult
  */
 
-use Up\Tutortoday\Services\HTMLHelper;
-
-global $USER;
+global $USER, $APPLICATION;
 
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-3 bg-light sidebar">
-            <form method="get" action="/">
-                <div class="col-md-9 mt-3">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="ed-format-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Education Format
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="ed-format-dropdown">
-                            <div class="form-group">
-	                            <?php foreach ($arResult['edFormats'] as $edFormat) : ?>
-                                    <div class="form-check form-check-custom">
-                                        <input class="form-check-input" name="edFormats[]" type="checkbox" value="<?= $edFormat['ID']?>">
-                                        <label class="form-check-label" for="<?= $edFormat['NAME']?>">
-				                            <?= $edFormat['NAME']?>
-                                        </label>
-                                    </div>
-	                            <?php endforeach; ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-9 mt-3">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="subject-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Subjects
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="subject-dropdown">
-                            <div class="form-group">
-                                <?php foreach ($arResult['subjects'] as $subject) : ?>
-                                <div class="form-check form-check-custom">
-                                    <input class="form-check-input" name="subjects[]" type="checkbox" value="<?= $subject['ID']?>">
-                                    <label class="form-check-label" for="<?= $subject['NAME']?>">
-                                        <?= $subject['NAME']?>
-                                    </label>
-                                </div>
-                                <?php endforeach; ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="subject-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            City
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="subject-dropdown">
-                            <div class="form-group">
-                                <?php foreach ($arResult['cities'] as $city) : ?>
-                                    <div class="form-check form-check-custom">
-                                        <input class="form-check-input" name="cities[]" type="checkbox" value="<?= $city['ID']?>">
-                                        <label class="form-check-label" for="<?= $city['NAME']?>">
-                                            <?= $city['NAME']?>
-                                        </label>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-3 ml-1">
-                    <div class="col">
-                        <label for="price-from">The lowest price:</label>
-                        <input type="text" class="form-control" name="minPrice" id="price-from" placeholder="Enter price">
-                    </div>
-                    <div class="col">
-                        <label for="price-to">The highest price:</label>
-                        <input type="text" class="form-control" name="maxPrice" id="price-to" placeholder="Enter price">
-                    </div>
-                </div>
-                <?php if ($USER->GetID() !== null): ?>
-                    <div class="form-check form-check-custom mt-4 ml-5">
-                        <input class="form-check-input" name="myPreferences" type="checkbox">
-                        <label class="form-check-label" for="myPreferences">
-                            Use my preferences
-                        </label>
-                    </div>
-                <?php endif; ?>
-                <button type="submit" class="btn mt-4 ml-4 btn-danger">Find</button>
-                <a class="btn mt-4 ml-4 btn-danger" href="/">Reset</a>
-            </form>
-        </div>
-        <div class="col-md-9">
-            <div class="mt-3">
-                <form method="get" class="form-inline my-2 my-lg-0" action="/">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Find tutor" name="search">
-                    <button class="btn btn-danger my-2 my-sm-0" type="submit">Search</button>
-                </form>
-            </div>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/local/components/up/tutortoday.main/templates/.default/styles/style.css">
+    <link rel="stylesheet" href="/local/templates/tutortoday/template_styles.css">
+    <title><?php $APPLICATION->ShowTitle(); ?></title>
+    <?php $APPLICATION->ShowHead(); ?>
 
-            <p class="mt-3">Resently created profiles:</p>
-			<?php foreach ($arResult['tutors'] as $tutor) : ?>
-            <a href="/profile/<?=$tutor['ID']?>/" class="card-link">
-                <div class="mt-2 card-box-container-custom">
-                    <div class="row no-gutters card-container">
-                        <div class="col-md-4 photo-container">
-                            <img src="<?=$tutor['photo']?>" class="img-rounded card-img img-fixed-size" alt="Tutor photo">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body-custom">
-                                <h2 class="card-title-custom">
-                                    <?=htmlspecialchars($tutor['fullName']['lastName'])?>&nbsp;
-                                    <?=htmlspecialchars($tutor['fullName']['name'])?>&nbsp;
-                                    <?=htmlspecialchars($tutor['fullName']['secondName'])?></h2>
-                                <div class="br"></div>
-                                <p class="card-text">
-                                    <strong>City:</strong>
-                                    <?php if($tutor['city'] == null): ?>
-                                        No city
-                                    <?php endif; ?>
-                                    <?=htmlspecialchars($tutor['city']['NAME'])?>
-                                </p>
-                                <div class="container-subjects">
-                                    <?php if($tutor['subjects'] == null): ?>
-                                        <div class="box-darker-element-custom">No subjects</div>
-                                    <?php endif; ?>
-                                    <?php foreach ($tutor['subjects'] as $subject): ?>
-                                        <div class="box-darker-element-custom container-row-custom is-justified-center">
-                                            <div><?=$subject['NAME']?></div>
-                                            <div class="vbr"></div>
-                                            <div><?=$subject['PRICE'] == 0 ? '-' : $subject['PRICE']?></div>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                                <div class="container-subjects">
-                                    <?php if($tutor['edFormat'] == null): ?>
-                                        <div class="box-dark-element-custom">No education format</div>
-                                    <?php endif; ?>
-                                    <?php foreach ($tutor['edFormat'] as $edFormat): ?>
-                                        <div class="box-dark-element-custom"><?=$edFormat['NAME']?></div>
-                                    <?php endforeach; ?>
-                                </div>
-                                <p class="card-text">
-                                    <strong>Description:</strong>
-                                    &nbsp;
-                                    <?php if($tutor['description'] == ''): ?>
-                                        No description
-                                    <?php endif; ?>
-                                    <?=htmlspecialchars(HTMLHelper::cutText($tutor['description'], 300))?>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+</head>
+<body>
+<?php $APPLICATION->ShowPanel(); ?>
+<header class="header">
+    <div class="container header__container">
+        <a class="header__mainLink header__links-item link" href="/overview/">TutorToday</a>
+        <div class="header__links">
+            <a class="header__links-item link" href="/profile/<?=$USER->GetID()?>/">My Profile</a>
+            <a class="header__links-item link" href="#">About</a>
+            <a class="header__links-item link" href="#">Contacts</a>
+            <a class="header__links-item link" href="/registration/">Registration</a>
+        </div>
+    </div>
+</header>
+
+    <main>
+       <div class="main__promo">
+           <div class="main__promo-wrapper">
+               <div class="container">
+                <div class="main__content">
+                    <h3 class="main__content-item  main__content-item--title">Tutors online (offline)</h3>
+                    <div class="main__content-item main__content-item--subtitle">Available over 700 tutors</div>
+                    <div class="main__content-item main__content-item--subtitle2">Find an experienced tutor in one day!</div>
+                    <div class="main__content-item main__content-item--subtitle3">More than 3000 students have already trusted us.</div>
+                    <div class="main__content-item main__content-item--subtitle4">Choose the best tutors based on the reviews of more than 500 students!</div>
                 </div>
-            </a>
-			<?php endforeach; ?>
-<!--            pagination-->
-            <div class="container-margin-top-bottom is-justified-center">
-                <nav role="navigation" class="container-row-custom">
-                    <ul class="pagination-list">
-                        <li>
-                            <a class="pagination-link" href="/?page=1">1</a>
-                        </li>
-                        <li>
-                            <span class="pagination-ellipsis">&hellip;</span>
-                        </li>
-                        <li>
-                            <a class="pagination-link"
-                                <?=($arResult['currentPage'] - 1) > 0 ?
-                                    'href="/?'. $arResult['currentURIParams'] . '&page=' . $arResult['currentPage'] - 1 . '"' : ''?>>
-                                <?=($arResult['currentPage'] - 1) > 0 ?
-                                    $arResult['currentPage'] - 1 : ''?>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="pagination-link is-current-custom" href="/?<?=$arResult['currentURIParams']?>&page=<?=$arResult['currentPage']?>"><?=$arResult['currentPage']?></a>
-                        </li>
-                        <li>
-                            <a class="pagination-link"
-                                <?=($arResult['currentPage'] + 1) <= $arResult['maxPage'] ?
-                                'href="/?'. $arResult['currentURIParams'] . '&page=' . $arResult['currentPage'] + 1 . '"' : ''?>>
-                                <?=($arResult['currentPage'] + 1) <= $arResult['maxPage'] ?
-                                    $arResult['currentPage'] + 1 : ''?>
-                            </a>
-                        </li>
-                        <li>
-                            <span class="pagination-ellipsis">&hellip;</span>
-                        </li>
-                        <li>
-                            <a class="pagination-link" href="/?<?=$arResult['currentURIParams']?>&page=<?=$arResult['maxPage']?>"><?=$arResult['maxPage']?></a>
-                        </li>
-                    </ul>
-                </nav>
+
+                   <a class="main__content-button" href="/overview/">Find a tutor</a>
+               </div>
+           </div>
+       </div>
+    </main>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer__content">
+            <div class="footer__content-row">
+                <img src="/local/components/up/tutortoday.main/templates/.default/static/TutorTodayLogo.svg" alt="logo"/>
+                <div class="footer__content-address">
+                    <span class="footer__content-link">Калининград, туда сюда, улица Хотения выходных, дом 15</span>
+                </div>
+            </div>
+            <div class="footer__content-row">
+                <span class="footer__content-category">Subjects</span>
+                <?php foreach ($arResult['subjects'] as $i => $subject): ?>
+                    <a class="footer__content-link link" href="/overview/?subjects%5B%5D=<?=$subject['ID']?>"><?=$subject['NAME']?></a>
+                    <?php if ($i === 5) { break; }?>
+                <?php endforeach; ?>
+                <div class="footer__content">and other</div>
+            </div>
+            <div class="footer__content-row">
+                <span class="footer__content-category">Education formats</span>
+                <?php foreach ($arResult['edFormats'] as $i => $edFormat): ?>
+                    <a class="footer__content-link link" href="/overview/?edFormats%5B%5D=<?=$edFormat['ID']?>"><?=$edFormat['NAME']?></a>
+                    <?php if ($i === 5) { break; }?>
+                <?php endforeach; ?>
+            </div>
+            <div class="footer__content-row">
+                <span class="footer__content-category">Cities</span>
+                <?php foreach ($arResult['cities'] as $i => $city): ?>
+                    <a class="footer__content-link link" href="/overview/?cities%5B%5D=<?=$city['ID']?>"><?=$city['NAME']?></a>
+                    <?php if ($i === 5) { break; }?>
+                <?php endforeach; ?>
+                <div class="footer__content">and other</div>
             </div>
         </div>
     </div>
-</div>
-
+</footer>
+</body>
+</html>

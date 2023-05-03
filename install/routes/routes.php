@@ -10,6 +10,7 @@ use Up\Tutortoday\Services\ErrorService;
 
 return function (RoutingConfigurator $routes) {
     $routes->get('/', new PublicPageController('/local/view/tutortoday/tutortoday-main.php'));
+    $routes->get('/overview/', new PublicPageController('/local/view/tutortoday/tutortoday-overview.php'));
     $routes->get('/login/', new PublicPageController('/local/view/tutortoday/tutortoday-login.php'));
     $routes->get('/registration/', new PublicPageController('/local/view/tutortoday/tutortoday-registration.php'));
     $routes->get('/profile/{id}/', new PublicPageController('/local/view/tutortoday/tutortoday-profile.php'));
@@ -33,7 +34,7 @@ return function (RoutingConfigurator $routes) {
     $routes->post('/profile/weekday/', function () {
         return ProfileController::getUserTimeByDayID(getPostList());
     });
-    $routes->post('/profile/{id}/settings/', function ($id) {
+    $routes->post('/profile/{id}/settings/', function () {
         global $USER;
         (new ProfileController((int)$USER->GetID()))->updateUser();
     });
@@ -47,7 +48,7 @@ return function (RoutingConfigurator $routes) {
     $routes->post('/profile/settings/deleteTime/', function (){
         ProfileController::deleteTime(getPostList());
     });
-    $routes->post('/profile/{id}/delete/', function ($id) {
+    $routes->post('/profile/{id}/delete/', function () {
         global $USER;
         (new ProfileController((int)$USER->GetID()))->deleteProfile();
     });

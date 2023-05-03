@@ -5,7 +5,7 @@
 }
 
 .main-container-custom {
-    margin: 0 4rem;
+    margin-top: calc(0.75rem + 30px)
 }
 
 .container-row-custom {
@@ -21,6 +21,7 @@
 .sidebar {
     border-bottom: 2px solid #710303;
     border-right: 2px solid #710303;
+    border-top: 2px solid #710303;
 }
 
 .is-invalid {
@@ -130,7 +131,6 @@
 a:link { text-decoration: none; }
 a:visited { text-decoration: none; }
 a:hover { text-decoration: none; }
-
 a:active { text-decoration: none; }
 
 .form-check-custom {

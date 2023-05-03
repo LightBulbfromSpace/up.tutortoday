@@ -146,43 +146,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                         <?php if ($arResult['user']['role']['NAME'] === 'tutor'): ?>
                             <button type="button" id="add-close-feedback-button" class="box-button">Add feedback</button>
                             <div id="feedback-form-area"></div>
-<!--                            --><?php //if (count($arResult['user']['feedbacks']) === 0): ?>
-<!--                                <div class="box" id="no-feedbacks-message">No feedbacks yet</div>-->
-<!--                            --><?php //endif; ?>
-                            <div id="feedbacks-area">
-<!--                            --><?php //if (count($arResult['user']['feedbacks']) !== 0): ?>
-<!--                                <button class="feedback-button">&lt;</button>-->
-<!--                            --><?php //endif; ?>
-<!--                                <div class="feedback-cards-container">-->
-<!--                                --><?php //foreach ($arResult['user']['feedbacks'] as $i => $feedback): ?>
-<!--                                <div class="feedback-card-container">-->
-<!--                                    <a class="feedback-card-user-info-container" href="/profile/--><?php //=$feedback['student']['ID']?><!--/">-->
-<!--                                        <img src="--><?php //=$feedback['student']['photo']?><!--" class="photo-small img-rounded" alt="avatar">-->
-<!--                                        <div class="help">--><?php //=htmlspecialchars($feedback['student']['surname'])?><!--</div>-->
-<!--                                        <div class="help">--><?php //=htmlspecialchars($feedback['student']['name'])?><!--</div>-->
-<!--                                    </a>-->
-<!--                                    <div class="box feedback-card-custom">-->
-<!--                                        <div class="title-feedback-custom">-->
-<!--                                            <div class="title-custom">--><?php //=htmlspecialchars($feedback['title'])?><!--</div>-->
-<!--                                            <div class="stars-container">-->
-<!--                                                --><?php //for ($j = 5; $j > 0; $j--): ?>
-<!--                                                    <div id="s--><?php //=$j?><!-----><?php //=$i?><!---disabled" class="fa fa-star --><?php //= $j<=$feedback['stars'] ? 'star-selected' : '' ?><!--"></div>-->
-<!--                                                --><?php //endfor; ?>
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                        <div class="br"></div>-->
-<!--                                        --><?php //if ($feedback['description'] == ''): ?>
-<!--                                            <div>No description</div>-->
-<!--                                        --><?php //endif; ?>
-<!--                                        <div>--><?php //=htmlspecialchars($feedback['description'])?><!--</div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                --><?php //endforeach; ?>
-<!--                                </div>-->
-<!--                            --><?php //if (count($arResult['user']['feedbacks']) !== 0): ?>
-<!--                                <button class="feedback-button">&gt;</button>-->
-<!--                            --><?php //endif; ?>
-                            </div>
+                            <div id="feedbacks-area"></div>
                         <?php endif; ?>
                     <?php endif; ?>
 
