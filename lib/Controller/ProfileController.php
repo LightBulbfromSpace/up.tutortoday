@@ -210,9 +210,10 @@ class ProfileController
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
         $feedbackForm = new FeedbackForm($post);
-        if(strlen($feedbackForm->getTitle()) > 100)
+        $title = trim($feedbackForm->getTitle());
+        if(strlen($title) > 100 || strlen($title) < 5)
         {
-            return (new ErrorService('too_long'))->getLastError();
+            return (new ErrorService('invalid_len'))->getLastError();
         }
         return (new FeedbackService($this->userID))->add($feedbackForm);
     }

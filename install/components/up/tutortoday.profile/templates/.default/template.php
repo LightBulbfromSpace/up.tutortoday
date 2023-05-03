@@ -148,10 +148,10 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                             <button type="button" id="add-close-feedback-button" class="box-button">Add feedback</button>
                             <div id="feedback-form-area"></div>
                             <?php if (count($arResult['user']['feedbacks']) === 0): ?>
-                                <div class="box">No feedbacks yet</div>
+                                <div class="box" id="no-feedbacks-message">No feedbacks yet</div>
                             <?php endif; ?>
                             <div id="feedbacks-area">
-                                <?php foreach ($arResult['user']['feedbacks'] as $feedback): ?>
+                                <?php foreach ($arResult['user']['feedbacks'] as $i => $feedback): ?>
                                 <div class="feedback-card-container">
                                     <a class="feedback-card-user-info-container" href="/profile/<?=$feedback['student']['ID']?>/">
                                         <img src="<?=$feedback['student']['photo']?>" class="photo-small img-rounded" alt="avatar">
@@ -159,8 +159,18 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                         <div class="help"><?=htmlspecialchars($feedback['student']['name'])?></div>
                                     </a>
                                     <div class="box feedback-card-custom">
-                                        <div class="title-custom"><?=htmlspecialchars($feedback['title'])?></div>
+                                        <div class="title-feedback-custom">
+                                            <div class="title-custom"><?=htmlspecialchars($feedback['title'])?></div>
+                                            <div class="stars-container">
+                                                <?php for ($j = 5; $j > 0; $j--): ?>
+                                                    <div id="s<?=$j?>-<?=$i?>-disabled" class="fa fa-star <?= $j<=$feedback['stars'] ? 'star-selected' : '' ?>"></div>
+                                                <?php endfor; ?>
+                                            </div>
+                                        </div>
                                         <div class="br"></div>
+                                        <?php if ($feedback['description'] == ''): ?>
+                                            <div>No description</div>
+                                        <?php endif; ?>
                                         <div><?=htmlspecialchars($feedback['description'])?></div>
                                     </div>
                                 </div>

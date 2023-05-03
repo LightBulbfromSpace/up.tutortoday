@@ -26,7 +26,7 @@ class FeedbackService
             'DESCRIPTION' => $feedbackForm->getDescription(),
             'STARS_NUMBER' => $feedbackForm->getStars(),
         ]);
-        return true;
+        return $feedbackForm->getStars();
     }
 
     public function getByPage(int $tutorID, int $page, int $tutorsPerPage = self::feedbacksByPage)

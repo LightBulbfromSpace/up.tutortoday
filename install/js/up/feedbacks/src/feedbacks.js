@@ -6,6 +6,7 @@ export class Feedbacks
 	sendButton
 	#feedbacksPerLoad = 3
 	#page = 0
+	#stars
 
 	constructor(options = {})
 	{
@@ -83,17 +84,29 @@ export class Feedbacks
 										  <textarea class="textarea-custom" id="feedback-description" placeholder="Description"></textarea>
 										  <div class="container-row-custom">
 											  <div class="stars-container">
-												  <span class="fa fa-star"></span>
-												  <span class="fa fa-star"></span>
-												  <span class="fa fa-star"></span>
-												  <span class="fa fa-star"></span>
-												  <span class="fa fa-star"></span>
+												  <button id="s5" class="fa fa-star"></button>
+												  <button id="s4" class="fa fa-star"></button>
+												  <button id="s3" class="fa fa-star"></button>
+												  <button id="s2" class="fa fa-star"></button>
+												  <button id="s1" class="fa fa-star"></button>
 											  </div>
 											  <button class="button-plus-minus button-small-custom" id="send-button">Send</button>
 										  </div>
 									  </div>`
 		this.toggleButton.innerText = 'Close'
 		this.toggleButton.onclick = () => {this.closeForm()}
+
+		for (let i = 1; i < 6; i++) {
+			document.getElementById('s'+ i).onclick = () => {
+				this.#stars = i
+				for (let j = 1; j < 6; j++) {
+						document.getElementById('s'+ j).classList.remove('star-selected')
+				}
+				for (let j = 1; j <= this.#stars; j++) {
+					document.getElementById('s'+ j).classList.add('star-selected')
+				}
+			}
+		}
 
 		this.sendButton = document.getElementById('send-button')
 		this.sendButton.onclick = () => {this.#sendForm(); this.closeForm()}
@@ -116,22 +129,20 @@ export class Feedbacks
 	{
 		let title = document.getElementById('feedback-title')
 		let description = document.getElementById('feedback-description')
-		//TODO: remove hardcode
-		let stars = 0
 		BX.ajax({
 			url: '/profile/feedbacks/add/',
 			data: {
 				receiverID: this.feedbackReceiverID,
 				title: title.value,
 				description: description.value,
-				stars: stars,
+				stars: this.#stars,
 				sessid: BX.bitrix_sessid(),
 			},
 			method: 'POST',
 			dataType: 'json',
 			timeout: 10,
 			onsuccess: (res) => {
-				//console.log(res)
+				console.log(res)
 				this.loadFeedbacksPerPage()
 			},
 			onfailure: function reject (e) {
@@ -154,7 +165,7 @@ export class Feedbacks
 			dataType: 'json',
 			timeout: 10,
 			onsuccess: (res) => {
-				console.log(res)
+				//console.log(res)
 				if (res === null) {
 					return
 				}
@@ -170,8 +181,11 @@ export class Feedbacks
 	}
 
 	displayFeedbacksPerPage(feedbacks) {
+		let noFeedbacksMsg = document.getElementById('no-feedbacks-message')
+		if (feedbacks.length > 0 && noFeedbacksMsg) {
+			noFeedbacksMsg.remove()
+		}
 		for (let i= 0; i < feedbacks.length; i++) {
-			console.log(i)
 			let elem = document.createElement('div')
 			elem.classList.add('feedback-card-container')
 			elem.innerHTML = `<a class="feedback-card-user-info-container" href="/profile/${feedbacks[i]['student']['ID']}/">
@@ -180,11 +194,23 @@ export class Feedbacks
 									<div class="help">${this.#sanitize(feedbacks[i]['student']['name'])}</div>
 								</a>
 								<div class="box feedback-card-custom">
-									<div class="title-custom">${this.#sanitize(feedbacks[i]['title'])}</div>
+									<div class="title-feedback-custom">
+										<div class="title-custom">${this.#sanitize(feedbacks[i]['title'])}</div>
+										<div class="stars-container">
+											<div id="s5-`+ i +`-disabled" class="fa fa-star"></div>
+											<div id="s4-`+ i +`-disabled" class="fa fa-star"></div>
+											<div id="s3-`+ i +`-disabled" class="fa fa-star"></div>
+											<div id="s2-`+ i +`-disabled" class="fa fa-star"></div>
+											<div id="s1-`+ i +`-disabled" class="fa fa-star"></div>
+										</div>
+									</div>
 									<div class="br"></div>
 									<div>${this.#sanitize(feedbacks[i]['description'])}</div>
 								</div>`
 			this.feedbacksRootID.appendChild(elem)
+			for (let j = 1; j <= feedbacks[i]['stars']; j++) {
+				document.getElementById('s' + j + '-' + i + '-disabled').classList.add('star-selected')
+			}
 		}
 	}
 
