@@ -224,8 +224,19 @@ class ProfileController
         {
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
-        return (new FeedbackService($this->userID))->getByPage(
+
+        $fbService = new FeedbackService($this->userID);
+
+        $feedbacks =  $fbService->getByPage(
             $post['tutorID'], $post['page'], $post['tutorsPerPage']
         );
+
+        $total = $fbService->getAllFeedbacksCount($post['tutorID']);
+
+
+        return [
+            'feedbacks' => $feedbacks,
+            'total' => $total,
+        ];
     }
 }

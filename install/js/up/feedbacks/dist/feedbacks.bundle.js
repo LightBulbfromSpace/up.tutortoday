@@ -149,17 +149,59 @@ this.BX.Up = this.BX.Up || {};
 	  }, {
 	    key: "displayFeedbacksPerPage",
 	    value: function displayFeedbacksPerPage(feedbacks) {
-	      var noFeedbacksMsg = document.getElementById('no-feedbacks-message');
-	      if (feedbacks.length > 0 && noFeedbacksMsg) {
-	        noFeedbacksMsg.remove();
+	      var _this5 = this;
+	      while (this.feedbacksRootID.lastChild) {
+	        this.feedbacksRootID.lastChild.remove();
 	      }
-	      for (var i = 0; i < feedbacks.length; i++) {
+	      var noFbMsg = document.getElementById('no-feedbacks-message');
+	      this.feedbacksRootID.style.justifyContent = 'space-between';
+	      if (feedbacks['total'] === 0) {
+	        if (_noFbMsg) {
+	          return;
+	        }
+	        var _noFbMsg = document.createElement('div');
+	        _noFbMsg.id = 'no-feedbacks-message';
+	        _noFbMsg.classList.add('box');
+	        _noFbMsg.innerText = 'No feedbacks yet';
+	        this.feedbacksRootID.appendChild(_noFbMsg);
+	        this.feedbacksRootID.style.justifyContent = 'center';
+	        return;
+	      }
+	      if (noFbMsg) {
+	        noFbMsg.remove();
+	      }
+	      this.feedbacksRootID.innerHTML = "<button class=\"feedback-button\" id=\"feedbacks-button-previous\">&lt;</button>\n\t\t\t\t\t\t\t\t\t\t  <div class=\"feedback-cards-container\" id=\"feedback-cards-container\"></div>\n\t\t\t\t\t\t\t\t\t\t  <button class=\"feedback-button\" id=\"feedbacks-button-next\">&gt;</button>";
+	      var previousButton = document.getElementById('feedbacks-button-previous');
+	      var feedbacksContainer = document.getElementById('feedback-cards-container');
+	      var nextButton = document.getElementById('feedbacks-button-next');
+	      previousButton.onclick = function () {
+	        var _this$page, _this$page2;
+	        previousButton.style.backgroundColor = babelHelpers.classPrivateFieldGet(_this5, _page) > 0 ? '#FFFFFF' : '#D9D9D9';
+	        if (babelHelpers.classPrivateFieldGet(_this5, _page) <= 0) {
+	          return;
+	        }
+	        babelHelpers.classPrivateFieldSet(_this5, _page, (_this$page = babelHelpers.classPrivateFieldGet(_this5, _page), _this$page2 = _this$page--, _this$page)), _this$page2;
+	        _this5.loadFeedbacksPerPage();
+	        console.log('previous', babelHelpers.classPrivateFieldGet(_this5, _page));
+	      };
+	      nextButton.onclick = function () {
+	        var _this$page3, _this$page4;
+	        var maxPage = Math.ceil(feedbacks['total'] / babelHelpers.classPrivateFieldGet(_this5, _feedbacksPerLoad) - 1);
+	        nextButton.style.backgroundColor = babelHelpers.classPrivateFieldGet(_this5, _page) < maxPage ? '#FFFFFF' : '#D9D9D9';
+	        if (babelHelpers.classPrivateFieldGet(_this5, _page) >= maxPage) {
+	          return;
+	        }
+	        babelHelpers.classPrivateFieldSet(_this5, _page, (_this$page3 = babelHelpers.classPrivateFieldGet(_this5, _page), _this$page4 = _this$page3++, _this$page3)), _this$page4;
+	        _this5.loadFeedbacksPerPage();
+	        console.log('next', babelHelpers.classPrivateFieldGet(_this5, _page), feedbacks['total'] / babelHelpers.classPrivateFieldGet(_this5, _feedbacksPerLoad));
+	      };
+	      for (var i = 0; i < feedbacks['feedbacks'].length; i++) {
 	        var elem = document.createElement('div');
 	        elem.classList.add('feedback-card-container');
-	        elem.innerHTML = "<a class=\"feedback-card-user-info-container\" href=\"/profile/".concat(feedbacks[i]['student']['ID'], "/\">\n\t\t\t\t\t\t\t\t\t<img src=\"").concat(_classPrivateMethodGet(this, _sanitize, _sanitize2).call(this, feedbacks[i]['student']['photo']), "\" class=\"photo-small img-rounded\" alt=\"avatar\">\n\t\t\t\t\t\t\t\t\t<div class=\"help\">").concat(_classPrivateMethodGet(this, _sanitize, _sanitize2).call(this, feedbacks[i]['student']['surname']), "</div>\n\t\t\t\t\t\t\t\t\t<div class=\"help\">").concat(_classPrivateMethodGet(this, _sanitize, _sanitize2).call(this, feedbacks[i]['student']['name']), "</div>\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t<div class=\"box feedback-card-custom\">\n\t\t\t\t\t\t\t\t\t<div class=\"title-feedback-custom\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"title-custom\">").concat(_classPrivateMethodGet(this, _sanitize, _sanitize2).call(this, feedbacks[i]['title']), "</div>\n\t\t\t\t\t\t\t\t\t\t<div class=\"stars-container\">\n\t\t\t\t\t\t\t\t\t\t\t<div id=\"s5-") + i + "-disabled\" class=\"fa fa-star\"></div>\n\t\t\t\t\t\t\t\t\t\t\t<div id=\"s4-" + i + "-disabled\" class=\"fa fa-star\"></div>\n\t\t\t\t\t\t\t\t\t\t\t<div id=\"s3-" + i + "-disabled\" class=\"fa fa-star\"></div>\n\t\t\t\t\t\t\t\t\t\t\t<div id=\"s2-" + i + "-disabled\" class=\"fa fa-star\"></div>\n\t\t\t\t\t\t\t\t\t\t\t<div id=\"s1-" + i + "-disabled\" class=\"fa fa-star\"></div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"br\"></div>\n\t\t\t\t\t\t\t\t\t<div>".concat(_classPrivateMethodGet(this, _sanitize, _sanitize2).call(this, feedbacks[i]['description']), "</div>\n\t\t\t\t\t\t\t\t</div>");
-	        this.feedbacksRootID.appendChild(elem);
-	        for (var j = 1; j <= feedbacks[i]['stars']; j++) {
-	          document.getElementById('s' + j + '-' + i + '-disabled').classList.add('star-selected');
+	        elem.innerHTML = "<a class=\"feedback-card-user-info-container\" href=\"/profile/".concat(feedbacks['feedbacks'][i]['student']['ID'], "/\">\n\t\t\t\t\t\t\t\t\t<img src=\"").concat(_classPrivateMethodGet(this, _sanitize, _sanitize2).call(this, feedbacks['feedbacks'][i]['student']['photo']), "\" class=\"photo-small img-rounded\" alt=\"avatar\">\n\t\t\t\t\t\t\t\t\t<div class=\"help\">").concat(_classPrivateMethodGet(this, _sanitize, _sanitize2).call(this, feedbacks['feedbacks'][i]['student']['surname']), "</div>\n\t\t\t\t\t\t\t\t\t<div class=\"help\">").concat(_classPrivateMethodGet(this, _sanitize, _sanitize2).call(this, feedbacks['feedbacks'][i]['student']['name']), "</div>\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t<div class=\"box feedback-card-custom\">\n\t\t\t\t\t\t\t\t\t<div class=\"title-feedback-custom\">\n\t\t\t\t\t\t\t\t\t\t<div class=\"title-custom\">").concat(_classPrivateMethodGet(this, _sanitize, _sanitize2).call(this, feedbacks['feedbacks'][i]['title']), "</div>\n\t\t\t\t\t\t\t\t\t\t<div class=\"stars-container\">\n\t\t\t\t\t\t\t\t\t\t\t<div id=\"s5-").concat(i, "-disabled\" class=\"fa fa-star\"></div>\n\t\t\t\t\t\t\t\t\t\t\t<div id=\"s4-").concat(i, "-disabled\" class=\"fa fa-star\"></div>\n\t\t\t\t\t\t\t\t\t\t\t<div id=\"s3-").concat(i, "-disabled\" class=\"fa fa-star\"></div>\n\t\t\t\t\t\t\t\t\t\t\t<div id=\"s2-").concat(i, "-disabled\" class=\"fa fa-star\"></div>\n\t\t\t\t\t\t\t\t\t\t\t<div id=\"s1-").concat(i, "-disabled\" class=\"fa fa-star\"></div>\n\t\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t\t\t<div class=\"br\"></div>\n\t\t\t\t\t\t\t\t\t<div>").concat(_classPrivateMethodGet(this, _sanitize, _sanitize2).call(this, feedbacks['feedbacks'][i]['description']) === '' ? 'No description' : _classPrivateMethodGet(this, _sanitize, _sanitize2).call(this, feedbacks['feedbacks'][i]['description']), "</div>\n\t\t\t\t\t\t\t\t</div>");
+	        feedbacksContainer.appendChild(elem);
+	        for (var j = 1; j <= feedbacks['feedbacks'][i]['stars']; j++) {
+	          document.getElementById("s".concat(j, "-").concat(i, "-disabled")).classList.add('star-selected');
 	        }
 	      }
 	    }
@@ -167,7 +209,7 @@ this.BX.Up = this.BX.Up || {};
 	  return Feedbacks;
 	}();
 	function _sendForm2() {
-	  var _this5 = this;
+	  var _this6 = this;
 	  var title = document.getElementById('feedback-title');
 	  var description = document.getElementById('feedback-description');
 	  BX.ajax({
@@ -184,7 +226,7 @@ this.BX.Up = this.BX.Up || {};
 	    timeout: 10,
 	    onsuccess: function onsuccess(res) {
 	      console.log(res);
-	      _this5.loadFeedbacksPerPage();
+	      _this6.loadFeedbacksPerPage();
 	    },
 	    onfailure: function reject(e) {
 	      console.log(e);

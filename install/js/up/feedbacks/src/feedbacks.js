@@ -181,35 +181,85 @@ export class Feedbacks
 	}
 
 	displayFeedbacksPerPage(feedbacks) {
-		let noFeedbacksMsg = document.getElementById('no-feedbacks-message')
-		if (feedbacks.length > 0 && noFeedbacksMsg) {
-			noFeedbacksMsg.remove()
+
+		while (this.feedbacksRootID.lastChild) {
+			this.feedbacksRootID.lastChild.remove()
 		}
-		for (let i= 0; i < feedbacks.length; i++) {
+
+		let noFbMsg = document.getElementById('no-feedbacks-message')
+		this.feedbacksRootID.style.justifyContent = 'space-between'
+		if (feedbacks['total']=== 0) {
+			if (noFbMsg) {
+				return
+			}
+			let noFbMsg = document.createElement('div')
+			noFbMsg.id = 'no-feedbacks-message'
+			noFbMsg.classList.add('box')
+			noFbMsg.innerText = 'No feedbacks yet'
+			this.feedbacksRootID.appendChild(noFbMsg)
+			this.feedbacksRootID.style.justifyContent = 'center'
+			return
+		}
+
+		if (noFbMsg) {
+			noFbMsg.remove()
+		}
+
+		this.feedbacksRootID.innerHTML = `<button class="feedback-button" id="feedbacks-button-previous">&lt;</button>
+										  <div class="feedback-cards-container" id="feedback-cards-container"></div>
+										  <button class="feedback-button" id="feedbacks-button-next">&gt;</button>`
+
+		let previousButton = document.getElementById('feedbacks-button-previous')
+		let feedbacksContainer = document.getElementById('feedback-cards-container')
+		let nextButton = document.getElementById('feedbacks-button-next')
+
+		previousButton.onclick = () => {
+			previousButton.style.backgroundColor = this.#page > 0 ? '#FFFFFF' : '#D9D9D9'
+			if (this.#page <= 0) {
+				return
+			}
+			this.#page--
+			this.loadFeedbacksPerPage()
+			console.log('previous',this.#page)
+		}
+
+		nextButton.onclick = () => {
+			let maxPage = Math.ceil(feedbacks['total'] / this.#feedbacksPerLoad - 1)
+			nextButton.style.backgroundColor = this.#page < maxPage ? '#FFFFFF' : '#D9D9D9'
+			if (this.#page >= maxPage) {
+				return
+			}
+			this.#page++
+			this.loadFeedbacksPerPage()
+			console.log('next',this.#page, feedbacks['total'] / this.#feedbacksPerLoad)
+
+		}
+
+		for (let i= 0; i < feedbacks['feedbacks'].length; i++) {
 			let elem = document.createElement('div')
 			elem.classList.add('feedback-card-container')
-			elem.innerHTML = `<a class="feedback-card-user-info-container" href="/profile/${feedbacks[i]['student']['ID']}/">
-									<img src="${this.#sanitize(feedbacks[i]['student']['photo'])}" class="photo-small img-rounded" alt="avatar">
-									<div class="help">${this.#sanitize(feedbacks[i]['student']['surname'])}</div>
-									<div class="help">${this.#sanitize(feedbacks[i]['student']['name'])}</div>
+			elem.innerHTML =   `<a class="feedback-card-user-info-container" href="/profile/${feedbacks['feedbacks'][i]['student']['ID']}/">
+									<img src="${this.#sanitize(feedbacks['feedbacks'][i]['student']['photo'])}" class="photo-small img-rounded" alt="avatar">
+									<div class="help">${this.#sanitize(feedbacks['feedbacks'][i]['student']['surname'])}</div>
+									<div class="help">${this.#sanitize(feedbacks['feedbacks'][i]['student']['name'])}</div>
 								</a>
 								<div class="box feedback-card-custom">
 									<div class="title-feedback-custom">
-										<div class="title-custom">${this.#sanitize(feedbacks[i]['title'])}</div>
+										<div class="title-custom">${this.#sanitize(feedbacks['feedbacks'][i]['title'])}</div>
 										<div class="stars-container">
-											<div id="s5-`+ i +`-disabled" class="fa fa-star"></div>
-											<div id="s4-`+ i +`-disabled" class="fa fa-star"></div>
-											<div id="s3-`+ i +`-disabled" class="fa fa-star"></div>
-											<div id="s2-`+ i +`-disabled" class="fa fa-star"></div>
-											<div id="s1-`+ i +`-disabled" class="fa fa-star"></div>
+											<div id="s5-${i}-disabled" class="fa fa-star"></div>
+											<div id="s4-${i}-disabled" class="fa fa-star"></div>
+											<div id="s3-${i}-disabled" class="fa fa-star"></div>
+											<div id="s2-${i}-disabled" class="fa fa-star"></div>
+											<div id="s1-${i}-disabled" class="fa fa-star"></div>
 										</div>
 									</div>
 									<div class="br"></div>
-									<div>${this.#sanitize(feedbacks[i]['description'])}</div>
+									<div>${this.#sanitize(feedbacks['feedbacks'][i]['description']) === '' ? 'No description' : this.#sanitize(feedbacks['feedbacks'][i]['description'])}</div>
 								</div>`
-			this.feedbacksRootID.appendChild(elem)
-			for (let j = 1; j <= feedbacks[i]['stars']; j++) {
-				document.getElementById('s' + j + '-' + i + '-disabled').classList.add('star-selected')
+			feedbacksContainer.appendChild(elem)
+			for (let j = 1; j <= feedbacks['feedbacks'][i]['stars']; j++) {
+				document.getElementById(`s${j}-${i}-disabled`).classList.add('star-selected')
 			}
 		}
 	}

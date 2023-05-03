@@ -29,6 +29,14 @@ class FeedbackService
         return $feedbackForm->getStars();
     }
 
+    public function getAllFeedbacksCount(int $tutorID) {
+        return FeedbacksTable::query()
+            ->setSelect(['*', 'STUDENT'])
+            ->where('TUTOR_ID', $tutorID)
+            ->fetchCollection()
+            ->count();
+    }
+
     public function getByPage(int $tutorID, int $page, int $tutorsPerPage = self::feedbacksByPage)
     {
         $role = UserRoleTable::query()
