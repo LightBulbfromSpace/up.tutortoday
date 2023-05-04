@@ -15,7 +15,6 @@ class TutorTodayProfileComponent extends CBitrixComponent {
         $this->prepareLocalization();
         $this->onPrepareComponentParams($this->arParams);
         $this->fetchUserInfo($this->arResult['ID']);
-    //    $this->fetchLoggedInUserInfo();
         $this->fetchWeekdays();
         $this->prepareTemplateParams();
         $this->includeComponentTemplate();
@@ -48,20 +47,6 @@ class TutorTodayProfileComponent extends CBitrixComponent {
 
         $this->arResult['user'] = $user;
     }
-
-//    protected function fetchLoggedInUserInfo()
-//    {
-//        global $USER;
-//
-//        if ($USER->GetID() === null)
-//        {
-//            $this->arResult['loggedInUser'] = null;
-//            return;
-//        }
-//
-//        $user = (new UserService($USER->GetID()))->getUserByID();
-//        $this->arResult['loggedInUser'] = $user;
-//    }
 
     protected function fetchWeekdays()
     {

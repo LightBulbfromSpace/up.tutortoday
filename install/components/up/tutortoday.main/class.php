@@ -17,8 +17,22 @@ class TutorTodayMainPageComponent extends CBitrixComponent {
 	    $this->fetchSubjectFilters();
 	    $this->fetchEducationFormatsFilters();
         $this->fetchAllCities();
+        $this->prepareProfileLink();
         $this->prepareTemplateParams();
         $this->includeComponentTemplate();
+    }
+
+    protected function prepareProfileLink()
+    {
+        global $USER;
+
+        $linkToProfile = '/login/';
+        if ($USER->GetID() != null)
+        {
+            $linkToProfile = "/profile/{$USER->GetID()}/";
+        }
+
+        $this->arResult['linkToProfile'] = $linkToProfile;
     }
 
     public function prepareTemplateParams()

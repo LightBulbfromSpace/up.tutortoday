@@ -628,4 +628,24 @@ class UserService
         }
         return $preferences;
     }
+
+    public function getUserRoleByID()
+    {
+        $result = UserTable::query()
+            ->setSelect(['WORK_POSITION'])
+            ->where('ID', $this->observedUserID)
+            ->fetchObject();
+
+        $roleID = $result['WORK_POSITION'];
+
+        $result = RolesTable::query()
+            ->setSelect(['NAME'])
+            ->where('ID', $roleID)
+            ->fetchObject();
+
+        return [
+            'ID' => $roleID,
+            'NAME' => $result['NAME'],
+        ];
+    }
 }

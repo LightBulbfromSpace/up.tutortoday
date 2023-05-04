@@ -75,8 +75,8 @@ class up_tutortoday extends CModule
             true
         );
         CopyDirFiles(
-            $_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tutortoday/install/view',
-            $_SERVER['DOCUMENT_ROOT'] . '/local/view/',
+            $_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tutortoday/install/js',
+            $_SERVER['DOCUMENT_ROOT'] . '/local/js/',
             true,
             true
         );

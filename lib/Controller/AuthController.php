@@ -35,12 +35,22 @@ class AuthController extends Controller
 
         $result = $USER->Login($post['login'], $post['password']);
 
-        session()->set('userID', $USER->GetID());
+        //session()->set('userID', $USER->GetID());
 
         if ($result !== true)
         {
             LocalRedirect("/login/?err=auth");
+            return;
         }
+
+        $userRole = (new UserService($USER->GetID()))->getUserRoleByID();
+
+        if ($userRole['NAME'] === 'administrator')
+        {
+            LocalRedirect('/admin/');
+            return;
+        }
+
         LocalRedirect("/profile/{$USER->getID()}/");
     }
 

@@ -27,7 +27,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
     <div class="container header__container">
         <a class="header__mainLink header__links-item link" href="/overview/">TutorToday</a>
         <div class="header__links">
-            <a class="header__links-item link" href="/profile/<?=$USER->GetID()?>/">My Profile</a>
+            <a class="header__links-item link" href="<?=$arResult['linkToProfile']?>">My Profile</a>
             <a class="header__links-item link" href="#">About</a>
             <a class="header__links-item link" href="#">Contacts</a>
             <a class="header__links-item link" href="/registration/">Registration</a>

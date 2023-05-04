@@ -28,4 +28,14 @@ class LocationService
         }
         return $city['NAME'];
     }
+
+    public static function getCitiesPerPage(int $pageFromNull, int $itemsPerPage)
+    {
+        $offset = $pageFromNull * $itemsPerPage;
+        return CitiesTable::query()
+            ->setSelect(['*'])
+            ->setOffset($offset)
+            ->setLimit($itemsPerPage)
+            ->fetchCollection();
+    }
 }

@@ -16,6 +16,26 @@ class EducationService
         $this->usersIDs = $usersIDs;
     }
 
+    public static function getEdFormatsPerPage(int $pageFromNull, int $itemsPerPage)
+    {
+        $offset = $pageFromNull * $itemsPerPage;
+        return EducationFormatTable::query()
+            ->setSelect(['*'])
+            ->setOffset($offset)
+            ->setLimit($itemsPerPage)
+            ->fetchCollection();
+    }
+
+    public static function getSubjectsPerPage(int $pageFromNull, int $itemsPerPage)
+    {
+        $offset = $pageFromNull * $itemsPerPage;
+        return SubjectTable::query()
+            ->setSelect(['*'])
+            ->setOffset($offset)
+            ->setLimit($itemsPerPage)
+            ->fetchCollection();
+    }
+
     public function getUsersIDs(): array
     {
         return $this->usersIDs;

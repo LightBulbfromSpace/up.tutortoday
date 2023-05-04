@@ -149,6 +149,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <div class="select-custom">
                 <select name="role">
                     <?php foreach ($arResult['roles'] as $role): ?>
+                        <?php if ($role['NAME'] === 'administrator') continue; ?>
                         <option value="<?=$role['ID']?>"><?=$role['NAME']?></option>
                     <?php endforeach; ?>
                 </select>

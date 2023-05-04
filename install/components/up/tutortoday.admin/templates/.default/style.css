@@ -1,0 +1,111 @@
+@import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
+
+
+
+.container-custom {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 80px;
+    width: 100vw;
+    height: 75vh;
+    flex-grow: 1;
+    position: relative;
+}
+
+.menu-button-container {
+    height: 40px;
+}
+
+/*.input-custom:focus, .input-custom:focus-visible {*/
+/*    border: 1px solid #363636;*/
+/*    box-shadow: 0 0 0 0.125em rgb(72 95 199 / 25%);*/
+/*    outline: none;*/
+/*}*/
+
+/*.input-custom {*/
+/*    box-shadow: inset 0 0.0625em 0.125em rgb(10 10 10 / 5%);*/
+/*    max-width: 100%;*/
+/*    width: 100%;*/
+/*    background-color: #fff;*/
+/*    !*border-color: #dbdbdb;*!*/
+/*    border-radius: 4px;*/
+/*    color: #363636;*/
+/*    -webkit-appearance: none;*/
+/*    align-items: center;*/
+/*    border: 1px solid #dbdbdb;*/
+/*    display: inline-flex;*/
+/*    font-size: 1rem;*/
+/*    height: 2.5em;*/
+/*    justify-content: flex-start;*/
+/*    line-height: 1.5;*/
+/*    padding: calc(0.5em - 1px) calc(0.75em - 1px);*/
+/*    position: relative;*/
+/*    vertical-align: top;*/
+/*}*/
+
+/*.button-container {*/
+/*    display: flex;*/
+/*    justify-content: space-evenly;*/
+/*    align-items: center;*/
+/*    margin: 10px;*/
+/*}*/
+
+.small-container {
+    margin: 0 5px;
+}
+
+button:focus, button:focus-visible {
+    outline: none;
+}
+
+.menu-button {
+    font-size: 22px;
+    outline: none;
+    border-width: 0;
+    background-color: transparent;
+}
+
+.menu-button-active {
+    border-bottom-width: 3px !important;
+    transition-duration: 50ms;
+}
+
+#admin-data-area {
+    margin-top: 5px;
+    width: 478px;
+}
+
+#admin-users-button {
+    color: #c01d00;
+    border-color: #c01d00;
+}
+
+#admin-subjects-button {
+    color: #eab91b;
+    border-color: #eab91b;
+}
+
+#admin-ed-formats-button {
+    color: #46c000;
+    border-color: #46c000;
+}
+
+#admin-cities-button {
+    color: #00c0c0;
+    border-color: #00c0c0;
+}
+
+body::-webkit-scrollbar {
+    width: 5px;
+}
+
+body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #D9D9D9;
+    border-radius: 20px;
+    border: none;
+}

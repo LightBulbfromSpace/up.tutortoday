@@ -14,7 +14,6 @@ export class Feedbacks
 			throw new Error('Feedbacks: options.rootNodeID is required')
 		}
 
-
 		this.rootNode = document.getElementById(options.rootNodeID)
 
 

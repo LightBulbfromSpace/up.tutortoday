@@ -1,6 +1,7 @@
 INSERT INTO up_tutortoday_roles (NAME) VALUES
     ('tutor'),
-    ('student');
+    ('student'),
+    ('administrator');
 
 INSERT INTO up_tutortoday_subject (NAME) VALUES
     ('mathematics'),

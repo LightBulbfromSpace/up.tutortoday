@@ -2,6 +2,7 @@
 
 use Bitrix\Main\Routing\Controllers\PublicPageController;
 use Bitrix\Main\Routing\RoutingConfigurator;
+use Up\Tutortoday\Controller\AdminController;
 use Up\Tutortoday\Controller\AuthController;
 use Up\Tutortoday\Controller\MainPageController;
 use Up\Tutortoday\Controller\ProfileController;
@@ -15,7 +16,20 @@ return function (RoutingConfigurator $routes) {
     $routes->get('/registration/', new PublicPageController('/local/view/tutortoday/tutortoday-registration.php'));
     $routes->get('/profile/{id}/', new PublicPageController('/local/view/tutortoday/tutortoday-profile.php'));
     $routes->get('/profile/{id}/settings/', new PublicPageController('/local/view/tutortoday/tutortoday-profile-settings.php'));
+    $routes->get('/admin/', new PublicPageController('/local/view/tutortoday/tutortoday-admin.php'));
 
+    $routes->get('/admin/subjects/', function () {
+        global $USER;
+        return (new AdminController((int)$USER->GetID()))->getSubjects(getGetList());
+    });
+    $routes->get('/admin/edFormats/', function () {
+        global $USER;
+        return (new AdminController((int)$USER->GetID()))->getEdFormats(getGetList());
+    });
+    $routes->get('/admin/cities/', function () {
+        global $USER;
+        return (new AdminController((int)$USER->GetID()))->getCities(getGetList());
+    });
 
     $routes->get('/profile/settings/allSubjects/', function () {
         return ProfileController::getAllSubjectsJSON();
