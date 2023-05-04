@@ -38,7 +38,7 @@ Loc::loadMessages(__FILE__);
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="<?=$linkToProfile?>">My Profile</a>
+                <a class="nav-link" id="registrationButton" href="<?=$linkToProfile?>">My Profile</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">About</a>
