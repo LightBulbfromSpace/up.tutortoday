@@ -116,7 +116,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <div class="field is-justified-center">
                     <label class="label"></label>
                     <div class="control">
-                        <button class="button is-dark" type="button" onclick="closeSubjects()">Save</button>
+                        <button class="button is-dark" type="button" id="select-subjects-save-button" onclick="closeSubjects()">Save</button>
                     </div>
                 </div>
             </div>
@@ -138,7 +138,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <div class="is-justified-center">
                     <label class="label"></label>
                     <div class="control">
-                        <button class="button is-dark" type="button" onclick="closeEdFormats()">Save</button>
+                        <button class="button is-dark" type="button" id="select-ed-formats-save-button" onclick="closeEdFormats()">Save</button>
                     </div>
                 </div>
             </div>
@@ -168,7 +168,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
         <div class="field is-grouped is-justify-content-center">
             <div class="control">
-                <button class="button is-dark">Register me</button>
+                <button class="button is-dark" id="confirm-registration-button">Register me</button>
             </div>
         </div>
     </form>
