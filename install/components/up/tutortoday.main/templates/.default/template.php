@@ -25,8 +25,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 <?php $APPLICATION->ShowPanel(); ?>
 <header class="header">
     <div class="container header__container">
-        <a class="header__mainLink header__links-item link" href="/overview/">TutorToday</a>
-        <div class="header__links">
+        <a class="header__mainLink header__links-item link" href="/overview/" id="main-logo">TutorToday</a>
+        <div class="header__links" id="navbarNav">
             <a class="header__links-item link" href="<?=$arResult['linkToProfile']?>">My Profile</a>
             <a class="header__links-item link" href="#">About</a>
             <a class="header__links-item link" href="#">Contacts</a>
