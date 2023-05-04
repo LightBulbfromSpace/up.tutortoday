@@ -85,7 +85,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         </div>
 
         <div class="container-large-custom">
-            <div class="container-row-custom">
+            <div class="save-button-container-main">
                 <div class="save-button-container">
                     <a class="link-button" href="/profile/<?=$arResult['user']['mainData']['ID']?>/">Back</a>
                 </div>
@@ -103,7 +103,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <div class="container-column-custom">
                         <label class="label">Education format</label>
                         <div class="control">
-                            <div class="box max-width-90">
+                            <div class="box">
                                 <?php foreach ($arResult['edFormats'] as $edFormat): ?>
                                     <div class="form-check-custom">
                                         <input class="form-check-input" name="edFormats[]"
@@ -132,7 +132,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     </div>
                     <div class="container-column-custom">
                         <label class="label">Subjects</label>
-                        <div class="box max-width-90">
+                        <div class="box">
                             <?php if($arResult['user']['subjects'] != null): ?>
                                 <?php foreach ($arResult['user']['subjects'] as $subject): ?>
                                     <div class="container-subjects" id="subject-container-<?=$subject['SUBJECT']['ID']?>">
@@ -156,7 +156,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                         </div>
                     </div>
                     <div id="add-subject-area"></div>
-                    <div class="box max-width-90">
+                    <div class="box">
                         <button type="button" class="button-plus-minus button-large-custom" onclick="closeSubjectForm()">-</button>
                     </div>
                     <div class="container-contacts">

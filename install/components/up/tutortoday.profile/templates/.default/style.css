@@ -295,13 +295,14 @@ body::-webkit-scrollbar-thumb {
 }
 
 .button-plus-minus:hover {
-    background-color: rgba(113, 3, 3, 0.95);
+    background-color: #D9D9D9;
     cursor: pointer;
     color: black;
 }
-
-.button-plus-minus:focus, .button-plus-minus:focus-visible {
-    outline: none;
+button:focus, button:focus-visible,
+.button-plus-minus:focus, .button-plus-minus:focus-visible,
+.button-plus-minus-large:focus, .button-plus-minus-large:focus-visible {
+    outline: none !important;
 }
 
 /*.fa-star:hover {*/

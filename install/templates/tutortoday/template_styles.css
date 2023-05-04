@@ -1,5 +1,5 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
-@import 'normalize.css';
+/*@import 'normalize.css';*/
 
 .navbar-brand-custom {
     display: flex;
@@ -100,7 +100,7 @@ body{
     margin-left: 10px;
 }
 
-.footer{
+.footer__main{
     background-color: #2b2f33;
 
     min-height: 250px;

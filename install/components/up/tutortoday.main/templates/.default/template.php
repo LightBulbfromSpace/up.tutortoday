@@ -53,20 +53,20 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
        </div>
     </main>
 
-<footer class="footer">
+<footer class="footer__main">
     <div class="container">
         <div class="footer__content">
             <div class="footer__content-row">
                 <img src="/local/components/up/tutortoday.main/templates/.default/static/TutorTodayLogo.svg" alt="logo"/>
                 <div class="footer__content-address">
-                    <span class="footer__content-link">Калининград, туда сюда, улица Хотения выходных, дом 15</span>
+                    <span class="footer__content-link">Kaliningrad, WantingTheWeekends St., 15</span>
                 </div>
             </div>
             <div class="footer__content-row">
                 <span class="footer__content-category">Subjects</span>
                 <?php foreach ($arResult['subjects'] as $i => $subject): ?>
                     <a class="footer__content-link link" href="/overview/?subjects%5B%5D=<?=$subject['ID']?>"><?=$subject['NAME']?></a>
-                    <?php if ($i === 5) { break; }?>
+                    <?php if ($i === 3) { break; }?>
                 <?php endforeach; ?>
                 <div class="footer__content">and other</div>
             </div>
@@ -74,14 +74,14 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <span class="footer__content-category">Education formats</span>
                 <?php foreach ($arResult['edFormats'] as $i => $edFormat): ?>
                     <a class="footer__content-link link" href="/overview/?edFormats%5B%5D=<?=$edFormat['ID']?>"><?=$edFormat['NAME']?></a>
-                    <?php if ($i === 5) { break; }?>
+                    <?php if ($i === 3) { break; }?>
                 <?php endforeach; ?>
             </div>
             <div class="footer__content-row">
                 <span class="footer__content-category">Cities</span>
                 <?php foreach ($arResult['cities'] as $i => $city): ?>
                     <a class="footer__content-link link" href="/overview/?cities%5B%5D=<?=$city['ID']?>"><?=$city['NAME']?></a>
-                    <?php if ($i === 5) { break; }?>
+                    <?php if ($i === 3) { break; }?>
                 <?php endforeach; ?>
                 <div class="footer__content">and other</div>
             </div>

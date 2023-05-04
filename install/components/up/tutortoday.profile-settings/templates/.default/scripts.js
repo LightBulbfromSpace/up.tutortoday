@@ -143,7 +143,7 @@ function openSubjectForm(weekdays) {
         options += `<option value="` + weekday['ID'] + `">` + weekday['name'] + `</option>`
     })
 
-    form.innerHTML = `<div class="container-subjects box max-width-90 is-justified-center" id="subject-form">
+    form.innerHTML = `<div class="container-subjects box is-justified-center" id="subject-form">
                         <div class="container-subjects">
                             <div class="control">
                                 <div class="select-custom">
@@ -154,7 +154,7 @@ function openSubjectForm(weekdays) {
                                     `</select>
                                 </div>
                             </div>
-                            <div class="container-row-custom is-aligned-center max-width-90">
+                            <div class="container-row-custom is-aligned-center">
                                 <div class="box-dark-element-custom">
                                     <input type="number" class="input-custom" placeholder="Price" name="newSubjectsPrices[]" value="1000">
                                     <div class="price">rub/hour</div>

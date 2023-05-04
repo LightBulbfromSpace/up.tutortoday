@@ -9,7 +9,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
 $uri = Application::getInstance()->getContext()->getServer()->get('REQUEST_URI');
 
-if ($uri !== '/')
+$uri = explode('?', $uri);
+
+if ($uri[0] !== '/')
 {
     include 'other/footer.php';
 }
