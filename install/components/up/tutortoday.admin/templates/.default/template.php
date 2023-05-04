@@ -7,6 +7,7 @@
 
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
+<script src="/local/components/up/tutortoday.admin/templates/.default/scripts.js"></script>
 <div class="container-custom">
     <div class="menu-button-container" id="menu-button-container">
         <button id="admin-users-button" class="small-container menu-button menu-button-active">Users</button>
@@ -17,7 +18,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
     <div id="admin-data-area"></div>
 </div>
 <script>
-    BX.ready(
+    BX.ready(() => {
+        hideWarning()
         window.TutortodayAdminPanel = new BX.Up.Tutortoday.AdminPanel({
             dataAreaID: 'admin-data-area',
             buttonsContainerID: 'menu-button-container',
@@ -26,5 +28,5 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             edFormatsButtonID: 'admin-ed-formats-button',
             citiesButtonID: 'admin-cities-button',
         })
-    )
+    })
 </script>

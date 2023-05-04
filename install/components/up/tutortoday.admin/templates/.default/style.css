@@ -11,6 +11,7 @@
     height: 75vh;
     flex-grow: 1;
     position: relative;
+    margin-top: 4.25rem;
 }
 
 .menu-button-container {

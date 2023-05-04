@@ -88,5 +88,13 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         </div>
     </div>
 </footer>
+<script>
+    BX.ready(() => {
+        let elems = document.getElementsByClassName('tablebodytext')
+        if (elems[0]) {
+            elems[0].remove()
+        }
+    })
+</script>
 </body>
 </html>

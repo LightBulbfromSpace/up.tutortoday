@@ -8,6 +8,7 @@
     flex-grow: 1;
     justify-content: center;
     position: relative;
+    margin-top: 4.25rem;
 }
 
 .input-custom:focus, .input-custom:focus-visible {

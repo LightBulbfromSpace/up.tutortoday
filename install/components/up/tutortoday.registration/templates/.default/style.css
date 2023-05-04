@@ -3,8 +3,8 @@
 .container-custom {
     max-width: 600px;
     flex-grow: 1;
-    margin: 3rem auto;
     position: relative;
+    margin: 6.5rem auto 3rem;
 }
 
 .input-custom:focus, .input-custom:focus-visible, .textarea-custom:focus, .textarea-custom:focus-visible {

@@ -50,37 +50,9 @@ function displayTime(res, weekdayID) {
     document.getElementById('weekday-' + weekdayID).classList.add('weekday-selected')
 }
 
-// function openFeedbackForm() {
-//     let area= document.getElementById('feedback-form-area')
-//     area.innerHTML = `<div class="container-feedback-custom">
-//                           <input type="text" class="input-custom" name="feedback-title" placeholder="Title">
-//                           <textarea class="textarea-custom" name="feedback-description" placeholder="Description"></textarea>
-//                           <div class="container-row-custom">
-//                               <div class="stars-container">
-//                                   <span class="fa fa-star"></span>
-//                                   <span class="fa fa-star"></span>
-//                                   <span class="fa fa-star"></span>
-//                                   <span class="fa fa-star"></span>
-//                                   <span class="fa fa-star"></span>
-//                               </div>
-//                               <button class="button-plus-minus button-small-custom">Send</button>
-//                           </div>
-//                       </div>`
-//     let addButton = document.getElementById('add-close-feedback-button')
-//     addButton.innerText = 'Close'
-//     addButton.onclick = () => {closeFeedbackForm()}
-//     // BX.ajax.post(
-//     //     '/profile'
-//     // )
-// }
-// function closeFeedbackForm() {
-//     let area= document.getElementById('feedback-form-area')
-//     while (area.lastChild) {
-//         area.lastChild.remove()
-//     }
-//     let addButton = document.getElementById('add-close-feedback-button')
-//     addButton.innerText = 'Add feedback'
-//     addButton.onclick = () => {openFeedbackForm()}
-//     console.log(sessionStorage.getItem('feedback-for-user'))
-//
-// }
+function hideWarning() {
+    let elems = document.getElementsByClassName('tablebodytext')
+    if (elems[0]) {
+        elems[0].remove()
+    }
+}

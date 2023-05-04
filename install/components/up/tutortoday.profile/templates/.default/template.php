@@ -157,13 +157,14 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 </div>
 <script>
     BX.ready(() => {
-            window.TutortodayFeedbacks = new BX.Up.Tutortoday.Feedbacks({
-                rootNodeID: 'feedbacks-container',
-                formID: 'feedback-form-area',
-                feedbacksRootID: 'feedbacks-area',
-                feedbackReceiverID: <?=$arResult['user']['mainData']['ID']?>,
-                toggleButtonID: 'add-close-feedback-button',
-            })
-            window.TutortodayFeedbacks.loadFeedbacksPerPage()
+        window.TutortodayFeedbacks = new BX.Up.Tutortoday.Feedbacks({
+            rootNodeID: 'feedbacks-container',
+            formID: 'feedback-form-area',
+            feedbacksRootID: 'feedbacks-area',
+            feedbackReceiverID: <?=$arResult['user']['mainData']['ID']?>,
+            toggleButtonID: 'add-close-feedback-button',
+        })
+        window.TutortodayFeedbacks.loadFeedbacksPerPage()
+        hideWarning()
     })
 </script>
