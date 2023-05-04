@@ -21,6 +21,7 @@ class EducationService
         $offset = $pageFromNull * $itemsPerPage;
         return EducationFormatTable::query()
             ->setSelect(['*'])
+            ->setOrder(['ID' => 'DESC'])
             ->setOffset($offset)
             ->setLimit($itemsPerPage)
             ->fetchCollection();
@@ -31,6 +32,7 @@ class EducationService
         $offset = $pageFromNull * $itemsPerPage;
         return SubjectTable::query()
             ->setSelect(['*'])
+            ->setOrder(['ID' => 'DESC'])
             ->setOffset($offset)
             ->setLimit($itemsPerPage)
             ->fetchCollection();

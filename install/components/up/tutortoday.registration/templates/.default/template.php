@@ -92,11 +92,11 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         <div class="field is-grouped">
             <label class="label"></label>
             <div class="control">
-                <button class="button is-dark" type="button" onclick="showSubjects()">Select subjects</button>
+                <button class="button is-dark" type="button" id="select-subjects-button" onclick="showSubjects()">Select subjects</button>
             </div>
             <label class="label"></label>
             <div class="control">
-                <button class="button is-dark" type="button" onclick="showEdFormats()">Select educational formats</button>
+                <button class="button is-dark" type="button" id="select-ed-formats-button" onclick="showEdFormats()">Select educational formats</button>
             </div>
         </div>
 

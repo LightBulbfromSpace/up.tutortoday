@@ -34,6 +34,7 @@ class LocationService
         $offset = $pageFromNull * $itemsPerPage;
         return CitiesTable::query()
             ->setSelect(['*'])
+            ->setOrder(['ID' => 'DESC'])
             ->setOffset($offset)
             ->setLimit($itemsPerPage)
             ->fetchCollection();
