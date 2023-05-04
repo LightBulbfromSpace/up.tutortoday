@@ -27,10 +27,10 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
     <div class="container header__container">
         <a class="header__mainLink header__links-item link" href="/overview/" id="main-logo">TutorToday</a>
         <div class="header__links" id="navbarNav">
-            <a class="header__links-item link" href="<?=$arResult['linkToProfile']?>">My Profile</a>
+            <a class="header__links-item link" id="myProfileButton" href="<?=$arResult['linkToProfile']?>">My Profile</a>
             <a class="header__links-item link" href="#">About</a>
             <a class="header__links-item link" href="#">Contacts</a>
-            <a class="header__links-item link" href="/registration/">Registration</a>
+            <a class="header__links-item link" id="registrationButton" href="/registration/">Registration</a>
         </div>
     </div>
 </header>
