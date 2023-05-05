@@ -39,4 +39,26 @@ class LocationService
             ->setLimit($itemsPerPage)
             ->fetchCollection();
     }
+
+    public static function deleteCity(int $ID)
+    {
+        $result = CitiesTable::delete($ID);
+        return $result->isSuccess();
+    }
+
+    public static function addNewCity(string $name)
+    {
+        $result = CitiesTable::add([
+            'NAME' => $name,
+        ]);
+        return $result->isSuccess();
+    }
+
+    public static function editCity(int $ID, mixed $name)
+    {
+        $result = CitiesTable::update($ID, [
+            'NAME' => $name,
+        ]);
+        return $result->isSuccess();
+    }
 }

@@ -41,23 +41,46 @@ class EducationService
 
     public static function addNewSubject(string $name)
     {
-        return SubjectTable::add([
+        $result = SubjectTable::add([
             'NAME' => $name,
         ]);
+        return $result->isSuccess();
     }
 
     public static function addNewEdFormat(string $name)
     {
-        return EducationFormatTable::add([
+        $result = EducationFormatTable::add([
             'NAME' => $name,
         ]);
+        return $result->isSuccess();
     }
 
-    public static function addNewCity(string $name)
+    public static function deleteSubject(int $ID)
     {
-        return CitiesTable::add([
+        $result = SubjectTable::delete($ID);
+        return $result->isSuccess();
+    }
+
+    public static function deleteEdFormat(int $ID)
+    {
+        $result = EducationFormatTable::delete($ID);
+        return $result->isSuccess();
+    }
+
+    public static function editSubject(int $ID, string $name)
+    {
+        $result = SubjectTable::update($ID, [
             'NAME' => $name,
         ]);
+        return $result->isSuccess();
+    }
+
+    public static function editEdFormat(int $ID, mixed $name)
+    {
+        $result = EducationFormatTable::update($ID, [
+            'NAME' => $name,
+        ]);
+        return $result->isSuccess();
     }
 
     public function getUsersIDs(): array
@@ -113,7 +136,7 @@ class EducationService
         return $edFormat->fetchObject();
     }
 
-    public function deleteSubject(mixed $subjectID)
+    public function deleteUserSubject(mixed $subjectID)
     {
         foreach ($this->usersIDs as $userID)
         {

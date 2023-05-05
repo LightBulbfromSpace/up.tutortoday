@@ -9,9 +9,26 @@ export class AdminPanel
 	#citiesPage = 0
 
 	#reloadFunc
+	#addButtonCallback
 
 	constructor(options = {})
 	{
+		if (!Type.isStringFilled(options.errorMsgAreaID)) {
+			throw new Error('Feedbacks: "buttonsContainerID" is required')
+		}
+
+		this.errorMsgArea = document.getElementById(options.errorMsgAreaID)
+
+		if (!this.errorMsgArea) {
+			throw new Error(`Feedbacks: element with ID "${options.errorMsgAreaID}" not found`)
+		}
+
+		window.addEventListener('click', () => {
+			while (this.errorMsgArea.lastChild) {
+				this.errorMsgArea.lastChild.remove()
+			}
+		})
+
 		if (!Type.isStringFilled(options.buttonsContainerID)) {
 			throw new Error('Feedbacks: "buttonsContainerID" is required')
 		}
@@ -128,14 +145,21 @@ export class AdminPanel
 
 	#displaySubjects(res)
 	{
-		this.#displayIDNameElements(res, 'subject-')
+		this.#reloadFunc = this.#loadSubjects
 
-		this.#displayAddButton(() => {
+		this.#displayIDNameElements(
+			res, 'subject-',
+				'/admin/delete/subject/',
+				'/admin/edit/subject/',
+			)
+
+		this.#addButtonCallback = () => {
 			this.dataArea.appendChild(this.#addItemTableElement(
-					'/admin/add/subjects/',
-						this.#loadSubjects
-				))
-		})
+				'/admin/add/subjects/'
+			))
+		}
+
+		this.#displayAddButton()
 	}
 
 	#loadEdFormats()
@@ -160,14 +184,21 @@ export class AdminPanel
 
 	#displayEdFormats(res)
 	{
-		this.#displayIDNameElements(res, 'ed-format-')
+		this.#reloadFunc = this.#loadEdFormats
 
-		this.#displayAddButton(() => {
+		this.#displayIDNameElements(
+			res, 'ed-format-',
+				'/admin/delete/edFormat/',
+				'/admin/edit/edFormat/',
+			)
+
+		this.#addButtonCallback = () => {
 			this.dataArea.appendChild(this.#addItemTableElement(
-				'/admin/add/edFormat/',
-				this.#loadEdFormats
+				'/admin/add/edFormat/'
 			))
-		})
+		}
+
+		this.#displayAddButton()
 	}
 
 	#loadCities()
@@ -192,17 +223,24 @@ export class AdminPanel
 
 	#displayCities(res)
 	{
-		this.#displayIDNameElements(res, 'city-')
+		this.#reloadFunc = this.#loadCities
 
-		this.#displayAddButton(() => {
+		this.#displayIDNameElements(
+			res, 'city-',
+				'/admin/delete/city/',
+				'/admin/edit/city/',
+			)
+
+		this.#addButtonCallback = () => {
 			this.dataArea.appendChild(this.#addItemTableElement(
-					'/admin/add/city/',
-					this.#loadCities
-				))
-		})
+				'/admin/add/city/'
+			))
+		}
+
+		this.#displayAddButton()
 	}
 
-	#displayIDNameElements(res, IDPrefix)
+	#displayIDNameElements(res, IDPrefix, deleteAddress, editAddress)
 	{
 		while (this.dataArea.lastChild) {
 			this.dataArea.lastChild.remove()
@@ -211,7 +249,9 @@ export class AdminPanel
 		let elements = []
 
 		for (let i = 0; i <  res.length; i++) {
-			elements.push(this.#createTableElement(res[i]['ID'], res[i]['NAME'], IDPrefix))
+			elements.push(this.#createTableElement(
+				res[i]['ID'], res[i]['NAME'], IDPrefix, deleteAddress, editAddress
+			))
 		}
 
 		elements.reverse()
@@ -229,19 +269,19 @@ export class AdminPanel
 		)
 	}
 
-	#displayAddButton(addButtonCallback)
+	#displayAddButton()
 	{
 		if (!this.addButton) {
-			this.addButton = this.#createAddButton(addButtonCallback)
+			this.addButton = this.#createAddButton(this.#addButtonCallback)
 		}
 		if (this.addButtonArea.children.length === 0) {
 			this.addButtonArea.appendChild(this.addButton)
 		}
 
-		this.addButton.onclick = addButtonCallback
+		this.addButton.onclick = () => { this.#addButtonCallback(); this.addButton.remove() }
 	}
 
-	#createTableElement(ID, name, elemIDPrefix, role = null)
+	#createTableElement(ID, name, elemIDPrefix, deleteAddress, editAddress, role = null)
 	{
 		let elem = this.#createTableElementContainer()
 		elem.id = elemIDPrefix + ID
@@ -266,7 +306,49 @@ export class AdminPanel
 		let editButton = this.#createButton(
 			'hsl(187,100%,41%)', 'hsl(187,100%,60%)',
 			'Edit', () => {
+				let elemNameInput = document.createElement('input')
+				elemNameInput.id = elem.id + '-input'
+				elemNameInput.classList.add('input-custom', 'edit-input-max-width')
+				elemNameInput.value = elemName.innerText
+				elemName.replaceWith(elemNameInput)
 
+				editButton.removeEventListener('mouseenter', () => {
+					editButton.style.backgroundColor = 'hsl(187,100%,60%)'
+				})
+
+				editButton.removeEventListener('mouseleave', () => {
+					editButton.style.backgroundColor = 'hsl(187,100%,41%)'
+				})
+
+				let cancelButton = this.#createButton(
+					'hsl(348, 100%, 61%)', 'hsl(348, 100%, 70%)',
+					'Cancel', () => {
+						elemNameInput.replaceWith(elemName)
+					})
+
+				deleteButton.replaceWith(cancelButton)
+
+				let confirmButton = this.#createButton(
+					'hsl(86,100%,45%)', 'hsl(86,100%,65%)',
+					'Confirm', () => {
+						BX.ajax.post(
+							editAddress,
+							{
+								ID: ID,
+								name: elemNameInput.value,
+							},
+							(res) => {
+								console.log(res)
+								this.#reloadFunc()
+								res = JSON.parse(res)
+								if (res['TYPE'] !== 'OK') {
+									this.errorMsgArea.innerHTML = this.#createErrorHTML(res['MESSAGE'])
+								}
+							}
+						)
+					})
+
+				editButton.replaceWith(confirmButton)
 			})
 
 		editDelContainer.appendChild(editButton)
@@ -274,7 +356,16 @@ export class AdminPanel
 		let deleteButton = this.#createButton(
 			'hsl(348, 100%, 61%)', 'hsl(348, 100%, 70%)',
 			'Delete', () => {
-
+				BX.ajax.post(
+					deleteAddress,
+					{
+						ID: ID,
+					},
+					(res) => {
+						console.log(res)
+						this.#reloadFunc()
+					}
+				)
 			})
 
 		editDelContainer.appendChild(deleteButton)
@@ -300,10 +391,8 @@ export class AdminPanel
 		return elem
 	}
 
-	#addItemTableElement(addItemAddress, reloadFunc)
+	#addItemTableElement(addItemAddress)
 	{
-		this.#reloadFunc = reloadFunc
-
 		let form = this.#createTableElementContainer()
 		form.id = 'add-form'
 
@@ -328,6 +417,10 @@ export class AdminPanel
 					(res) => {
 						console.log(res)
 						this.#reloadFunc()
+						res = JSON.parse(res)
+						if (res['TYPE'] !== 'OK') {
+							this.errorMsgArea.innerHTML = this.#createErrorHTML(res['MESSAGE'])
+						}
 					}
 				)
 			})
@@ -338,6 +431,7 @@ export class AdminPanel
 			'hsl(348, 100%, 61%)', 'hsl(348, 100%, 70%)',
 			'Cancel', () => {
 				form.remove()
+				this.#displayAddButton()
 			})
 
 		confirmCancelContainer.appendChild(cancelButton)
@@ -367,5 +461,12 @@ export class AdminPanel
 		button.onclick = callback
 
 		return button
+	}
+
+	#createErrorHTML(text)
+	{
+		return `<article class="message is-danger">
+            		<div class="message-body">${text}</div>
+        		</article>`
 	}
 }

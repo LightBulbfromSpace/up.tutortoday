@@ -117,4 +117,28 @@ return function (RoutingConfigurator $routes) {
         global $USER;
         return (new AdminController((int)$USER->GetID()))->addCity(getPostList());
     });
+    $routes->post('/admin/edit/subject/', function () {
+        global $USER;
+        return (new AdminController((int)$USER->GetID()))->editSubject(getPostList());
+    });
+    $routes->post('/admin/edit/edFormat/', function () {
+        global $USER;
+        return (new AdminController((int)$USER->GetID()))->editEdFormat(getPostList());
+    });
+    $routes->post('/admin/edit/city/', function () {
+        global $USER;
+        return (new AdminController((int)$USER->GetID()))->editCity(getPostList());
+    });
+    $routes->post('/admin/delete/subject/', function () {
+        global $USER;
+        return (new AdminController((int)$USER->GetID()))->deleteSubject(getPostList());
+    });
+    $routes->post('/admin/delete/edFormat/', function () {
+        global $USER;
+        return (new AdminController((int)$USER->GetID()))->deleteEdFormat(getPostList());
+    });
+    $routes->post('/admin/delete/city/', function () {
+        global $USER;
+        return (new AdminController((int)$USER->GetID()))->deleteCity(getPostList());
+    });
 };

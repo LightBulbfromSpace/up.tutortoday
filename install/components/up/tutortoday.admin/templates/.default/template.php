@@ -10,6 +10,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
 <script src="/local/components/up/tutortoday.admin/templates/.default/scripts.js"></script>
 <div class="container-custom">
+    <div id="error-message-area"></div>
     <div class="menu-button-container" id="menu-button-container">
         <button id="admin-users-button" class="small-container menu-button menu-button-active">Users</button>
         <button id="admin-subjects-button" class="small-container menu-button">Subjects</button>
@@ -23,6 +24,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
     BX.ready(() => {
         hideWarning()
         window.TutortodayAdminPanel = new BX.Up.Tutortoday.AdminPanel({
+            errorMsgAreaID: 'error-message-area',
             dataAreaID: 'admin-data-area',
             addButtonAreaID: 'admin-add-button-area',
             buttonsContainerID: 'menu-button-container',

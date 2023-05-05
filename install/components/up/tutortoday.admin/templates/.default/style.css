@@ -6,49 +6,15 @@
     flex-direction: column;
     padding-top: 80px;
     width: 100vw;
-    height: 75vh;
+    height: 82vh;
     flex-grow: 1;
     position: relative;
-    margin-top: 4.25rem;
+    margin-top: 1.75rem;
 }
 
 .menu-button-container {
     height: 40px;
 }
-
-/*.input-custom:focus, .input-custom:focus-visible {*/
-/*    border: 1px solid #363636;*/
-/*    box-shadow: 0 0 0 0.125em rgb(72 95 199 / 25%);*/
-/*    outline: none;*/
-/*}*/
-
-/*.input-custom {*/
-/*    box-shadow: inset 0 0.0625em 0.125em rgb(10 10 10 / 5%);*/
-/*    max-width: 100%;*/
-/*    width: 100%;*/
-/*    background-color: #fff;*/
-/*    !*border-color: #dbdbdb;*!*/
-/*    border-radius: 4px;*/
-/*    color: #363636;*/
-/*    -webkit-appearance: none;*/
-/*    align-items: center;*/
-/*    border: 1px solid #dbdbdb;*/
-/*    display: inline-flex;*/
-/*    font-size: 1rem;*/
-/*    height: 2.5em;*/
-/*    justify-content: flex-start;*/
-/*    line-height: 1.5;*/
-/*    padding: calc(0.5em - 1px) calc(0.75em - 1px);*/
-/*    position: relative;*/
-/*    vertical-align: top;*/
-/*}*/
-
-/*.button-container {*/
-/*    display: flex;*/
-/*    justify-content: space-evenly;*/
-/*    align-items: center;*/
-/*    margin: 10px;*/
-/*}*/
 
 .small-container {
     margin: 0 5px;
@@ -68,6 +34,11 @@ button:focus, button:focus-visible {
 .menu-button-active {
     border-bottom-width: 3px !important;
     transition-duration: 50ms;
+}
+
+#error-message-area {
+    margin-bottom: 1rem;
+    width: 478px;
 }
 
 #admin-data-area {
@@ -115,6 +86,10 @@ button:focus, button:focus-visible {
     max-width: 100%;
     font-size: 1rem;
     height: 2.5em;
+}
+
+.edit-input-max-width {
+    max-width: 40%;
 }
 
 .input-custom:focus, .input-custom:focus-visible {

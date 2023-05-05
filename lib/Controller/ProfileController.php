@@ -133,7 +133,7 @@ class ProfileController
         {
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
-        (new EducationService([$post['userID']]))->deleteSubject($post['subjectID']);
+        (new EducationService([$post['userID']]))->deleteUserSubject($post['subjectID']);
     }
 
     public static function getAllSubjectsJSON()

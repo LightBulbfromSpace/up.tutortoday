@@ -81,7 +81,17 @@ class AdminController
             return (new ErrorService('perm_denied'))->getLastError();
         }
 
-        return json_encode(EducationService::addNewSubject($dict['name']));
+        if (trim($dict['name']) === '')
+        {
+            return (new ErrorService('empty_field'))->getLastError();
+        }
+
+        $result = EducationService::addNewSubject($dict['name']);
+        if ($result === true)
+        {
+            return (new ErrorService('ok'))->getLastError();
+        }
+        return json_encode($result);
     }
 
     public function addEdFormat(ParameterDictionary $dict)
@@ -91,7 +101,18 @@ class AdminController
             return (new ErrorService('perm_denied'))->getLastError();
         }
 
-        return json_encode(EducationService::addNewEdFormat($dict['name']));
+        if (trim($dict['name']) === '')
+        {
+            return (new ErrorService('empty_field'))->getLastError();
+        }
+
+        $result = EducationService::addNewEdFormat($dict['name']);
+        if ($result === true)
+        {
+            return (new ErrorService('ok'))->getLastError();
+        }
+
+        return json_encode($result);
     }
 
     public function addCity(ParameterDictionary $dict)
@@ -101,6 +122,113 @@ class AdminController
             return (new ErrorService('perm_denied'))->getLastError();
         }
 
-        return json_encode(EducationService::addNewCity($dict['name']));
+        if (trim($dict['name']) === '')
+        {
+            return (new ErrorService('empty_field'))->getLastError();
+        }
+
+        $result = LocationService::addNewCity($dict['name']);
+        if ($result === true)
+        {
+            return (new ErrorService('ok'))->getLastError();
+        }
+
+        return json_encode($result);
+    }
+
+    public function deleteCity(ParameterDictionary $dict)
+    {
+        if (!$this->isAdmin())
+        {
+            return (new ErrorService('perm_denied'))->getLastError();
+        }
+
+        return json_encode(LocationService::deleteCity((int)$dict['ID']));
+    }
+
+    public function deleteSubject(ParameterDictionary $dict)
+    {
+        if (!$this->isAdmin())
+        {
+            return (new ErrorService('perm_denied'))->getLastError();
+        }
+
+        return json_encode(EducationService::deleteSubject((int)$dict['ID']));
+    }
+
+    public function deleteEdFormat(ParameterDictionary $dict)
+    {
+        if (!$this->isAdmin())
+        {
+            return (new ErrorService('perm_denied'))->getLastError();
+        }
+
+        return json_encode(EducationService::deleteEdFormat((int)$dict['ID']));
+    }
+
+    public function editSubject(ParameterDictionary $dict)
+    {
+        if (!$this->isAdmin())
+        {
+            return (new ErrorService('perm_denied'))->getLastError();
+        }
+
+        if (trim($dict['name']) === '')
+        {
+            return (new ErrorService('empty_field'))->getLastError();
+        }
+
+        $result = EducationService::editSubject((int)$dict['ID'], $dict['name']);
+
+        if ($result === true)
+        {
+            return (new ErrorService('ok'))->getLastError();
+        }
+
+        return json_encode($result);
+    }
+
+    public function editEdFormat(ParameterDictionary $dict)
+    {
+        if (!$this->isAdmin())
+        {
+            return (new ErrorService('perm_denied'))->getLastError();
+        }
+
+        if (trim($dict['name']) === '')
+        {
+            return (new ErrorService('empty_field'))->getLastError();
+        }
+
+        $result = EducationService::editEdFormat((int)$dict['ID'], $dict['name']);
+
+        if ($result === true)
+        {
+            return (new ErrorService('ok'))->getLastError();
+        }
+
+        return json_encode($result);
+    }
+
+    public function editCity(ParameterDictionary $dict)
+    {
+        if (!$this->isAdmin())
+        {
+            return (new ErrorService('perm_denied'))->getLastError();
+        }
+
+        if (trim($dict['name']) === '')
+        {
+            return (new ErrorService('empty_field'))->getLastError();
+        }
+
+        $result = LocationService::editCity((int)$dict['ID'], $dict['name']);
+
+        if ($result === true)
+        {
+            return (new ErrorService('ok'))->getLastError();
+        }
+
+        return json_encode($result);
     }
 }
