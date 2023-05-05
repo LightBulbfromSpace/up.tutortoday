@@ -104,4 +104,17 @@ return function (RoutingConfigurator $routes) {
         global $USER;
         return (new ProfileController((int)$USER->GetID()))->getFeedbacks(getPostList());
     });
+
+    $routes->post('/admin/add/subjects/', function () {
+        global $USER;
+        return (new AdminController((int)$USER->GetID()))->addSubject(getPostList());
+    });
+    $routes->post('/admin/add/edFormat/', function () {
+        global $USER;
+        return (new AdminController((int)$USER->GetID()))->addEdFormat(getPostList());
+    });
+    $routes->post('/admin/add/city/', function () {
+        global $USER;
+        return (new AdminController((int)$USER->GetID()))->addCity(getPostList());
+    });
 };

@@ -2,6 +2,7 @@
 
 namespace Up\Tutortoday\Services;
 
+use Up\Tutortoday\Model\Tables\CitiesTable;
 use Up\Tutortoday\Model\Tables\EducationFormatTable;
 use Up\Tutortoday\Model\Tables\RolesTable;
 use Up\Tutortoday\Model\Tables\SubjectTable;
@@ -36,6 +37,27 @@ class EducationService
             ->setOffset($offset)
             ->setLimit($itemsPerPage)
             ->fetchCollection();
+    }
+
+    public static function addNewSubject(string $name)
+    {
+        return SubjectTable::add([
+            'NAME' => $name,
+        ]);
+    }
+
+    public static function addNewEdFormat(string $name)
+    {
+        return EducationFormatTable::add([
+            'NAME' => $name,
+        ]);
+    }
+
+    public static function addNewCity(string $name)
+    {
+        return CitiesTable::add([
+            'NAME' => $name,
+        ]);
     }
 
     public function getUsersIDs(): array

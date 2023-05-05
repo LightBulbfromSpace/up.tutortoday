@@ -7,6 +7,9 @@ export class AdminPanel
 	#subjectsPage = 0
 	#edFormatsPage = 0
 	#citiesPage = 0
+
+	#reloadFunc
+
 	constructor(options = {})
 	{
 		if (!Type.isStringFilled(options.buttonsContainerID)) {
@@ -21,7 +24,7 @@ export class AdminPanel
 
 
 		if (!Type.isStringFilled(options.dataAreaID)) {
-			throw new Error('Feedbacks: "buttonsContainerID" is required')
+			throw new Error('Feedbacks: "dataAreaID" is required')
 		}
 
 		this.dataArea = document.getElementById(options.dataAreaID)
@@ -29,6 +32,18 @@ export class AdminPanel
 		if (!this.dataArea) {
 			throw new Error(`Feedbacks: element with ID "${options.dataAreaID}" not found`)
 		}
+
+
+		if (!Type.isStringFilled(options.addButtonAreaID)) {
+			throw new Error('Feedbacks: "addButtonAreaID" is required')
+		}
+
+		this.addButtonArea = document.getElementById(options.addButtonAreaID)
+
+		if (!this.addButtonArea) {
+			throw new Error(`Feedbacks: element with ID "${options.addButtonAreaID}" not found`)
+		}
+
 
 		if (!Type.isStringFilled(options.userButtonID)) {
 			throw new Error('Feedbacks: "userButtonID" is required')
@@ -79,6 +94,8 @@ export class AdminPanel
 		}
 
 		this.citiesButton.onclick = () => {this.#loadCities()}
+
+		this.addButton = this.#createAddButton(() => {})
 	}
 
 	#loadUsers()
@@ -111,8 +128,13 @@ export class AdminPanel
 
 	#displaySubjects(res)
 	{
-		this.#displayIDNameElements(res, 'subject-', () => {
+		this.#displayIDNameElements(res, 'subject-')
 
+		this.#displayAddButton(() => {
+			this.dataArea.appendChild(this.#addItemTableElement(
+					'/admin/add/subjects/',
+						this.#loadSubjects
+				))
 		})
 	}
 
@@ -138,8 +160,13 @@ export class AdminPanel
 
 	#displayEdFormats(res)
 	{
-		this.#displayIDNameElements(res, 'ed-format-', () => {
+		this.#displayIDNameElements(res, 'ed-format-')
 
+		this.#displayAddButton(() => {
+			this.dataArea.appendChild(this.#addItemTableElement(
+				'/admin/add/edFormat/',
+				this.#loadEdFormats
+			))
 		})
 	}
 
@@ -165,12 +192,17 @@ export class AdminPanel
 
 	#displayCities(res)
 	{
-		this.#displayIDNameElements(res, 'city-', () => {
+		this.#displayIDNameElements(res, 'city-')
 
+		this.#displayAddButton(() => {
+			this.dataArea.appendChild(this.#addItemTableElement(
+					'/admin/add/city/',
+					this.#loadCities
+				))
 		})
 	}
 
-	#displayIDNameElements(res, IDPrefix, callback)
+	#displayIDNameElements(res, IDPrefix)
 	{
 		while (this.dataArea.lastChild) {
 			this.dataArea.lastChild.remove()
@@ -187,39 +219,31 @@ export class AdminPanel
 		elements.forEach((elem) => {
 			this.dataArea.appendChild(elem)
 		})
-
-		this.dataArea.appendChild(this.#createAddButton(callback))
 	}
 
 	#createAddButton(callback)
 	{
-		let addButton = document.createElement('button')
-		addButton.innerText = 'Add'
-		addButton.style.margin = '0 5px'
-		addButton.style.minHeight = '3rem'
-		addButton.style.width = '5rem'
-		addButton.style.backgroundColor = 'hsl(46,100%,56%)';
-		addButton.addEventListener('mouseenter', () => {
-			addButton.style.backgroundColor = 'hsl(46,100%,65%)';
-		})
+		return this.#createButton(
+			'hsl(46,100%,56%)', 'hsl(46,100%,65%)',
+			'Add', callback
+		)
+	}
 
-		addButton.addEventListener('mouseleave', () => {
-			addButton.style.backgroundColor = 'hsl(46,100%,56%)';
-		})
-		addButton.style.border = 'none'
-		addButton.style.borderRadius = '10px'
-		addButton.onclick = () => {callback()}
-		return addButton
+	#displayAddButton(addButtonCallback)
+	{
+		if (!this.addButton) {
+			this.addButton = this.#createAddButton(addButtonCallback)
+		}
+		if (this.addButtonArea.children.length === 0) {
+			this.addButtonArea.appendChild(this.addButton)
+		}
+
+		this.addButton.onclick = addButtonCallback
 	}
 
 	#createTableElement(ID, name, elemIDPrefix, role = null)
 	{
-		let elem = document.createElement('div')
-		elem.classList.add('box')
-		elem.style.display = 'flex'
-		elem.style.justifyContent = 'space-between'
-		elem.style.alignItems = 'center'
-		elem.style.width = '100%'
+		let elem = this.#createTableElementContainer()
 		elem.id = elemIDPrefix + ID
 
 		let elemID = document.createElement('div')
@@ -239,41 +263,19 @@ export class AdminPanel
 
 		elem.appendChild(editDelContainer)
 
-		let editButton = document.createElement('button')
-		editButton.innerText = 'Edit'
-		editButton.style.margin = '0 5px'
-		editButton.style.minHeight = '3rem'
-		editButton.style.minWidth = '5rem'
-		editButton.style.backgroundColor = 'hsl(187,100%,41%)';
-		editButton.style.border = 'none'
-		editButton.style.borderRadius = '10px'
+		let editButton = this.#createButton(
+			'hsl(187,100%,41%)', 'hsl(187,100%,60%)',
+			'Edit', () => {
 
-		editButton.addEventListener('mouseenter', () => {
-			editButton.style.backgroundColor = 'hsl(187,100%,60%)';
-		})
-
-		editButton.addEventListener('mouseleave', () => {
-			editButton.style.backgroundColor = 'hsl(187,100%,41%)';
-		})
+			})
 
 		editDelContainer.appendChild(editButton)
 
-		let deleteButton = document.createElement('button')
-		deleteButton.innerText = 'Delete'
-		deleteButton.style.margin = '0 5px'
-		deleteButton.style.minHeight = '3rem'
-		deleteButton.style.minWidth = '5rem'
-		deleteButton.style.backgroundColor = 'hsl(348, 100%, 61%)';
-		deleteButton.style.border = 'none'
-		deleteButton.style.borderRadius = '10px'
+		let deleteButton = this.#createButton(
+			'hsl(348, 100%, 61%)', 'hsl(348, 100%, 70%)',
+			'Delete', () => {
 
-		deleteButton.addEventListener('mouseenter', () => {
-			deleteButton.style.backgroundColor = 'hsl(348, 100%, 70%)';
-		})
-
-		deleteButton.addEventListener('mouseleave', () => {
-			deleteButton.style.backgroundColor = 'hsl(348, 100%, 61%)';
-		})
+			})
 
 		editDelContainer.appendChild(deleteButton)
 
@@ -285,5 +287,85 @@ export class AdminPanel
 		elem.appendChild(elemRole)
 
 		return elem
+	}
+
+	#createTableElementContainer()
+	{
+		let elem = document.createElement('div')
+		elem.classList.add('box')
+		elem.style.display = 'flex'
+		elem.style.justifyContent = 'space-between'
+		elem.style.alignItems = 'center'
+		elem.style.width = '100%'
+		return elem
+	}
+
+	#addItemTableElement(addItemAddress, reloadFunc)
+	{
+		this.#reloadFunc = reloadFunc
+
+		let form = this.#createTableElementContainer()
+		form.id = 'add-form'
+
+		let input = document.createElement('input')
+		input.id = 'add-input'
+		input.classList.add('input-custom')
+		input.required = true
+		form.appendChild(input)
+
+		let confirmCancelContainer = document.createElement('div')
+
+		form.appendChild(confirmCancelContainer)
+
+		let confirmButton = this.#createButton(
+			'hsl(86,100%,45%)', 'hsl(86,100%,65%)',
+			'Confirm', () => {
+				BX.ajax.post(
+					addItemAddress,
+					{
+						name: input.value,
+					},
+					(res) => {
+						console.log(res)
+						this.#reloadFunc()
+					}
+				)
+			})
+
+		confirmCancelContainer.appendChild(confirmButton)
+
+		let cancelButton = this.#createButton(
+			'hsl(348, 100%, 61%)', 'hsl(348, 100%, 70%)',
+			'Cancel', () => {
+				form.remove()
+			})
+
+		confirmCancelContainer.appendChild(cancelButton)
+
+		return form
+	}
+
+	#createButton(color, colorHover, text, callback)
+	{
+		let button = document.createElement('button')
+		button.innerText = text
+		button.style.margin = '0 5px'
+		button.style.minHeight = '3rem'
+		button.style.minWidth = '5rem'
+		button.style.backgroundColor = color
+		button.style.border = 'none'
+		button.style.borderRadius = '10px'
+
+		button.addEventListener('mouseenter', () => {
+			button.style.backgroundColor = colorHover;
+		})
+
+		button.addEventListener('mouseleave', () => {
+			button.style.backgroundColor = color;
+		})
+
+		button.onclick = callback
+
+		return button
 	}
 }

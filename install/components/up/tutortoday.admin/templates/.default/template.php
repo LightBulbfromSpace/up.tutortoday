@@ -17,12 +17,14 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         <button id="admin-cities-button" class="small-container menu-button">Cities</button>
     </div>
     <div id="admin-data-area"></div>
+    <div id="admin-add-button-area"></div>
 </div>
 <script>
     BX.ready(() => {
         hideWarning()
         window.TutortodayAdminPanel = new BX.Up.Tutortoday.AdminPanel({
             dataAreaID: 'admin-data-area',
+            addButtonAreaID: 'admin-add-button-area',
             buttonsContainerID: 'menu-button-container',
             userButtonID: 'admin-users-button',
             subjectsButtonID: 'admin-subjects-button',
