@@ -18,6 +18,10 @@ return function (RoutingConfigurator $routes) {
     $routes->get('/profile/{id}/settings/', new PublicPageController('/local/view/tutortoday/tutortoday-profile-settings.php'));
     $routes->get('/admin/', new PublicPageController('/local/view/tutortoday/tutortoday-admin.php'));
 
+    $routes->get('/admin/users/', function () {
+        global $USER;
+        return (new AdminController((int)$USER->GetID()))->getUsers(getGetList());
+    });
     $routes->get('/admin/subjects/', function () {
         global $USER;
         return (new AdminController((int)$USER->GetID()))->getSubjects(getGetList());
@@ -103,6 +107,11 @@ return function (RoutingConfigurator $routes) {
     $routes->post('/profile/feedbacks/', function () {
         global $USER;
         return (new ProfileController((int)$USER->GetID()))->getFeedbacks(getPostList());
+    });
+
+    $routes->post('/admin/user/block/', function () {
+        global $USER;
+        return (new AdminController((int)$USER->GetID()))->setUserBlockInfo(getPostList());
     });
 
     $routes->post('/admin/add/subjects/', function () {

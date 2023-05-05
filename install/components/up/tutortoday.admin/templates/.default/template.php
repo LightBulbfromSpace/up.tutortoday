@@ -17,7 +17,11 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         <button id="admin-ed-formats-button" class="small-container menu-button">Education formats</button>
         <button id="admin-cities-button" class="small-container menu-button">Cities</button>
     </div>
-    <div id="admin-data-area"></div>
+    <div class="data-container">
+        <button id="previous-button" class="pagination-button">&lt;</button>
+        <div id="admin-data-area"></div>
+        <button id="next-button" class="pagination-button">&gt;</button>
+    </div>
     <div id="admin-add-button-area"></div>
 </div>
 <script>
@@ -32,6 +36,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             subjectsButtonID: 'admin-subjects-button',
             edFormatsButtonID: 'admin-ed-formats-button',
             citiesButtonID: 'admin-cities-button',
+            previousButtonID: 'previous-button',
+            nextButtonID: 'next-button',
         })
     })
 </script>

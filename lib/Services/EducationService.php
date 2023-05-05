@@ -28,6 +28,13 @@ class EducationService
             ->fetchCollection();
     }
 
+    public static function getNumberOfAllSubjects() {
+        return SubjectTable::query()
+            ->setSelect(['ID'])
+            ->fetchCollection()
+            ->count();
+    }
+
     public static function getSubjectsPerPage(int $pageFromNull, int $itemsPerPage)
     {
         $offset = $pageFromNull * $itemsPerPage;
@@ -45,6 +52,14 @@ class EducationService
             'NAME' => $name,
         ]);
         return $result->isSuccess();
+    }
+
+    public static function getNumberOfAllEdFormats()
+    {
+        return EducationFormatTable::query()
+            ->setSelect(['ID'])
+            ->fetchCollection()
+            ->count();
     }
 
     public static function addNewEdFormat(string $name)

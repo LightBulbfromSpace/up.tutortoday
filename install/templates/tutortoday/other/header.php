@@ -3,6 +3,9 @@
  * @var CMain $APPLICATION
  */
 
+use Bitrix\Main\Localization\Loc;
+use Up\Tutortoday\Controller\AdminController;
+
 global $USER;
 
 $linkToProfile = '/login/';
@@ -11,7 +14,9 @@ if ($USER->GetID() != null)
     $linkToProfile = "/profile/{$USER->GetID()}/";
 }
 
-use Bitrix\Main\Localization\Loc;
+$isAdmin = (new AdminController($USER->GetID()))->isAdmin();
+
+
 Loc::loadMessages(__FILE__);
 ?>
 
@@ -37,6 +42,11 @@ Loc::loadMessages(__FILE__);
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
+            <?php if ($isAdmin): ?>
+                <li class="nav-item">
+                    <a class="nav-link" id="myProfileButton" href="/admin/">Admin Panel</a>
+                </li>
+            <?php endif; ?>
             <li class="nav-item">
                 <a class="nav-link" id="myProfileButton" href="<?=$linkToProfile?>">My Profile</a>
             </li>

@@ -23,6 +23,34 @@ class AdminController
         return $role['NAME'] === 'administrator';
     }
 
+    public function getUsers(ParameterDictionary $dict)
+    {
+        if (!$this->isAdmin())
+        {
+            return (new ErrorService('perm_denied'))->getLastError();
+        }
+
+        $offset = (int)$dict['page'] * (int)$dict['itemsPerPage'];
+
+        $service = (new UserService($this->userID));
+        $service->setRoles(['student', 'tutor']);
+        $service->setFetchAllAvailableUsers(true);
+        $result = $service->getUsersByPage($offset, (int)$dict['itemsPerPage'], true);
+        $users = [];
+        foreach ($result as $item)
+        {
+            $users[] = [
+                'ID' => $item['ID'],
+                'NAME' => $item['fullName']['name'],
+                'LAST_NAME' => $item['fullName']['lastName'],
+                'SECOND_NAME' => $item['fullName']['secondName'],
+                'ROLE' => $item['ROLE']
+            ];
+        }
+
+        return $users;
+    }
+
     public function getSubjects(ParameterDictionary $dict)
     {
         if (!$this->isAdmin())
@@ -36,6 +64,8 @@ class AdminController
         {
             $subjects[] = ['ID' => $item['ID'], 'NAME' => $item['NAME']];
         }
+
+        $subjects['TOTAL'] = EducationService::getNumberOfAllSubjects();
 
         return $subjects;
     }
@@ -54,6 +84,8 @@ class AdminController
             $edFormats[] = ['ID' => $item['ID'], 'NAME' => $item['NAME']];
         }
 
+        $edFormats['TOTAL'] = EducationService::getNumberOfAllEdFormats();
+
         return $edFormats;
     }
 
@@ -70,6 +102,8 @@ class AdminController
         {
             $cities[] = ['ID' => $item['ID'], 'NAME' => $item['NAME']];
         }
+
+        $cities['TOTAL'] = LocationService::getNumberOfAllCities();
 
         return $cities;
     }
@@ -230,5 +264,14 @@ class AdminController
         }
 
         return json_encode($result);
+    }
+
+    public function setUserBlockInfo(ParameterDictionary $dict)
+    {
+        if (!$this->isAdmin() || !check_bitrix_sessid())
+        {
+            return (new ErrorService('perm_denied'))->getLastError();
+        }
+        return (new UserService($this->userID))->setBlockStatus($dict['blocked']);
     }
 }

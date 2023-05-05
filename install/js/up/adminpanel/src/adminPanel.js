@@ -1,4 +1,5 @@
 import {Type} from 'main.core';
+// import {concat} from "../../../../../../../../bitrix/modules/main/install/js/main/core/bundle.config";
 
 export class AdminPanel
 {
@@ -75,7 +76,7 @@ export class AdminPanel
 		this.userButton.onclick = () => {this.#loadUsers()}
 
 		if (!Type.isStringFilled(options.subjectsButtonID)) {
-			throw new Error('Feedbacks: "userButtonID" is required')
+			throw new Error('Feedbacks: "subjectsButtonID" is required')
 		}
 
 		this.subjectsButton = document.getElementById(options.subjectsButtonID)
@@ -88,7 +89,7 @@ export class AdminPanel
 
 
 		if (!Type.isStringFilled(options.edFormatsButtonID)) {
-			throw new Error('Feedbacks: "userButtonID" is required')
+			throw new Error('Feedbacks: "edFormatsButtonID" is required')
 		}
 
 		this.edFormatsButton = document.getElementById(options.edFormatsButtonID)
@@ -101,7 +102,7 @@ export class AdminPanel
 
 
 		if (!Type.isStringFilled(options.citiesButtonID)) {
-			throw new Error('Feedbacks: "userButtonID" is required')
+			throw new Error('Feedbacks: "citiesButtonID" is required')
 		}
 
 		this.citiesButton = document.getElementById(options.citiesButtonID)
@@ -112,15 +113,52 @@ export class AdminPanel
 
 		this.citiesButton.onclick = () => {this.#loadCities()}
 
+
+		if (!Type.isStringFilled(options.previousButtonID)) {
+			throw new Error('Feedbacks: "previousButtonID" is required')
+		}
+
+		this.previousButton = document.getElementById(options.previousButtonID)
+
+		if (!this.previousButton) {
+			throw new Error(`Feedbacks: element with ID "${options.previousButtonID}" not found`)
+		}
+
+		if (!Type.isStringFilled(options.nextButtonID)) {
+			throw new Error('Feedbacks: "nextButtonID" is required')
+		}
+
+		this.nextButton = document.getElementById(options.nextButtonID)
+
+		if (!this.nextButton) {
+			throw new Error(`Feedbacks: element with ID "${options.nextButtonID}" not found`)
+		}
+
 		this.addButton = this.#createAddButton(() => {})
+
+		this.#loadUsers()
 	}
 
 	#loadUsers()
 	{
+		while (this.addButtonArea.lastChild) {
+			this.addButtonArea.lastChild.remove()
+		}
 		for (let i = 0; i < this.buttonsContainer.children.length; i++) {
 			this.buttonsContainer.children[i].classList.remove('menu-button-active')
 		}
 		this.userButton.classList.add('menu-button-active')
+		BX.ajax.get(
+			'/admin/users/',
+			{
+				page: this.#usersPage,
+				itemsPerPage: this.#itemsPerPage,
+			},
+			(res) => {
+				console.log(res)
+				this.#displayUserElements(JSON.parse(res), '/admin/user/block/')
+			}
+		)
 	}
 
 	#loadSubjects()
@@ -158,6 +196,8 @@ export class AdminPanel
 				'/admin/add/subjects/'
 			))
 		}
+
+		this.#bindPaginationButtons(this.#subjectsPage, res['maxPage'])
 
 		this.#displayAddButton()
 	}
@@ -198,6 +238,8 @@ export class AdminPanel
 			))
 		}
 
+		this.#bindPaginationButtons(this.#edFormatsPage, res['maxPage'])
+
 		this.#displayAddButton()
 	}
 
@@ -237,6 +279,8 @@ export class AdminPanel
 			))
 		}
 
+		this.#bindPaginationButtons(this.#citiesPage, res['maxPage'])
+
 		this.#displayAddButton()
 	}
 
@@ -259,6 +303,35 @@ export class AdminPanel
 		elements.forEach((elem) => {
 			this.dataArea.appendChild(elem)
 		})
+	}
+
+	#displayUserElements(res, blockAddress)
+	{
+		while (this.dataArea.lastChild) {
+			this.dataArea.lastChild.remove()
+		}
+
+		let elements = []
+
+		for (let i = 0; i <  res.length; i++) {
+			elements.push(this.#createUserElement(
+				res[i]['ID'],
+				[res[i]['LAST_NAME'], res[i]['NAME'], res[i]['SECOND_NAME']].join(' '),
+				'user-',
+				blockAddress,
+				res[i]['ROLE']['NAME'],
+			))
+		}
+
+		elements.reverse()
+
+		elements.forEach((elem) => {
+			this.dataArea.appendChild(elem)
+		})
+
+		this.#reloadFunc = this.#loadUsers
+
+		this.#bindPaginationButtons(this.#usersPage, res['maxPage'])
 	}
 
 	#createAddButton(callback)
@@ -373,9 +446,78 @@ export class AdminPanel
 		if (role === null) return elem
 
 		let elemRole = document.createElement('div')
-		elemRole.innerText = name
+		elemRole.innerText = role
 
 		elem.appendChild(elemRole)
+
+		return elem
+	}
+
+	#createUserElement(ID, fullName, elemIDPrefix, blockAddress, role)
+	{
+		let elem = this.#createTableElementContainer()
+		elem.id = elemIDPrefix + ID
+		elem.style.justifyContent = 'flex-start'
+
+		let elemID = document.createElement('div')
+		elemID.innerText = ID
+		elemID.style.minWidth ='40px'
+
+		elem.appendChild(elemID)
+
+		//let elemName = `<a href="/profile/${ID}/" target="_blank" rel="noopener noreferrer">${fullName}</a>`
+		let elemName = document.createElement('a')
+		elemName.href = `/profile/${ID}/`
+		elemName.target = '_black'
+		elemName.rel = 'noopener noreferrer'
+		elemName.innerText = fullName
+		elemName.style.minWidth ='230px'
+		elemName.style.color = '#4a4a4a'
+
+		elem.appendChild(elemName)
+
+		let elemRole = document.createElement('div')
+		elemRole.innerText = role
+		elemRole.style.minWidth = '70px'
+		elemRole.style.display = 'flex'
+		elemRole.style.justifyContent = 'center'
+		elemRole.classList.add('box-dark-element-custom')
+
+		elem.appendChild(elemRole)
+
+		let blockButton = this.#createButton(
+			'hsl(348, 100%, 61%)', 'hsl(348, 100%, 70%)',
+			'Block', () => {
+				BX.ajax({
+					url: blockAddress,
+					data: {
+						userID: ID,
+						blocked: 'Y',
+						sessid: BX.bitrix_sessid(),
+					},
+					method: 'POST',
+					dataType: 'json',
+					timeout: 30,
+					onsuccess: (res) => {
+						console.log(res)
+						blockButton.replaceWith(
+							this.#createUnblockButton(blockAddress, ID, blockButton)
+						)
+					},
+					onfailure: (e) => {
+						console.log(e)
+					}
+				})
+			})
+		// blockButton.onclick = () => {
+		// 	blockButton.replaceWith(
+		// 		this.#createUnblockButton(blockAddress, ID, blockButton)
+		// 	)
+		// }
+
+		blockButton.style.marginLeft = '20px'
+
+		elem.appendChild(blockButton)
 
 		return elem
 	}
@@ -468,5 +610,51 @@ export class AdminPanel
 		return `<article class="message is-danger">
             		<div class="message-body">${text}</div>
         		</article>`
+	}
+
+	#createUnblockButton(blockAddress, userID, blockButton)
+	{
+		let unblockButton = this.#createButton(
+			'hsl(0,0%,85%)', 'hsl(0,0%,70%)', 'Unblock',
+			() => {
+				BX.ajax.post(
+					blockAddress,
+					{
+						userID: userID,
+						blocked: 'N',
+						sessid: BX.bitrix_sessid(),
+					},
+					(res) => {
+						console.log(res)
+					}
+				)
+			})
+		unblockButton.onclick = () => {
+			unblockButton.replaceWith(blockButton)
+		}
+		return unblockButton
+	}
+
+	#bindPaginationButtons(page, maxPage)
+	{
+		this.previousButton.onclick = () => {
+			if (page <= 0 ) {
+				this.previousButton.display = 'none'
+				return
+			}
+			this.previousButton.display = 'flex'
+			page--
+			this.#reloadFunc()
+		}
+
+		this.nextButton.onclick = () => {
+			if (page >= maxPage ) {
+				this.nextButton.display = 'none'
+				return
+			}
+			this.nextButton.display = 'flex'
+			page++
+			this.#reloadFunc()
+		}
 	}
 }

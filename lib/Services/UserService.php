@@ -261,7 +261,7 @@ class UserService
         ];
     }
 
-    public function getUsersByPage(int $offset = 0, int $limit = 50)
+    public function getUsersByPage(int $offset = 0, int $limit = 50, bool $short = false)
     {
         if ($offset < 0)
         {
@@ -279,7 +279,7 @@ class UserService
             ->where('WORK_COMPANY', SITE_NAME);
 
         $query = UserTable::query()
-            ->setSelect(['ID', 'NAME', 'LAST_NAME', 'SECOND_NAME', 'WORK_CITY'])
+            ->setSelect(['ID', 'NAME', 'LAST_NAME', 'SECOND_NAME', 'WORK_CITY', 'WORK_POSITION'])
             ->whereIn('WORK_POSITION', $this->roleIDs)
             ->where('WORK_COMPANY', SITE_NAME)
             ->setOrder(['ID' => 'DESC'])
@@ -302,6 +302,40 @@ class UserService
             $fetchedUserIDs[] = $user['ID'];
         }
 
+        $result = [];
+
+        $roles = RolesTable::query()
+            ->setSelect(['*'])
+            ->whereIn('ID', $this->roleIDs)
+            ->fetchCollection();
+
+        foreach ($users as $i => $user)
+        {
+            $result[$i] = [
+                'ID' => $user['ID'],
+                'fullName' => [
+                    'name' => $user['NAME'],
+                    'lastName' => $user['LAST_NAME'],
+                    'secondName' => $user['SECOND_NAME'],
+                ],
+            ];
+            foreach ($roles as $role)
+            {
+                if ((int)$user['WORK_POSITION'] === (int)$role['ID'])
+                {
+                    $result[$i]['ROLE'] = [
+                        'ID' => $role['ID'],
+                        'NAME' => $role['NAME'],
+                    ];
+                    break;
+                }
+            }
+        }
+
+        if ($short) {
+            return $result;
+        }
+
         $descriptions = UserDescriptionTable::query()
             ->setSelect(['USER_ID', 'DESCRIPTION'])
             ->whereIn('USER_ID', $fetchedUserIDs)
@@ -321,6 +355,8 @@ class UserService
 
         $photos = (new ImagesService())->getProfileImages($this->userIDs);
 
+
+        //TODO: change this
         $result = [];
 
         foreach ($users as $i => $user)
@@ -647,5 +683,15 @@ class UserService
             'ID' => $roleID,
             'NAME' => $result['NAME'],
         ];
+    }
+
+    public function setBlockStatus(mixed $blocked)
+    {
+        $user = new CUser();
+        $user->update($this->observedUserID, [
+            'BLOCKED' => $blocked,
+        ]);
+
+        return true;
     }
 }

@@ -61,4 +61,12 @@ class LocationService
         ]);
         return $result->isSuccess();
     }
+
+    public static function getNumberOfAllCities()
+    {
+        return CitiesTable::query()
+            ->setSelect(['ID'])
+            ->fetchCollection()
+            ->count();
+    }
 }
