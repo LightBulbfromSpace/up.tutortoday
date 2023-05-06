@@ -44,7 +44,7 @@ this.BX.Up = this.BX.Up || {};
 	      }
 	      var message = document.createElement('article');
 	      message.classList.add('message', 'is-success');
-	      message.innerHTML = "<div class=\"message-header\">\n\t\t\t\t\t\t\t\t<p>Success</p>\n\t\t\t\t\t\t\t\t<button class=\"delete\" id=\"popup-delete-button\"></button>\n\t\t\t\t\t\t\t  </div>\n\t\t\t\t\t\t\t  <div class=\"message-body\">\n\t\t\t\t\t\t\t\t  Filters used: ".concat(messageText, ".\n\t\t\t\t\t\t\t  </div>");
+	      message.innerHTML = "<div class=\"message-header\">\n\t\t\t\t\t\t\t\t<p>Success</p>\n\t\t\t\t\t\t\t\t<button class=\"delete\" id=\"popup-delete-button\"></button>\n\t\t\t\t\t\t\t  </div>\n\t\t\t\t\t\t\t  <div id=\"filter-used\" class=\"message-body\">\n\t\t\t\t\t\t\t\t  Filters used: ".concat(messageText, ".\n\t\t\t\t\t\t\t  </div>");
 	      message.style.position = 'fixed';
 	      message.style.margin = '40% 5% 5% 75%';
 	      message.style.zIndex = '100';

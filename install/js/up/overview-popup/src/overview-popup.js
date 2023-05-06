@@ -60,7 +60,7 @@ export class OverviewPopup
 								<p>Success</p>
 								<button class="delete" id="popup-delete-button"></button>
 							  </div>
-							  <div class="message-body">
+							  <div id="filter-used" class="message-body">
 								  Filters used: ${messageText}.
 							  </div>`
 

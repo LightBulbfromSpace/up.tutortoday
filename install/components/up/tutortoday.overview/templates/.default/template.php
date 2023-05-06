@@ -211,7 +211,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             subjects: <?=isset($arResult['filters']['subjects']) ? 'true' : 'false'?>,
             city: <?=isset($arResult['filters']['cities']) ? 'true' : 'false'?>,
             price: <?=isset($arResult['filters']['maxPrice']) || isset($arResult['filters']['minPrice']) ? 'true' : 'false'?>,
-            preferences: <?=isset($arResult['myPreferences']) ? 'true' : 'false'?>,
+            preferences: <?=$arResult['myPreferences'] ? 'true' : 'false'?>,
         })
         window.filtersOverviewPopupTutortoday.displayMessage()
     })
