@@ -163,7 +163,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <nav role="navigation" class="container-row-custom">
                     <ul class="pagination-list">
                         <li>
-                            <a class="pagination-link" href="/?page=1">1</a>
+                            <a class="pagination-link" href="/overview/?page=1">1</a>
                         </li>
                         <li>
                             <span class="pagination-ellipsis">&hellip;</span>
@@ -191,7 +191,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                             <span class="pagination-ellipsis">&hellip;</span>
                         </li>
                         <li>
-                            <a class="pagination-link" href="/?<?=$arResult['currentURIParams']?>&page=<?=$arResult['maxPage']?>"><?=$arResult['maxPage']?></a>
+                            <a class="pagination-link" href="/overview/?<?=$arResult['currentURIParams']?>&page=<?=$arResult['maxPage']?>"><?=$arResult['maxPage']?></a>
                         </li>
                     </ul>
                 </nav>
