@@ -204,10 +204,11 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         let elems = document.getElementsByClassName('tablebodytext')
         if (elems[0]) {
             elems[0].remove()
-    })
-    let input = document.getElementById('file-input')
-    BX.bind(input, 'input', () => {
-        console.log('here')
-        updatePhoto()
+        }
+        let input = document.getElementById('file-input')
+        input.addEventListener('input', () => {
+            console.log('here')
+            updatePhoto()
+        })
     })
 </script>

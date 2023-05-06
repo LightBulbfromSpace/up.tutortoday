@@ -348,6 +348,9 @@ function displayAddPhotoForm(imgSrc) {
                                    </div>
                                </form>`
     document.getElementById('add-photo-form-area').appendChild(formContainer)
+    document.getElementById('file-input').addEventListener('input', () => {
+        updatePhoto()
+    })
     turnOnOverlay()
 }
 
@@ -386,7 +389,6 @@ function updatePhoto() {
         (res) => {
             console.log(res)
             loadPhoto(res)
-            BX.setCookie('avatarSrc', res)
             ToConfirmButton()
         },
         null,
