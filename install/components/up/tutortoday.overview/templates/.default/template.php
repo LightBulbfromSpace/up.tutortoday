@@ -87,7 +87,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                         </label>
                     </div>
                 <?php endif; ?>
-                <button type="submit" class="btn mt-4 ml-4 btn-danger">Find</button>
+                <button type="submit" id="findButton" class="btn mt-4 ml-4 btn-danger">Find</button>
                 <a class="btn mt-4 ml-4 btn-danger" href="/">Reset</a>
             </form>
         </div>
