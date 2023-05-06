@@ -7,9 +7,12 @@ use Up\Tutortoday\Services\HTMLHelper;
 
 global $USER;
 
+\Bitrix\Main\UI\Extension::load('main.core');
+\Bitrix\Main\UI\Extension::load('up.overview-popup');
+
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
-
+<div id="message-area"></div>
 <div class="container-fluid main-container-custom">
     <div class="row">
         <div class="col-md-3 bg-light sidebar">
@@ -202,6 +205,15 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         if (elems[0]) {
             elems[0].remove()
         }
+        window.filtersOverviewPopupTutortoday = new BX.Up.Tutortoday.OverviewPopup({
+            nodeID: 'message-area',
+            edFormats: <?=isset($arResult['filters']['edFormats']) ? 'true' : 'false'?>,
+            subjects: <?=isset($arResult['filters']['subjects']) ? 'true' : 'false'?>,
+            city: <?=isset($arResult['filters']['cities']) ? 'true' : 'false'?>,
+            price: <?=isset($arResult['filters']['maxPrice']) || isset($arResult['filters']['minPrice']) ? 'true' : 'false'?>,
+            preferences: <?=isset($arResult['myPreferences']) ? 'true' : 'false'?>,
+        })
+        window.filtersOverviewPopupTutortoday.displayMessage()
     })
 </script>
 

@@ -161,3 +161,7 @@ body::-webkit-scrollbar-thumb {
     font-size: 17px;
     font-weight: 500;
 }
+
+#popup-delete-button:focus, #popup-delete-button:focus-visible {
+    outline: none;
+}

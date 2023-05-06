@@ -58,6 +58,10 @@ class TutorTodayOverviewPageComponent extends CBitrixComponent {
         $this->arResult['filters'] = $filters;
     }
 
+    protected function preparePopupParams()
+    {
+
+    }
 
     public function prepareTemplateParams()
     {

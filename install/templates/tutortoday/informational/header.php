@@ -9,6 +9,8 @@ use Up\Tutortoday\Controller\AdminController;
 
 \Bitrix\Main\UI\Extension::load('main.core');
 
+$linkToProfile = $USER->GetID() != null ? "/profile/{$USER->GetID()}/" : "/login/";
+
 $isAdmin = (new AdminController((int)$USER->GetID()))->isAdmin();
 
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
@@ -35,7 +37,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <?php if ($isAdmin): ?>
                 <a class="header__links-item link" id="adminPanel" href="/admin/">Admin Panel</a>
             <?php endif; ?>
-            <a class="header__links-item link" id="myProfileButton" href="<?=$arResult['linkToProfile']?>">My Profile</a>
+            <a class="header__links-item link" id="myProfileButton" href="<?=$linkToProfile?>">My Profile</a>
             <a class="header__links-item link" href="/about/">About</a>
             <a class="header__links-item link" href="#">Contacts</a>
             <a class="header__links-item link" id="registrationButton" href="/registration/">Registration</a>
