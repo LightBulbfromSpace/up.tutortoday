@@ -12,6 +12,7 @@ use Up\Tutortoday\Services\ErrorService;
 return function (RoutingConfigurator $routes) {
     $routes->get('/', new PublicPageController('/local/view/tutortoday/tutortoday-main.php'));
     $routes->get('/overview/', new PublicPageController('/local/view/tutortoday/tutortoday-overview.php'));
+    $routes->get('/about/', new PublicPageController('/local/view/tutortoday/tutortoday-about.php'));
     $routes->get('/login/', new PublicPageController('/local/view/tutortoday/tutortoday-login.php'));
     $routes->get('/registration/', new PublicPageController('/local/view/tutortoday/tutortoday-registration.php'));
     $routes->get('/profile/{id}/', new PublicPageController('/local/view/tutortoday/tutortoday-profile.php'));

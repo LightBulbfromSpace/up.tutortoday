@@ -8,14 +8,11 @@ use Up\Tutortoday\Controller\AdminController;
 
 global $USER;
 
-$linkToProfile = '/login/';
-if ($USER->GetID() != null)
-{
-    $linkToProfile = "/profile/{$USER->GetID()}/";
-}
+$linkToProfile = $USER->GetID() != null ? "/profile/{$USER->GetID()}/" : "/login/";
 
-$isAdmin = (new AdminController($USER->GetID()))->isAdmin();
+$isAdmin = (new AdminController((int)$USER->GetID()))->isAdmin();
 
+\Bitrix\Main\UI\Extension::load('main.core');
 
 Loc::loadMessages(__FILE__);
 ?>
@@ -44,14 +41,14 @@ Loc::loadMessages(__FILE__);
         <ul class="navbar-nav">
             <?php if ($isAdmin): ?>
                 <li class="nav-item">
-                    <a class="nav-link" id="myProfileButton" href="/admin/">Admin Panel</a>
+                    <a class="nav-link" id="adminPanel" href="/admin/">Admin Panel</a>
                 </li>
             <?php endif; ?>
             <li class="nav-item">
                 <a class="nav-link" id="myProfileButton" href="<?=$linkToProfile?>">My Profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
+                <a class="nav-link" href="/about/">About</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Contacts</a>

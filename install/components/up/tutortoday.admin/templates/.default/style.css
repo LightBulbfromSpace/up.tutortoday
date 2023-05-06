@@ -131,6 +131,10 @@ button:focus, button:focus-visible {
     background-color: #D9D9D9;
 }
 
+.hidden {
+    display: none;
+}
+
 body::-webkit-scrollbar {
     width: 5px;
 }

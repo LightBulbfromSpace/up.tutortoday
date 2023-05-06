@@ -11,7 +11,11 @@ $uri = Application::getInstance()->getContext()->getServer()->get('REQUEST_URI')
 
 $uri = explode('?', $uri);
 
-if ($uri[0] !== '/')
+if ($uri[0] === '/' || $uri[0] === '/about/')
+{
+    include 'informational/header.php';
+}
+else
 {
     include 'other/header.php';
 }

@@ -1,19 +1,23 @@
 import {Type} from 'main.core';
-// import {concat} from "../../../../../../../../bitrix/modules/main/install/js/main/core/bundle.config";
 
 export class AdminPanel
 {
 	#itemsPerPage = 3
-	#usersPage = 0
-	#subjectsPage = 0
-	#edFormatsPage = 0
-	#citiesPage = 0
+	#usersPage
+	#subjectsPage
+	#edFormatsPage
+	#citiesPage
 
 	#reloadFunc
 	#addButtonCallback
 
 	constructor(options = {})
 	{
+		this.#usersPage = new Page()
+		this.#subjectsPage = new Page()
+		this.#edFormatsPage = new Page()
+		this.#citiesPage = new Page()
+
 		if (!Type.isStringFilled(options.errorMsgAreaID)) {
 			throw new Error('Feedbacks: "buttonsContainerID" is required')
 		}
@@ -151,7 +155,7 @@ export class AdminPanel
 		BX.ajax.get(
 			'/admin/users/',
 			{
-				page: this.#usersPage,
+				page: this.#usersPage.value,
 				itemsPerPage: this.#itemsPerPage,
 			},
 			(res) => {
@@ -171,7 +175,7 @@ export class AdminPanel
 		BX.ajax.get(
 			'/admin/subjects/',
 			{
-				page: this.#subjectsPage,
+				page: this.#subjectsPage.value,
 				itemsPerPage: this.#itemsPerPage,
 			},
 			(res) => {
@@ -197,7 +201,9 @@ export class AdminPanel
 			))
 		}
 
-		this.#bindPaginationButtons(this.#subjectsPage, res['maxPage'])
+		let maxPage = Math.ceil(res['total'] / this.#itemsPerPage) - 1
+
+		this.#bindPaginationButtons(this.#subjectsPage, maxPage)
 
 		this.#displayAddButton()
 	}
@@ -212,7 +218,7 @@ export class AdminPanel
 		BX.ajax.get(
 			'/admin/edFormats/',
 			{
-				page: this.#edFormatsPage,
+				page: this.#edFormatsPage.value,
 				itemsPerPage: this.#itemsPerPage,
 			},
 			(res) => {
@@ -238,7 +244,9 @@ export class AdminPanel
 			))
 		}
 
-		this.#bindPaginationButtons(this.#edFormatsPage, res['maxPage'])
+		let maxPage = Math.ceil(res['total'] / this.#itemsPerPage) - 1
+
+		this.#bindPaginationButtons(this.#edFormatsPage, maxPage)
 
 		this.#displayAddButton()
 	}
@@ -253,7 +261,7 @@ export class AdminPanel
 		BX.ajax.get(
 			'/admin/cities/',
 			{
-				page: this.#citiesPage,
+				page: this.#citiesPage.value,
 				itemsPerPage: this.#itemsPerPage,
 			},
 			(res) => {
@@ -279,7 +287,9 @@ export class AdminPanel
 			))
 		}
 
-		this.#bindPaginationButtons(this.#citiesPage, res['maxPage'])
+		let maxPage = Math.ceil(res['total'] / this.#itemsPerPage) - 1
+
+		this.#bindPaginationButtons(this.#citiesPage, maxPage)
 
 		this.#displayAddButton()
 	}
@@ -292,9 +302,9 @@ export class AdminPanel
 
 		let elements = []
 
-		for (let i = 0; i <  res.length; i++) {
+		for (let i = 0; i <  res['items'].length; i++) {
 			elements.push(this.#createTableElement(
-				res[i]['ID'], res[i]['NAME'], IDPrefix, deleteAddress, editAddress
+				res['items'][i]['ID'], res['items'][i]['NAME'], IDPrefix, deleteAddress, editAddress
 			))
 		}
 
@@ -313,13 +323,17 @@ export class AdminPanel
 
 		let elements = []
 
-		for (let i = 0; i <  res.length; i++) {
+		for (let i = 0; i <  res['items'].length; i++) {
 			elements.push(this.#createUserElement(
-				res[i]['ID'],
-				[res[i]['LAST_NAME'], res[i]['NAME'], res[i]['SECOND_NAME']].join(' '),
+				res['items'][i]['ID'],
+				[
+					res['items'][i]['LAST_NAME'],
+					res['items'][i]['NAME'],
+					res['items'][i]['SECOND_NAME']
+				].join(' '),
 				'user-',
 				blockAddress,
-				res[i]['ROLE']['NAME'],
+				res['items'][i]['ROLE']['NAME'],
 			))
 		}
 
@@ -331,7 +345,9 @@ export class AdminPanel
 
 		this.#reloadFunc = this.#loadUsers
 
-		this.#bindPaginationButtons(this.#usersPage, res['maxPage'])
+		let maxPage = Math.ceil(res['total'] / this.#itemsPerPage) - 1
+
+		this.#bindPaginationButtons(this.#usersPage, maxPage)
 	}
 
 	#createAddButton(callback)
@@ -637,24 +653,40 @@ export class AdminPanel
 
 	#bindPaginationButtons(page, maxPage)
 	{
+		console.log(page, maxPage)
+		this.previousButton.classList.add('hidden')
+		this.nextButton.classList.add('hidden')
+		if (maxPage === 0) {
+			return
+		}
+		if (page.value < maxPage ) {
+			this.nextButton.classList.remove('hidden')
+		}
+		if (page.value > 0) {
+			this.previousButton.classList.remove('hidden')
+		}
+
 		this.previousButton.onclick = () => {
-			if (page <= 0 ) {
-				this.previousButton.display = 'none'
+			if (page.value <= 0 ) {
 				return
 			}
-			this.previousButton.display = 'flex'
-			page--
+			page.value--
 			this.#reloadFunc()
 		}
 
 		this.nextButton.onclick = () => {
-			if (page >= maxPage ) {
-				this.nextButton.display = 'none'
+			if (page.value >= maxPage) {
 				return
 			}
-			this.nextButton.display = 'flex'
-			page++
+			page.value++
 			this.#reloadFunc()
 		}
+	}
+}
+
+class Page {
+	value = 0
+	constructor(value = 0) {
+		this.value = value
 	}
 }

@@ -32,6 +32,11 @@ class AdminController
 
         $offset = (int)$dict['page'] * (int)$dict['itemsPerPage'];
 
+        if ((int)$dict['page'] < 0 || (int)$dict['itemsPerPage'] < 1)
+        {
+            return (new ErrorService('invalid_params'))->getLastError();
+        }
+
         $service = (new UserService($this->userID));
         $service->setRoles(['student', 'tutor']);
         $service->setFetchAllAvailableUsers(true);
@@ -48,7 +53,11 @@ class AdminController
             ];
         }
 
-        return $users;
+        $result = [];
+        $result['items'] = $users;
+        $result['total'] = $service->getNumOfFetchedUsers();
+
+        return $result;
     }
 
     public function getSubjects(ParameterDictionary $dict)
@@ -58,6 +67,11 @@ class AdminController
             return (new ErrorService('perm_denied'))->getLastError();
         }
 
+        if ((int)$dict['page'] < 0 || (int)$dict['itemsPerPage'] < 1)
+        {
+            return (new ErrorService('invalid_params'))->getLastError();
+        }
+
         $result = EducationService::getSubjectsPerPage((int)$dict['page'], (int)$dict['itemsPerPage']);
         $subjects = [];
         foreach ($result as $item)
@@ -65,9 +79,12 @@ class AdminController
             $subjects[] = ['ID' => $item['ID'], 'NAME' => $item['NAME']];
         }
 
-        $subjects['TOTAL'] = EducationService::getNumberOfAllSubjects();
+        $result = [];
+        $result['items'] = $subjects;
 
-        return $subjects;
+        $result['total'] = EducationService::getNumberOfAllSubjects();
+
+        return $result;
     }
 
     public function getEdFormats(ParameterDictionary $dict) : ?array
@@ -77,6 +94,11 @@ class AdminController
             return (new ErrorService('perm_denied'))->getLastError();
         }
 
+        if ((int)$dict['page'] < 0 || (int)$dict['itemsPerPage'] < 1)
+        {
+            return (new ErrorService('invalid_params'))->getLastError();
+        }
+
         $result = EducationService::getEdFormatsPerPage((int)$dict['page'], (int)$dict['itemsPerPage']);
         $edFormats = [];
         foreach ($result as $item)
@@ -84,9 +106,12 @@ class AdminController
             $edFormats[] = ['ID' => $item['ID'], 'NAME' => $item['NAME']];
         }
 
-        $edFormats['TOTAL'] = EducationService::getNumberOfAllEdFormats();
+        $result = [];
+        $result['items'] = $edFormats;
 
-        return $edFormats;
+        $result['total'] = EducationService::getNumberOfAllEdFormats();
+
+        return $result;
     }
 
     public function getCities(ParameterDictionary $dict)
@@ -96,6 +121,11 @@ class AdminController
             return (new ErrorService('perm_denied'))->getLastError();
         }
 
+        if ((int)$dict['page'] < 0 || (int)$dict['itemsPerPage'] < 1)
+        {
+            return (new ErrorService('invalid_params'))->getLastError();
+        }
+
         $result = LocationService::getCitiesPerPage((int)$dict['page'], (int)$dict['itemsPerPage']);
         $cities = [];
         foreach ($result as $item)
@@ -103,9 +133,12 @@ class AdminController
             $cities[] = ['ID' => $item['ID'], 'NAME' => $item['NAME']];
         }
 
-        $cities['TOTAL'] = LocationService::getNumberOfAllCities();
+        $result = [];
+        $result['items'] = $cities;
 
-        return $cities;
+        $result['total'] = LocationService::getNumberOfAllCities();
+
+        return $result;
     }
 
     public function addSubject(ParameterDictionary $dict)

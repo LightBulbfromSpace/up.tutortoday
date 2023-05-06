@@ -1,3 +1,6 @@
+@import 'normalize.css';
+
+
 html{
     display: flex;
     justify-content: center;
@@ -17,6 +20,7 @@ body{
 
 .container {
     max-width: 1000px;
+
     margin-left: auto;
     margin-right: auto;
     width: 100%;
@@ -65,7 +69,7 @@ body{
 .main__promo{
     height: calc(100vh - 48px);
 
-    background-image: url("../static/mainImage.webp");
+    background-image: url("static/mainImage.webp");
     background-size: cover;
     background-position: 75% 44%;
     background-repeat: no-repeat;
@@ -85,16 +89,23 @@ body{
     flex-direction: column;
 }
 
+.main__content-text {
+    font-size: 14px;
+}
+
 .main__content-item + .main__content-item{
     margin-top: 10px;
 }
 
 .main__content-item--title{
+    font-size: 24px;
+    font-weight: 600;
 }
 
 
 .main__content-item--subtitle{
-
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .main__content-item--subtitle2{
