@@ -232,7 +232,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             price: <?=isset($arResult['filters']['maxPrice']) || isset($arResult['filters']['minPrice']) ? 'true' : 'false'?>,
             preferences: <?=$arResult['myPreferences'] ? 'true' : 'false'?>,
         })
-        window.filtersOverviewPopupTutortoday.displayMessage()
+        window.filtersOverviewPopupTutortoday.displayMessage();
     })
 </script>
 

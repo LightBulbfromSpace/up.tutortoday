@@ -64,7 +64,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         <?php if($arResult['isOwner']): ?>
         <div class="container-button-custom">
             <div class="save-button-container">
-                <a class="button-plus-minus link-button button-small-container-custom" href="/profile/<?=$USER->GetID()?>/settings/">Settings</a>
+                <a class="button-plus-minus link-button button-small-container-custom" id="settingsprof" href="/profile/<?=$USER->GetID()?>/settings/">Settings</a>
             </div>
             <div class="save-button-container">
                 <a class="button-plus-minus link-button button-small-container-custom" href="/logout/">Logout</a>
