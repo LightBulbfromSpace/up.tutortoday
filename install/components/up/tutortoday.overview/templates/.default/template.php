@@ -138,7 +138,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 </div>
                             <div class="card-body-custom">
                                     <h2 class="card-title-custom">
-                                        <?=htmlspecialchars(HTMLHelper::cutText("{$tutor['fullName']['lastName']} {$tutor['fullName']['name']} {$tutor['fullName']['secondName']}", 50))?>
+                                        <?=htmlspecialchars(HTMLHelper::cutText("{$tutor['fullName']['lastName']} {$tutor['fullName']['name']} {$tutor['fullName']['secondName']}", 20))?>
                                     </h2>
 <!--                                    <div class="br"></div>-->
                                 <div class="container-card-main-info-custom">
