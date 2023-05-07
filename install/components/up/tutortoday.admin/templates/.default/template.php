@@ -18,9 +18,13 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         <button id="admin-cities-button" class="small-container menu-button">Cities</button>
     </div>
     <div class="data-container">
-        <button id="previous-button" class="pagination-button hidden">&lt;</button>
+        <div class="button-container">
+            <button id="previous-button" class="pagination-button hidden">&lt;</button>
+        </div>
         <div id="admin-data-area"></div>
-        <button id="next-button" class="pagination-button">&gt;</button>
+        <div class="button-container">
+            <button id="next-button" class="pagination-button">&gt;</button>
+        </div>
     </div>
     <div id="admin-add-button-area"></div>
 </div>

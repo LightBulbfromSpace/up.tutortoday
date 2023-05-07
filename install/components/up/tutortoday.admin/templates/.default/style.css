@@ -4,12 +4,12 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    padding-top: 80px;
+    /*padding-top: 80px;*/
     width: 100vw;
-    height: 82vh;
+    height: 100%;
     flex-grow: 1;
     position: relative;
-    margin-top: 1.75rem;
+    padding-top: 100px;
 }
 
 .menu-button-container {
@@ -27,6 +27,12 @@
 
 button:focus, button:focus-visible {
     outline: none;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    width: 60px;
 }
 
 .menu-button {
@@ -49,6 +55,8 @@ button:focus, button:focus-visible {
 #admin-data-area {
     margin-top: 5px;
     width: 478px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #admin-users-button {
@@ -151,4 +159,10 @@ body::-webkit-scrollbar-thumb {
 
 a:hover {
     color: #D9D9D9;
+}
+
+.footer-custom {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
 }
