@@ -159,7 +159,7 @@ a:hover {text-decoration: none;}
 a:active { text-decoration: none; }
 
 body::-webkit-scrollbar {
-    width: 0;
+    width: 4px;
 }
 
 body::-webkit-scrollbar-track {

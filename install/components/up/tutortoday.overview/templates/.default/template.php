@@ -136,7 +136,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                         <?=htmlspecialchars($tutor['fullName']['name'])?>&nbsp;
                                         <?=htmlspecialchars($tutor['fullName']['secondName'])?>
                                     </h2>
-                                    <div class="br"></div>
+<!--                                    <div class="br"></div>-->
                                 <div class="container-card-main-info-custom">
                                     <div class="subjects-ed-format-container">
                                         <div class="city-container">

@@ -4,11 +4,11 @@
     display: flex;
     align-items: center;
     width: 100vw;
-    min-height: 76vh;
+    min-height: 100%;
     flex-grow: 1;
     justify-content: center;
     position: relative;
-    margin-top: 4.25rem;
+    /*margin-top: 4.25rem;*/
 }
 
 .input-custom:focus, .input-custom:focus-visible {
@@ -33,10 +33,7 @@
     height: 2.5em;
     justify-content: flex-start;
     line-height: 1.5;
-    padding-bottom: calc(0.5em - 1px);
-    padding-left: calc(0.75em - 1px);
-    padding-right: calc(0.75em - 1px);
-    padding-top: calc(0.5em - 1px);
+    padding: calc(0.5em - 1px) calc(0.75em - 1px);
     position: relative;
     vertical-align: top;
 }
@@ -64,4 +61,10 @@ body::-webkit-scrollbar-thumb {
     background-color: #D9D9D9;
     border-radius: 20px;
     border: none;
+}
+
+.footer-custom {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
 }

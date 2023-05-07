@@ -24,40 +24,44 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             </div>
             <div class="box-invisible-custom role-container-custom"><div>I'm a</div>&nbsp;<div class="box-small-dark-custom"><?=$arResult['user']['role']['NAME']?></div></div>
             <div class="br"></div>
-            <label class="label">Email</label>
-            <?php if ($arResult['user']['contacts']['email'] == null): ?>
-                <div class="box-dark-element-custom">No email</div>
+            <?php if ($USER->GetID() === null): ?>
+                <div class="box-dark-element-custom">Only logged-in users can see contacts</div>
             <?php else: ?>
-                <div class="box-dark-element-custom">
-                    <?=$arResult['user']['contacts']['email']?>
-                </div>
+                <label class="label">Email</label>
+                <?php if ($arResult['user']['contacts']['email'] == null): ?>
+                    <div class="box-dark-element-custom">No email</div>
+                <?php else: ?>
+                    <div class="box-dark-element-custom">
+                        <?=$arResult['user']['contacts']['email']?>
+                    </div>
+                <?php endif; ?>
+                <label class="label">Phone</label>
+                <?php if ($arResult['user']['contacts']['phone'] == null): ?>
+                    <div class="box-dark-element-custom">No phone</div>
+                <?php else: ?>
+                    <div class="box-dark-element-custom">
+                        <?=$arResult['user']['contacts']['phone']?>
+                    </div>
+                <?php endif; ?>
+                <label class="label">VK</label>
+                <?php if (count($arResult['user']['contacts']['vk']) === 0): ?>
+                    <div class="box-dark-element-custom">No VK profile</div>
+                <?php endif; ?>
+                <?php foreach ($arResult['user']['contacts']['vk'] as $contact): ?>
+                    <div class="box-dark-element-custom">
+                        <?=htmlspecialchars($contact['VK_PROFILE'])?>
+                    </div>
+                <?php endforeach; ?>
+                <label class="label">Telegram</label>
+                <?php if (count($arResult['user']['contacts']['telegram']) === 0): ?>
+                    <div class="box-dark-element-custom">No telegram username</div>
+                <?php endif; ?>
+                <?php foreach ($arResult['user']['contacts']['telegram'] as $contact): ?>
+                    <div class="box-dark-element-custom">
+                        <?=htmlspecialchars($contact['TELEGRAM_USERNAME'])?>
+                    </div>
+                <?php endforeach; ?>
             <?php endif; ?>
-            <label class="label">Phone</label>
-            <?php if ($arResult['user']['contacts']['phone'] == null): ?>
-                <div class="box-dark-element-custom">No phone</div>
-            <?php else: ?>
-                <div class="box-dark-element-custom">
-                    <?=$arResult['user']['contacts']['phone']?>
-                </div>
-            <?php endif; ?>
-            <label class="label">VK</label>
-            <?php if (count($arResult['user']['contacts']['vk']) === 0): ?>
-                <div class="box-dark-element-custom">No VK profile</div>
-            <?php endif; ?>
-            <?php foreach ($arResult['user']['contacts']['vk'] as $contact): ?>
-                <div class="box-dark-element-custom">
-                    <?=htmlspecialchars($contact['VK_PROFILE'])?>
-                </div>
-            <?php endforeach; ?>
-            <label class="label">Telegram</label>
-            <?php if (count($arResult['user']['contacts']['telegram']) === 0): ?>
-                <div class="box-dark-element-custom">No telegram username</div>
-            <?php endif; ?>
-            <?php foreach ($arResult['user']['contacts']['telegram'] as $contact): ?>
-                <div class="box-dark-element-custom">
-                    <?=htmlspecialchars($contact['TELEGRAM_USERNAME'])?>
-                </div>
-            <?php endforeach; ?>
         </div>
     </div>
     <div class="container-large-custom">
