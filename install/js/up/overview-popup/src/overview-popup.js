@@ -57,7 +57,7 @@ export class OverviewPopup
 		message.classList.add('message', 'is-success')
 
 		message.innerHTML = `<div class="message-header">
-								<p>Success</p>
+								<p>Filters applied</p>
 								<button class="delete" id="popup-delete-button"></button>
 							  </div>
 							  <div id="filter-used" class="message-body">
@@ -66,7 +66,7 @@ export class OverviewPopup
 
 
 		message.style.position = 'fixed'
-		message.style.margin = '40% 5% 5% 75%'
+		message.style.margin = '35% 5% 5% 75%'
 		message.style.zIndex = '100'
 
 		this.node.appendChild(message)

@@ -11,7 +11,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 <script type="text/javascript" src="/local/components/up/tutortoday.profile-settings/templates/.default/scripts.js"></script>
 <div id="delete-form-area"></div>
 <div id="add-photo-form-area"></div>
-<form method="post" action="/profile/<?=$arResult['user']['mainData']['ID']?>/settings/">
+<form class="main-form" method="post" action="/profile/<?=$arResult['user']['mainData']['ID']?>/settings/">
     <?=bitrix_sessid_post()?>
     <div class="container-custom">
         <div class="container-narrow-custom">

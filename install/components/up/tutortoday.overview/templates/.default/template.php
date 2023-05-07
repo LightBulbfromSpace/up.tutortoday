@@ -13,31 +13,13 @@ global $USER;
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
 <div id="message-area"></div>
-<div class="container-fluid main-container-custom">
-    <div class="row">
-        <div class="col-md-3 bg-light sidebar">
+<div class="container-fluid-custom main-container-custom">
+    <div class="container-row-custom ml-0">
+        <div class="container-column-custom mr-3">
+            <div class="sidebar mr-2">
             <form method="get" action="/overview/">
-                <div class="col-md-9 mt-3">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="ed-format-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Education Format
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="ed-format-dropdown">
-                            <div class="form-group">
-	                            <?php foreach ($arResult['edFormats'] as $edFormat) : ?>
-                                    <div class="form-check form-check-custom">
-                                        <input class="form-check-input" name="edFormats[]" type="checkbox" value="<?= $edFormat['ID']?>">
-                                        <label class="form-check-label" for="<?= $edFormat['NAME']?>">
-				                            <?= $edFormat['NAME']?>
-                                        </label>
-                                    </div>
-	                            <?php endforeach; ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-9 mt-3">
-                    <div class="dropdown">
+                <div class="mt-5 container-row-custom space-between">
+                    <div class="dropdown-custom w-47">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="subject-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Subjects
                         </button>
@@ -54,7 +36,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                             </div>
                         </div>
                     </div>
-                    <div class="dropdown">
+                    <div class="dropdown-custom w-47">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="city-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             City
                         </button>
@@ -71,36 +53,73 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                             </div>
                         </div>
                     </div>
+
                 </div>
-                <div class="row mt-3 ml-1">
-                    <div class="col">
-                        <label for="price-from">The lowest price:</label>
+                <div class="mt-3 w-100">
+                    <div class="dropdown-custom">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="ed-format-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Education Format
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="ed-format-dropdown">
+                            <div class="form-group">
+                                <?php foreach ($arResult['edFormats'] as $edFormat) : ?>
+                                    <div class="form-check form-check-custom">
+                                        <input class="form-check-input" name="edFormats[]" type="checkbox" value="<?= $edFormat['ID']?>">
+                                        <label class="form-check-label" for="<?= $edFormat['NAME']?>">
+                                            <?= $edFormat['NAME']?>
+                                        </label>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-row-custom space-between mt-3">
+                    <div class="w-47">
+                        <label for="price-from">The lowest&nbsp;price:</label>
                         <input type="text" class="form-control" name="minPrice" id="price-from" placeholder="Enter price">
                     </div>
-                    <div class="col">
-                        <label for="price-to">The highest price:</label>
+                    <div class="w-47">
+                        <label for="price-to">The highest&nbsp;price:</label>
                         <input type="text" class="form-control" name="maxPrice" id="price-to" placeholder="Enter price">
                     </div>
                 </div>
                 <?php if ($USER->GetID() !== null): ?>
-                    <div class="form-check form-check-custom mt-4 ml-5">
+                    <div class="form-check form-check-custom mt-4 pl-0-3-rem">
                         <input class="form-check-input" name="myPreferences" type="checkbox">
                         <label class="form-check-label" for="myPreferences">
                             Use my preferences
                         </label>
                     </div>
                 <?php endif; ?>
-                <button type="submit" id="findButton" class="btn mt-4 ml-4 btn-danger">Find</button>
-                <a class="btn mt-4 ml-4 btn-danger" href="/">Reset</a>
+                <div class="container-row-custom space-between mb-5">
+                    <button type="submit" id="findButton" class="btn mt-4 w-47 btn-danger">Find</button>
+                    <a class="btn mt-4 w-47 btn-danger" href="/">Reset</a>
+                </div>
             </form>
         </div>
+            <div class="sidebar mr-2 mt-5-custom pl-0 pr-0">
+                <div class="message-header-custom">
+                    Facts & Useful
+                </div>
+                <div class="message-body-custom p-2">
+                    <div class="sub-message-custom padding-1">
+                        “If you want to be able to remember information, the best thing you can do is practice,” Katherine Rawson, psychologist at Kent State University in Ohio.
+                    </div>
+                    <div class="br-message"></div>
+                    <div class="sub-message-custom padding-1">Pay attention to diagrams and graphs in your class materials. Those pictures can really boost your memory of this material. And if there aren’t pictures, creating them can be really useful.</div>
+                    <div class="br-message"></div>
+                    <div class="sub-message-custom padding-1">Search for examples. Abstract concepts can be hard to understand. It tends to be far easier to form a mental image if you have a concrete example of something</div>
+                    <div class="br-message"></div>
+                    <div class="sub-message-custom padding-1">Have a question? Contact us by support.email@email.ru</div>
+                </div>
+            </div>
+        </div>
         <div class="col-md-9">
-            <div class="mt-3">
-                <form method="get" class="form-inline my-2 my-lg-0" action="/">
+                <form method="get" class="form-inline my-lg-0" action="/">
                     <input class="form-control mr-sm-2" type="search" placeholder="Find tutor" name="search">
                     <button class="btn btn-danger my-2 my-sm-0" type="submit">Search</button>
                 </form>
-            </div>
 
             <p class="mt-3">Resently created profiles:</p>
 			<?php foreach ($arResult['tutors'] as $tutor) : ?>
@@ -159,7 +178,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             </a>
 			<?php endforeach; ?>
 <!--            pagination-->
-            <div class="container-margin-top-bottom is-justified-center">
+            <div class="container-margin-top is-justified-center">
                 <nav role="navigation" class="container-row-custom">
                     <ul class="pagination-list">
                         <li>

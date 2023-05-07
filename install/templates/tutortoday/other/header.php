@@ -32,7 +32,7 @@ Loc::loadMessages(__FILE__);
 <?php $APPLICATION->ShowPanel(); ?>
 
 <div id="overlay"></div>
-<nav class="navbar navbar-expand-lg navbar-light bg-light header__other">
+<nav class="navbar navbar-expand-lg navbar-light header__other">
     <a class="navbar-brand" href="/overview/" id="main-logo">TutorToday</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -63,3 +63,4 @@ Loc::loadMessages(__FILE__);
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<div class="main-container-header">

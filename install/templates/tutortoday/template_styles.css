@@ -1,6 +1,10 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
 /*@import 'normalize.css';*/
 
+.main-container-header {
+    background-color: rgba(113, 3, 3, 0.06);
+}
+
 .navbar-brand-custom {
     display: flex;
     flex-shrink: 0;
@@ -21,13 +25,18 @@
     border-bottom: 2px solid #710303;
 }
 
+.nav-link{
+    color: #1a1a1a !important;
+}
+
 .link {
     color: #710303;
 }
 
 .footer-custom {
-    background-color: #fafafa;
+    /*background-color: #fafafa;*/
     padding: 2rem 6rem;
+    background-color: rgba(242, 84, 63, 0.5);
 }
 
 .navbar-brand {
@@ -64,6 +73,7 @@ body{
     position: fixed;
     top: 0;
     width: 100%;
+    background-color: #923329;
 }
 
 .header {

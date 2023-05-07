@@ -1,3 +1,4 @@
+</div>
 <footer class="footer-custom">
     <div class="content has-text-centered">
         <p>
