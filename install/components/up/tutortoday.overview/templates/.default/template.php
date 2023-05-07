@@ -14,7 +14,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
 <div id="message-area"></div>
 <div class="container-fluid-custom main-container-custom">
-    <div class="container-row-custom ml-0">
+    <div class="container-main-body-custom ml-0">
         <div class="container-column-custom mr-3">
             <div class="sidebar mr-2">
             <form method="get" action="/overview/">
@@ -94,7 +94,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <?php endif; ?>
                 <div class="container-row-custom space-between mb-5">
                     <button type="submit" id="findButton" class="btn mt-4 w-47 btn-danger">Find</button>
-                    <a class="btn mt-4 w-47 btn-danger" href="/">Reset</a>
+                    <a class="btn mt-4 w-47 btn-danger" href="/overview/">Reset</a>
                 </div>
             </form>
         </div>
@@ -116,67 +116,77 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             </div>
         </div>
         <div class="col-md-9">
-                <form method="get" class="form-inline my-lg-0" action="/">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Find tutor" name="search">
+                <form method="get" class="form-inline my-lg-0 search-custom" action="/overview/">
+                    <input class="form-control mr-sm-2 search-input-custom" type="search" placeholder="Find tutor" name="search">
                     <button class="btn btn-danger my-2 my-sm-0" type="submit">Search</button>
                 </form>
 
             <p class="mt-3">Resently created profiles:</p>
-			<?php foreach ($arResult['tutors'] as $tutor) : ?>
-            <a href="/profile/<?=$tutor['ID']?>/" class="card-link">
-                <div class="mt-2 card-box-container-custom">
-                    <div class="row no-gutters card-container">
-                        <div class="col-md-4 photo-container">
-                            <img src="<?=$tutor['photo']?>" class="img-rounded card-img img-fixed-size" alt="Tutor photo">
-                        </div>
-                        <div class="col-md-8">
+            <div class="cards-container">
+                <?php foreach ($arResult['tutors'] as $tutor) : ?>
+                <a href="/profile/<?=$tutor['ID']?>/" class="mb-3 card-link-container-custom">
+                    <div class="mt-4 card-box-container-custom">
+                        <div class="row no-gutters card-container">
+                                <div class="photo-container">
+                                    <img src="<?=$tutor['photo']?>" class="img-rounded card-img img-fixed-size" alt="Tutor photo">
+                                </div>
                             <div class="card-body-custom">
-                                <h2 class="card-title-custom">
-                                    <?=htmlspecialchars($tutor['fullName']['lastName'])?>&nbsp;
-                                    <?=htmlspecialchars($tutor['fullName']['name'])?>&nbsp;
-                                    <?=htmlspecialchars($tutor['fullName']['secondName'])?></h2>
-                                <div class="br"></div>
-                                <p class="card-text">
-                                    <strong>City:</strong>
-                                    <?php if($tutor['city'] == null): ?>
-                                        No city
-                                    <?php endif; ?>
-                                    <?=htmlspecialchars($tutor['city']['NAME'])?>
-                                </p>
-                                <div class="container-subjects">
-                                    <?php if($tutor['subjects'] == null): ?>
-                                        <div class="box-darker-element-custom">No subjects</div>
-                                    <?php endif; ?>
-                                    <?php foreach ($tutor['subjects'] as $subject): ?>
-                                        <div class="box-darker-element-custom container-row-custom is-justified-center">
-                                            <div><?=$subject['NAME']?></div>
-                                            <div class="vbr"></div>
-                                            <div><?=$subject['PRICE'] == 0 ? '-' : $subject['PRICE']?></div>
+                                    <h2 class="card-title-custom">
+                                        <?=htmlspecialchars($tutor['fullName']['lastName'])?>&nbsp;
+                                        <?=htmlspecialchars($tutor['fullName']['name'])?>&nbsp;
+                                        <?=htmlspecialchars($tutor['fullName']['secondName'])?>
+                                    </h2>
+                                    <div class="br"></div>
+                                <div class="container-card-main-info-custom">
+                                    <div class="subjects-ed-format-container">
+                                        <div class="city-container">
+                                                <img src="/local/components/up/tutortoday.overview/templates/.default/icons/icons8-location-50.png" class="icon-custom" alt="location">
+                                                <?php if($tutor['city'] == null): ?>
+                                                    No city
+                                                <?php endif; ?>
+                                                <?=htmlspecialchars($tutor['city']['NAME'])?>
                                         </div>
-                                    <?php endforeach; ?>
+                                        <div class="container-subjects">
+                                            <?php if($tutor['subjects'] == null): ?>
+                                                <div class="box-darker-element-custom">No subjects</div>
+                                            <?php endif; ?>
+                                            <?php foreach ($tutor['subjects'] as $i => $subject): ?>
+                                            <?php if ($i === 2): ?>
+                                                    <div class="box-darker-element-custom container-row-custom is-justified-center">
+                                                        ...
+                                                    </div>
+                                            <?php break; endif; ?>
+                                                <div class="box-darker-element-custom container-row-custom is-justified-center">
+                                                    <div><?=$subject['NAME']?></div>
+                                                    <div class="vbr"></div>
+                                                    <div><?=$subject['PRICE'] == 0 ? '-' : $subject['PRICE']?></div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                            <?php if($tutor['edFormat'] == null): ?>
+                                                <div class="box-dark-element-custom">No education format</div>
+                                            <?php endif; ?>
+                                            <?php foreach ($tutor['edFormat'] as $edFormat): ?>
+                                                <div class="box-dark-element-custom"><?=$edFormat['NAME']?></div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                    <div class="card-text-container">
+                                        <p class="card-text-custom">
+                                            &nbsp;
+                                            <?php if($tutor['description'] == ''): ?>
+                                                No description
+                                            <?php endif; ?>
+                                            <?=htmlspecialchars(HTMLHelper::cutText($tutor['description'], 155))?>
+                                        </p>
+                                    </div>
                                 </div>
-                                <div class="container-subjects">
-                                    <?php if($tutor['edFormat'] == null): ?>
-                                        <div class="box-dark-element-custom">No education format</div>
-                                    <?php endif; ?>
-                                    <?php foreach ($tutor['edFormat'] as $edFormat): ?>
-                                        <div class="box-dark-element-custom"><?=$edFormat['NAME']?></div>
-                                    <?php endforeach; ?>
                                 </div>
-                                <p class="card-text">
-                                    <strong>Description:</strong>
-                                    &nbsp;
-                                    <?php if($tutor['description'] == ''): ?>
-                                        No description
-                                    <?php endif; ?>
-                                    <?=htmlspecialchars(HTMLHelper::cutText($tutor['description'], 300))?>
-                                </p>
-                            </div>
+
                         </div>
                     </div>
-                </div>
-            </a>
-			<?php endforeach; ?>
+                </a>
+                <?php endforeach; ?>
+            </div>
 <!--            pagination-->
             <div class="container-margin-top is-justified-center">
                 <nav role="navigation" class="container-row-custom">
