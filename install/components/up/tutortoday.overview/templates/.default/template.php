@@ -127,7 +127,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <button class="btn btn-danger my-2 my-sm-0" type="submit">Search</button>
                 </form>
 
-            <p class="mt-3">Resently created profiles:</p>
+            <p class="mt-3">Recently created profiles:</p>
             <div class="cards-container">
                 <?php foreach ($arResult['tutors'] as $tutor) : ?>
                 <div class="mb-3 card-link-container-custom">
@@ -138,7 +138,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 </div>
                             <div class="card-body-custom">
                                     <h2 class="card-title-custom">
-                                        <?=htmlspecialchars(HTMLHelper::cutText("{$tutor['fullName']['lastName']} {$tutor['fullName']['name']} {$tutor['fullName']['secondName']}", 20))?>
+                                        <?=htmlspecialchars(HTMLHelper::cutText("{$tutor['fullName']['lastName']} {$tutor['fullName']['name']} {$tutor['fullName']['secondName']}", 30))?>
                                     </h2>
 <!--                                    <div class="br"></div>-->
                                 <div class="container-card-main-info-custom">
