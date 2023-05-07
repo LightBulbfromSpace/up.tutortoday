@@ -305,6 +305,6 @@ class AdminController
         {
             return (new ErrorService('perm_denied'))->getLastError();
         }
-        return (new UserService($this->userID))->setBlockStatus($dict['blocked']);
+        return (new UserService($this->userID))->setBlockStatus((int)$dict['userID'], $dict['blocked']);
     }
 }

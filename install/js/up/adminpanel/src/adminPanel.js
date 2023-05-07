@@ -516,20 +516,17 @@ export class AdminPanel
 					timeout: 30,
 					onsuccess: (res) => {
 						console.log(res)
-						blockButton.replaceWith(
-							this.#createUnblockButton(blockAddress, ID, blockButton)
-						)
+						if (JSON.parse(res) === true) {
+							blockButton.replaceWith(
+								this.#createUnblockButton(blockAddress, ID, blockButton)
+							)
+						}
 					},
 					onfailure: (e) => {
 						console.log(e)
 					}
 				})
 			})
-		// blockButton.onclick = () => {
-		// 	blockButton.replaceWith(
-		// 		this.#createUnblockButton(blockAddress, ID, blockButton)
-		// 	)
-		// }
 
 		blockButton.style.marginLeft = '20px'
 
@@ -541,7 +538,7 @@ export class AdminPanel
 	#createTableElementContainer()
 	{
 		let elem = document.createElement('div')
-		elem.classList.add('box')
+		elem.classList.add('box-custom')
 		elem.style.display = 'flex'
 		elem.style.justifyContent = 'space-between'
 		elem.style.alignItems = 'center'
@@ -633,21 +630,47 @@ export class AdminPanel
 		let unblockButton = this.#createButton(
 			'hsl(0,0%,85%)', 'hsl(0,0%,70%)', 'Unblock',
 			() => {
-				BX.ajax.post(
-					blockAddress,
-					{
+				BX.ajax({
+					url: blockAddress,
+					data: {
 						userID: userID,
 						blocked: 'N',
 						sessid: BX.bitrix_sessid(),
 					},
-					(res) => {
+					method: 'POST',
+					dataType: 'json',
+					timeout: 30,
+					onsuccess: (res) => {
 						console.log(res)
+						if (JSON.parse(res) === true) {
+							unblockButton.replaceWith(blockButton)
+						}
+					},
+					onfailure: (e) => {
+						console.log(e)
 					}
-				)
+				})
+				// BX.ajax.post(
+				// 	blockAddress,
+				// 	{
+				// 		userID: userID,
+				// 		blocked: 'N',
+				// 		sessid: BX.bitrix_sessid(),
+				// 	},
+				// 	(res) => {
+				// 		console.log(res)
+				// 	},
+				// 	(e) => {
+				// 		console.log(e)
+				// 	}
+				// )
 			})
-		unblockButton.onclick = () => {
-			unblockButton.replaceWith(blockButton)
-		}
+
+		unblockButton.style.marginLeft = '20px'
+
+		// unblockButton.onclick = () => {
+		// 	unblockButton.replaceWith(blockButton)
+		// }
 		return unblockButton
 	}
 

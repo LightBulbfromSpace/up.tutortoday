@@ -35,10 +35,13 @@ class AuthController extends Controller
 
         $result = $USER->Login($post['login'], $post['password']);
 
-        //session()->set('userID', $USER->GetID());
-
         if ($result !== true)
         {
+            if ((new UserService())->isBlocked())
+            {
+                LocalRedirect("/login/?err=blocked");
+                return;
+            }
             LocalRedirect("/login/?err=auth");
             return;
         }

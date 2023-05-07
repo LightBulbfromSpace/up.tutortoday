@@ -54,7 +54,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                </li>
                                <li>
                                    — we help to understand difficult situations. If you have any difficulties while working, please contact<br>
-                                   us with <u>mail@tutortoday.ru</u>.
+                                   us with <u><?=SUPPORT_EMAIL?></u>.
                                </li>
                            </ul>
                            <div>

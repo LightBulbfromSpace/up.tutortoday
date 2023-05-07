@@ -112,7 +112,7 @@ return function (RoutingConfigurator $routes) {
 
     $routes->post('/admin/user/block/', function () {
         global $USER;
-        return (new AdminController((int)$USER->GetID()))->setUserBlockInfo(getPostList());
+        return json_encode((new AdminController((int)$USER->GetID()))->setUserBlockInfo(getPostList()));
     });
 
     $routes->post('/admin/add/subjects/', function () {

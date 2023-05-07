@@ -10,6 +10,8 @@ use Bitrix\Main\Type\ParameterDictionary;
 const SITE_NAME = 'TutorToday';
 const USERS_BY_PAGE = 6;
 
+const SUPPORT_EMAIL = 'support@email.com';
+
 const DEFAULT_PHOTO = "/local/modules/up.tutortoday/images/default/no_photo.png";
 const MODULE_ROOT = __DIR__;
 

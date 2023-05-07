@@ -27,7 +27,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                             <div class="form-group">
                                 <?php foreach ($arResult['subjects'] as $subject) : ?>
                                 <div class="form-check form-check-custom">
-                                    <input class="form-check-input" name="subjects[]" type="checkbox" value="<?= $subject['ID']?>">
+                                    <input class="form-check-input" name="subjects[]" type="checkbox" value="<?= $subject['ID']?>"
+                                        <?=in_array($subject['ID'], (array)$arResult['filters']['subjects']) ? 'checked' : ''?>>
                                     <label class="form-check-label" for="<?= $subject['NAME']?>">
                                         <?= $subject['NAME']?>
                                     </label>
@@ -44,7 +45,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                             <div class="form-group">
                                 <?php foreach ($arResult['cities'] as $city) : ?>
                                     <div class="form-check form-check-custom">
-                                        <input class="form-check-input" name="cities[]" type="checkbox" value="<?= $city['ID']?>">
+                                        <input class="form-check-input" name="cities[]" type="checkbox" value="<?= $city['ID']?>"
+                                            <?=in_array($city['ID'], (array)$arResult['filters']['cities']) ? 'checked' : ''?>>
                                         <label class="form-check-label" for="<?= $city['NAME']?>">
                                             <?= $city['NAME']?>
                                         </label>
@@ -64,7 +66,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                             <div class="form-group">
                                 <?php foreach ($arResult['edFormats'] as $edFormat) : ?>
                                     <div class="form-check form-check-custom">
-                                        <input class="form-check-input" name="edFormats[]" type="checkbox" value="<?= $edFormat['ID']?>">
+                                        <input class="form-check-input" name="edFormats[]" type="checkbox" value="<?= $edFormat['ID']?>"
+                                            <?=in_array($edFormat['ID'], (array)$arResult['filters']['edFormats']) ? 'checked' : ''?>>
                                         <label class="form-check-label" for="<?= $edFormat['NAME']?>">
                                             <?= $edFormat['NAME']?>
                                         </label>
@@ -77,16 +80,19 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <div class="container-row-custom space-between mt-3">
                     <div class="w-47">
                         <label for="price-from">The lowest&nbsp;price:</label>
-                        <input type="text" class="form-control" name="minPrice" id="price-from" placeholder="Enter price">
+                        <input type="text" class="form-control" name="minPrice" id="price-from" placeholder="Enter price"
+                               value="<?=$arResult['filters']['minPrice']?>">
                     </div>
                     <div class="w-47">
                         <label for="price-to">The highest&nbsp;price:</label>
-                        <input type="text" class="form-control" name="maxPrice" id="price-to" placeholder="Enter price">
+                        <input type="text" class="form-control" name="maxPrice" id="price-to" placeholder="Enter price"
+                               value="<?=$arResult['filters']['maxPrice']?>">
                     </div>
                 </div>
                 <?php if ($USER->GetID() !== null): ?>
                     <div class="form-check form-check-custom mt-4 pl-0-3-rem">
-                        <input class="form-check-input" name="myPreferences" type="checkbox">
+                        <input class="form-check-input" name="myPreferences" type="checkbox"
+                            <?=$arResult['myPreferences'] ? 'checked' : ''?>>
                         <label class="form-check-label" for="myPreferences">
                             Use my preferences
                         </label>
@@ -111,7 +117,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <div class="br-message"></div>
                     <div class="sub-message-custom padding-1">Search for examples. Abstract concepts can be hard to understand. It tends to be far easier to form a mental image if you have a concrete example of something</div>
                     <div class="br-message"></div>
-                    <div class="sub-message-custom padding-1">Have a question? Contact us by support.email@email.ru</div>
+                    <div class="sub-message-custom padding-1">Have a question? Contact us by <?=SUPPORT_EMAIL?></div>
                 </div>
             </div>
         </div>
@@ -124,17 +130,15 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <p class="mt-3">Resently created profiles:</p>
             <div class="cards-container">
                 <?php foreach ($arResult['tutors'] as $tutor) : ?>
-                <a href="/profile/<?=$tutor['ID']?>/" class="mb-3 card-link-container-custom">
-                    <div class="mt-4 card-box-container-custom">
+                <div class="mb-3 card-link-container-custom">
+                    <a class="mt-4 card-box-container-custom" href="/profile/<?=$tutor['ID']?>/">
                         <div class="row no-gutters card-container">
                                 <div class="photo-container">
                                     <img src="<?=$tutor['photo']?>" class="img-rounded card-img img-fixed-size" alt="Tutor photo">
                                 </div>
                             <div class="card-body-custom">
                                     <h2 class="card-title-custom">
-                                        <?=htmlspecialchars($tutor['fullName']['lastName'])?>&nbsp;
-                                        <?=htmlspecialchars($tutor['fullName']['name'])?>&nbsp;
-                                        <?=htmlspecialchars($tutor['fullName']['secondName'])?>
+                                        <?=htmlspecialchars(HTMLHelper::cutText("{$tutor['fullName']['lastName']} {$tutor['fullName']['name']} {$tutor['fullName']['secondName']}", 50))?>
                                     </h2>
 <!--                                    <div class="br"></div>-->
                                 <div class="container-card-main-info-custom">
@@ -183,8 +187,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 </div>
 
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
                 <?php endforeach; ?>
             </div>
 <!--            pagination-->

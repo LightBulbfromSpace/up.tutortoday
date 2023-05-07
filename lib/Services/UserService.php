@@ -685,13 +685,25 @@ class UserService
         ];
     }
 
-    public function setBlockStatus(mixed $blocked)
+    public function setBlockStatus(int $userID, string $blocked)
     {
         $user = new CUser();
-        $user->update($this->observedUserID, [
+        return $user->Update($userID, [
             'BLOCKED' => $blocked,
         ]);
+    }
 
-        return true;
+    
+
+    public function isBlocked()
+    {
+        $result = UserTable::query()
+            ->setSelect(['ID'])
+            ->where('ID', $this->observedUserID)
+            ->fetchObject();
+
+        var_dump($result['ID']);die;
+
+        return $result['BLOCKED'] === 'Y';
     }
 }
