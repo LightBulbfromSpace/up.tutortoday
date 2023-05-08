@@ -22,7 +22,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <?=htmlspecialchars($arResult['user']['mainData']['LAST_NAME'])?>
                 <?=htmlspecialchars($arResult['user']['mainData']['SECOND_NAME'])?>
             </div>
-            <div class="box-invisible-custom role-container-custom"><div>I'm a</div>&nbsp;<div class="box-small-dark-custom"><?=$arResult['user']['role']['NAME']?></div></div>
+            <div class="box-invisible-custom role-container-custom"><div>I'm a</div>&nbsp;<div class="box-small-dark-custom"><?=htmlspecialchars($arResult['user']['role']['NAME'])?></div></div>
             <div class="br"></div>
             <?php if ($USER->GetID() === null): ?>
                 <div class="box-dark-element-custom">Only logged-in users can see contacts</div>
@@ -88,7 +88,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <label class="label">Days of week</label>
                     <div class="box-stretched-custom">
                         <?php foreach ($arResult['weekdays'] as $weekday): ?>
-                            <button class="box-button" onclick="getTime(<?=$arResult['user']['mainData']['ID']?>, <?=$weekday['ID']?>)" id="weekday-<?=$weekday['ID']?>"><?=$weekday['NAME']?></button>
+                            <button class="box-button" onclick="getTime(<?=$arResult['user']['mainData']['ID']?>, <?=$weekday['ID']?>)" id="weekday-<?=$weekday['ID']?>"><?=htmlspecialchars($weekday['NAME'])?></button>
                         <?php endforeach; ?>
                     </div>
                 </div>
@@ -107,10 +107,10 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                             <?php endif; ?>
                             <?php foreach ($arResult['user']['subjects'] as $subject): ?>
                                 <div class="box-dark-element-custom">
-                                    <?=$subject['SUBJECT']['NAME']?>
+                                    <?=htmlspecialchars($subject['SUBJECT']['NAME'])?>
                                 </div>
                                 <div class="box-invisible-custom">
-                                    <?=$subject['PRICE']?> rub/hour
+                                    <?=htmlspecialchars($subject['PRICE'])?> rub/hour
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -125,7 +125,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                             <?php endif; ?>
                             <?php foreach ($arResult['user']['edFormats'] as $edFormat): ?>
                                 <div class="box-dark-element-custom">
-                                    <?=$edFormat['EDUCATION_FORMAT']['NAME']?>
+                                    <?=htmlspecialchars($edFormat['EDUCATION_FORMAT']['NAME'])?>
                                 </div>
                             <?php endforeach; ?>
                         </div>

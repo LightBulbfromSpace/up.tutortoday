@@ -156,6 +156,7 @@
     flex-direction: column;
     min-width: 200px;
     margin-bottom: 15px;
+    margin-right: 5%;
 }
 
 .box-stretched-custom {

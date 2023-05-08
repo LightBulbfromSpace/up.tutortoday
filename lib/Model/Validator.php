@@ -105,8 +105,12 @@ class Validator
         return true;
     }
 
-    public static function validateRole(int $RoleID)
+    public static function validateRole(?int $RoleID)
     {
+        if ($RoleID === null)
+        {
+            return false;
+        }
         $roles = EducationService::getAllRoles();
         foreach ($roles as $role)
         {

@@ -58,6 +58,10 @@ class FeedbackService
             ->fetchCollection();
         $studentIDs = [];
 
+        if ($feedbacks->count() === 0) {
+            return null;
+        }
+
         foreach ($feedbacks as $feedback)
         {
             $studentIDs[] = $feedback['STUDENT']['ID'];

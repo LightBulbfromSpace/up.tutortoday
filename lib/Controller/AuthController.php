@@ -72,7 +72,7 @@ class AuthController extends Controller
             LocalRedirect('/registration/?err=user_exists');
         }
 
-        $passCheck = Validator::validatePassword($post['password'], $post['passwordConfirm']);
+        $passCheck = Validator::validatePassword((string)$post['password'], (string)$post['passwordConfirm']);
         if ($passCheck !== true)
         {
             LocalRedirect("/registration/?err=$passCheck");
@@ -98,7 +98,7 @@ class AuthController extends Controller
             LocalRedirect('/registration/?err=invalid_subject');
         }
 
-        if (!Validator::validateCitiesIDs([$userForm->getCityID()], false))
+        if (!Validator::validateCitiesIDs((array)$userForm->getCityID(), false))
         {
             LocalRedirect('/registration/?err=invalid_city');
         }

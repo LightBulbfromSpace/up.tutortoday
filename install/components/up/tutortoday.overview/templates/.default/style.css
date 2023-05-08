@@ -6,6 +6,13 @@
         display: flex;
         flex-direction: row;
     }
+
+    .not-found-container {
+        height: 80%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }
 @media screen and (max-width: 900px) {
     .container-main-body-custom {
@@ -40,6 +47,16 @@
     .message-body-custom {
         border-bottom-left-radius: 12px;
     }
+    .not-found-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+.not-found-text {
+    font-size: 24px;
+    font-weight: 500;
 }
 
 .container-margin-top {

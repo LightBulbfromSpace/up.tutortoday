@@ -24,15 +24,15 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <div class="br"></div>
                 <div class="label">Full name</div>
                 <div class="box-dark-element-custom">
-                    <input class="input-custom" name="name" placeholder="No name" value="<?=htmlspecialchars($arResult['user']['mainData']['NAME'])?>">
+                    <input class="input-custom" name="name" placeholder="No name" value="<?=htmlspecialchars($arResult['user']['mainData']['NAME'])?>" required>
                 </div>
                 <div class="box-dark-element-custom">
-                    <input class="input-custom" name="lastName" placeholder="No surname" value="<?=htmlspecialchars($arResult['user']['mainData']['LAST_NAME'])?>">
+                    <input class="input-custom" name="lastName" placeholder="No surname" value="<?=htmlspecialchars($arResult['user']['mainData']['LAST_NAME'])?>" required>
                 </div>
                 <div class="box-dark-element-custom">
                     <input class="input-custom" name="middleName" placeholder="No middle name" value="<?=htmlspecialchars($arResult['user']['mainData']['SECOND_NAME'])?>">
                 </div>
-                <div class="box-invisible-custom role-container-custom"><div>I'm a</div>&nbsp;<div class="box-small-dark-custom"><?=$arResult['user']['role']['NAME']?></div></div>
+                <div class="box-invisible-custom role-container-custom"><div>I'm a</div>&nbsp;<div class="box-small-dark-custom"><?=htmlspecialchars($arResult['user']['role']['NAME'])?></div></div>
                 <div class="br"></div>
                     <div id="msg-container"></div>
                     <label class="label">Password change</label>
@@ -50,7 +50,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <div class="container-contacts">
                     <label class="label">Email</label>
                     <div class="box-dark-element-custom">
-                        <input class="input-custom" name="workingEmail" value="<?=$arResult['user']['contacts']['email']?>">
+                        <input class="input-custom" name="workingEmail" value="<?=htmlspecialchars($arResult['user']['contacts']['email'])?>">
                     </div>
                 </div>
                 <div class="container-contacts">
@@ -91,7 +91,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 </div>
                 <div class="save-button-container">
                     <button type="button" class="button-plus-minus button-small-custom container-margin-top-bottom" onclick="openDeleteProfileForm(<?=$arResult['user']['mainData']['ID']?>)">Delete Profile</button>
-                    <button type="submit" class="button-plus-minus button-small-custom container-margin-top-bottom" onclick="submitForms()">Save Changes</button>
+                    <button type="submit" class="button-plus-minus button-small-custom container-margin-top-bottom">Save Changes</button>
                 </div>
             </div>
             <label class="label">Description</label>
@@ -111,8 +111,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                                <?php if ($arResult['user']['edFormatsIDs'] !== null): ?>
                                                <?=in_array($edFormat['ID'], $arResult['user']['edFormatsIDs']) ? 'checked' : ''?>
                                                <?php endif; ?>>
-                                        <label class="form-check-label" for="<?= $edFormat['NAME']?>">
-                                            <?= $edFormat['NAME']?>
+                                        <label class="form-check-label" for="<?=htmlspecialchars($edFormat['NAME'])?>">
+                                            <?=htmlspecialchars($edFormat['NAME'])?>
                                         </label>
                                     </div>
                                 <?php endforeach; ?>
@@ -125,7 +125,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                             <select name="city">
                                 <option value=""></option>
                                 <?php foreach ($arResult['cities'] as $city): ?>
-                                    <option value="<?=$city['ID']?>" <?=$arResult['user']['city'] === $city['NAME'] ? 'selected' : ''?>><?=$city['NAME']?></option>
+                                    <option value="<?=$city['ID']?>" <?=$arResult['user']['city'] === $city['NAME'] ? 'selected' : ''?>><?=htmlspecialchars($city['NAME'])?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -138,10 +138,10 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                     <div class="container-subjects" id="subject-container-<?=$subject['SUBJECT']['ID']?>">
                                         <div class="container-subjects">
                                             <div class="box-dark-element-custom">
-                                                <?=$subject['SUBJECT']['NAME']?>
+                                                <?=htmlspecialchars($subject['SUBJECT']['NAME'])?>
                                             </div>
                                                 <div class="container-row-custom is-aligned-center">
-                                                    <input type="number" class="input-custom" name="subjectsPrices[<?=$subject['SUBJECT']['ID']?>]" value="<?=$subject['PRICE']?>">
+                                                    <input type="number" class="input-custom" name="subjectsPrices[<?=$subject['SUBJECT']['ID']?>]" value="<?=htmlspecialchars($subject['PRICE'])?>">
                                                     <div class="price">rub/hour</div>
                                                 </div>
                                         </div>
@@ -205,10 +205,5 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
         if (elems[0]) {
             elems[0].remove()
         }
-        let input = document.getElementById('file-input')
-        input.addEventListener('input', () => {
-            console.log('here')
-            updatePhoto()
-        })
     })
 </script>

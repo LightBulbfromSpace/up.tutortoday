@@ -30,6 +30,7 @@ class ErrorService
             'invalid_ed_format' => "Education format is invalid",
             'unexpected_error' => "Unexpected error",
             'invalid_city' => "Invalid city",
+            'invalid_role' => "Invalid user role",
             'invalid_csrf' => "Invalid CSRF token",
             'perm_denied' => "Permission denied",
             'not_img' => "File is not an image",

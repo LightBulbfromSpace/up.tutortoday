@@ -24,8 +24,8 @@ class UserRegisterForm
 
     private array $edFormatsIDs = [];
     private string $description;
-    private string|int $cityID;
-    private int $roleID;
+    private ?int $cityID;
+    private ?int $roleID;
     private array $newSubjects;
 
     public function __construct(ParameterDictionary $post)
@@ -41,8 +41,8 @@ class UserRegisterForm
         $this->phoneNumber = trim($post['phoneNumber']);
         $this->edFormatsIDs = $post['edFormats'] ?? [];
         $this->description = $post['description'];
-        $this->cityID = !is_numeric($post['city']) ? '' : (int)$post['city'];
-        $this->roleID = !is_numeric($post['role']) ? 1 : (int)$post['role'];
+        $this->cityID = !is_numeric($post['city']) ? null : (int)$post['city'];
+        $this->roleID = !is_numeric($post['role']) ? null : (int)$post['role'];
         $this->subjectsIDs = $post['subjects'] ?? [];
         foreach ($post['subjectsPrices'] as $ID => $subjectPrice)
         {
@@ -128,12 +128,12 @@ class UserRegisterForm
         return $this->description;
     }
 
-    public function getCityID(): string|int
+    public function getCityID(): ?int
     {
         return $this->cityID;
     }
 
-    public function getRoleID(): int
+    public function getRoleID(): ?int
     {
         return $this->roleID;
     }

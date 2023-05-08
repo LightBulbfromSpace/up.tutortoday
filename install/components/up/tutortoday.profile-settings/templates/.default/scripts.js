@@ -1,32 +1,32 @@
 
-function getUserID() {
-    // let result =  BX.ajax({
-    //     url: '/profile/getID/',
-    //     data: {
-    //         sessid: BX.bitrix_sessid(),
-    //     },
-    //     method: 'POST',
-    //     dataType: 'json',
-    //     timeout: 10,
-    //     onsuccess: function (res) {
-    //         console.log(res)
-    //     },
-    //     onfailure: e => {
-    //         console.error(e)
-    //     }
-    // })
-
-    return BX.ajax.post(
-        '/profile/getID/',
-        {
-            sessid: BX.bitrix_sessid(),
-        },
-        function (res) {
-            return res
-        });
-
-    // return result
-}
+// function getUserID() {
+//     // let result =  BX.ajax({
+//     //     url: '/profile/getID/',
+//     //     data: {
+//     //         sessid: BX.bitrix_sessid(),
+//     //     },
+//     //     method: 'POST',
+//     //     dataType: 'json',
+//     //     timeout: 10,
+//     //     onsuccess: function (res) {
+//     //         console.log(res)
+//     //     },
+//     //     onfailure: e => {
+//     //         console.error(e)
+//     //     }
+//     // })
+//
+//     return BX.ajax.post(
+//         '/profile/getID/',
+//         {
+//             sessid: BX.bitrix_sessid(),
+//         },
+//         function (res) {
+//             return res
+//         });
+//
+//     // return result
+// }
 function getTime(userID, dayID) {
     BX.ajax({
         url: '/profile/weekday/',
@@ -92,12 +92,6 @@ function closeTimepicker() {
     document.getElementById('timepicker-form').style.display = 'none';
 }
 
-// function submitForms() {
-//     document.getElementById('full-name-form').submit();
-//     document.getElementById('description-form').submit();
-//     document.getElementById('ed-format-form').submit();
-// }
-
 function closeSubjectForm() {
     document.getElementById('add-subject-area').lastChild.remove()
 }
@@ -140,7 +134,7 @@ function openSubjectForm(weekdays) {
 
     let options = '';
     weekdays.forEach((weekday) => {
-        options += `<option value="` + weekday['ID'] + `">` + weekday['name'] + `</option>`
+        options += `<option value="` + weekday['ID'] + `">` + sanitize(weekday['name']) + `</option>`
     })
 
     form.innerHTML = `<div class="container-subjects box is-justified-center" id="subject-form">
@@ -455,4 +449,17 @@ function ToPreviewButton() {
     let button = document.getElementById('preview-confirm-button')
     button.onclick = updatePhoto
     button.innerText = 'Preview'
+}
+
+function sanitize(string) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#x27;',
+        "/": '&#x2F;',
+    };
+    const reg = /[&<>"'/]/ig;
+    return string.replace(reg, (match)=>(map[match]));
 }

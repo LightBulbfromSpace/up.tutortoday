@@ -29,8 +29,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 <div class="form-check form-check-custom">
                                     <input class="form-check-input" name="subjects[]" type="checkbox" value="<?= $subject['ID']?>"
                                         <?=in_array($subject['ID'], (array)$arResult['filters']['subjects']) ? 'checked' : ''?>>
-                                    <label class="form-check-label" for="<?= $subject['NAME']?>">
-                                        <?= $subject['NAME']?>
+                                    <label class="form-check-label" for="<?=htmlspecialchars($subject['NAME'])?>">
+                                        <?=htmlspecialchars($subject['NAME'])?>
                                     </label>
                                 </div>
                                 <?php endforeach; ?>
@@ -47,8 +47,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                     <div class="form-check form-check-custom">
                                         <input class="form-check-input" name="cities[]" type="checkbox" value="<?= $city['ID']?>"
                                             <?=in_array($city['ID'], (array)$arResult['filters']['cities']) ? 'checked' : ''?>>
-                                        <label class="form-check-label" for="<?= $city['NAME']?>">
-                                            <?= $city['NAME']?>
+                                        <label class="form-check-label" for="<?=htmlspecialchars($city['NAME'])?>">
+                                            <?=htmlspecialchars($city['NAME'])?>
                                         </label>
                                     </div>
                                 <?php endforeach; ?>
@@ -68,8 +68,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                     <div class="form-check form-check-custom">
                                         <input class="form-check-input" name="edFormats[]" type="checkbox" value="<?= $edFormat['ID']?>"
                                             <?=in_array($edFormat['ID'], (array)$arResult['filters']['edFormats']) ? 'checked' : ''?>>
-                                        <label class="form-check-label" for="<?= $edFormat['NAME']?>">
-                                            <?= $edFormat['NAME']?>
+                                        <label class="form-check-label" for="<?=htmlspecialchars($edFormat['NAME'])?>">
+                                            <?=htmlspecialchars($edFormat['NAME'])?>
                                         </label>
                                     </div>
                                 <?php endforeach; ?>
@@ -81,12 +81,12 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <div class="w-47">
                         <label for="price-from">The lowest&nbsp;price:</label>
                         <input type="text" class="form-control" name="minPrice" id="price-from" placeholder="Enter price"
-                               value="<?=$arResult['filters']['minPrice']?>">
+                               value="<?=htmlspecialchars($arResult['filters']['minPrice'])?>">
                     </div>
                     <div class="w-47">
                         <label for="price-to">The highest&nbsp;price:</label>
                         <input type="text" class="form-control" name="maxPrice" id="price-to" placeholder="Enter price"
-                               value="<?=$arResult['filters']['maxPrice']?>">
+                               value="<?=htmlspecialchars($arResult['filters']['maxPrice'])?>">
                     </div>
                 </div>
                 <?php if ($USER->GetID() !== null): ?>
@@ -128,6 +128,13 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 </form>
 
             <p class="mt-3">Recently created profiles:</p>
+            <?php if (count($arResult['tutors']) === 0): ?>
+                <div class="not-found-container">
+                    <div class="not-found-text">
+                        No tutors found
+                    </div>
+                </div>
+            <?php endif; ?>
             <div class="cards-container">
                 <?php foreach ($arResult['tutors'] as $tutor) : ?>
                 <div class="mb-3 card-link-container-custom">
@@ -161,16 +168,16 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                                     </div>
                                             <?php break; endif; ?>
                                                 <div class="box-darker-element-custom container-row-custom is-justified-center">
-                                                    <div><?=$subject['NAME']?></div>
+                                                    <div><?=htmlspecialchars($subject['NAME'])?></div>
                                                     <div class="vbr"></div>
-                                                    <div><?=$subject['PRICE'] == 0 ? '-' : $subject['PRICE']?></div>
+                                                    <div><?=$subject['PRICE'] == 0 ? '-' : htmlspecialchars($subject['PRICE'])?></div>
                                                 </div>
                                             <?php endforeach; ?>
                                             <?php if($tutor['edFormat'] == null): ?>
                                                 <div class="box-dark-element-custom">No education format</div>
                                             <?php endif; ?>
                                             <?php foreach ($tutor['edFormat'] as $edFormat): ?>
-                                                <div class="box-dark-element-custom"><?=$edFormat['NAME']?></div>
+                                                <div class="box-dark-element-custom"><?=htmlspecialchars($edFormat['NAME'])?></div>
                                             <?php endforeach; ?>
                                         </div>
                                     </div>
