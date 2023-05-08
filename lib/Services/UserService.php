@@ -31,6 +31,7 @@ class UserService
     private int $numOfFetchedUsers = 0;
     private bool $fetchAllAvailableUsers = false;
     private array $roleIDs = [1];
+    private bool $onlyUnblocked = false;
     public function __construct(int $userID = 0, array $userIDs = [])
     {
         $this->observedUserID = $userID;
@@ -40,6 +41,11 @@ class UserService
     public function getNumOfFetchedUsers(): int
     {
         return $this->numOfFetchedUsers;
+    }
+
+    public function getOnlyUnblockedUsers(bool $isUnblockedUsers)
+    {
+        $this->onlyUnblocked = $isUnblockedUsers;
     }
 
     public function UpdatePassword(string $oldPassword, string $newPassword, string $passwordConfirm)
@@ -279,7 +285,7 @@ class UserService
             ->where('WORK_COMPANY', SITE_NAME);
 
         $query = UserTable::query()
-            ->setSelect(['ID', 'NAME', 'LAST_NAME', 'SECOND_NAME', 'WORK_CITY', 'WORK_POSITION'])
+            ->setSelect(['ID', 'NAME', 'LAST_NAME', 'SECOND_NAME', 'WORK_CITY', 'WORK_POSITION', 'BLOCKED'])
             ->whereIn('WORK_POSITION', $this->roleIDs)
             ->where('WORK_COMPANY', SITE_NAME)
             ->setOrder(['ID' => 'DESC'])
@@ -290,6 +296,12 @@ class UserService
         {
             $queryForCount->whereIn('ID', $this->userIDs);
             $query->whereIn('ID', $this->userIDs);
+        }
+
+        if ($this->onlyUnblocked)
+        {
+            $queryForCount->where('BLOCKED', 'N');
+            $query->where('BLOCKED', 'N');
         }
 
         $users = $query->fetchCollection();
@@ -318,6 +330,7 @@ class UserService
                     'lastName' => $user['LAST_NAME'],
                     'secondName' => $user['SECOND_NAME'],
                 ],
+                'blocked' => $user['BLOCKED'],
             ];
             foreach ($roles as $role)
             {

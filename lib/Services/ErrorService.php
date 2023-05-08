@@ -33,6 +33,7 @@ class ErrorService
             'invalid_csrf' => "Invalid CSRF token",
             'perm_denied' => "Permission denied",
             'not_img' => "File is not an image",
+            'blocked' => "You have been blocked. If you think it's a mistake, please, contact us by " . SUPPORT_EMAIL,
             'ok' => "Success",
             default => "Undefined error",
         };

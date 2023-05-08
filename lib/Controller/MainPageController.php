@@ -72,6 +72,7 @@ class MainPageController
         $userService = new UserService(0, $foundUsersIDs);
         $userService->setRoles(['tutor']);
         $userService->setFetchAllAvailableUsers(false);
+        $userService->getOnlyUnblockedUsers(true);
 
         $tutors = $userService->getUsersByPage($this->pageFromNull * USERS_BY_PAGE, USERS_BY_PAGE);
         $this->numberOfUsers = $userService->getNumOfFetchedUsers();
@@ -92,6 +93,7 @@ class MainPageController
         $userService = new UserService(0, $filteredUsersIDs);
         $userService->setRoles(['tutor']);
         $userService->setFetchAllAvailableUsers(false);
+        $userService->getOnlyUnblockedUsers(true);
 
         $tutors = $userService->getUsersByPage($this->pageFromNull * USERS_BY_PAGE, USERS_BY_PAGE);
         $this->numberOfUsers = $userService->getNumOfFetchedUsers();
@@ -103,6 +105,7 @@ class MainPageController
         $userService = new UserService();
         $userService->setRoles(['tutor']);
         $userService->setFetchAllAvailableUsers(true);
+        $userService->getOnlyUnblockedUsers(true);
 
         $tutors = $userService->getUsersByPage($this->pageFromNull * USERS_BY_PAGE, USERS_BY_PAGE);
         $this->numberOfUsers = $userService->getNumOfFetchedUsers();

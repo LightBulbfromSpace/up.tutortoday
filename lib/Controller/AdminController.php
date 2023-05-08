@@ -49,7 +49,8 @@ class AdminController
                 'NAME' => $item['fullName']['name'],
                 'LAST_NAME' => $item['fullName']['lastName'],
                 'SECOND_NAME' => $item['fullName']['secondName'],
-                'ROLE' => $item['ROLE']
+                'ROLE' => $item['ROLE'],
+                'BLOCKED' => $item['blocked'],
             ];
         }
 

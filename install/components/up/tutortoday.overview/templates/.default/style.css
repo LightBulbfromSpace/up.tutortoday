@@ -261,6 +261,10 @@
 .card-link-container-custom {
     flex: 1 0 33%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .card-box-container-custom:hover {

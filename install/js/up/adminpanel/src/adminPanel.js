@@ -334,6 +334,7 @@ export class AdminPanel
 				'user-',
 				blockAddress,
 				res['items'][i]['ROLE']['NAME'],
+				res['items'][i]['BLOCKED'],
 			))
 		}
 
@@ -469,7 +470,7 @@ export class AdminPanel
 		return elem
 	}
 
-	#createUserElement(ID, fullName, elemIDPrefix, blockAddress, role)
+	#createUserElement(ID, fullName, elemIDPrefix, blockAddress, role, blocked)
 	{
 		let elem = this.#createTableElementContainer()
 		elem.id = elemIDPrefix + ID
@@ -480,8 +481,7 @@ export class AdminPanel
 		elemID.style.minWidth ='40px'
 
 		elem.appendChild(elemID)
-
-		//let elemName = `<a href="/profile/${ID}/" target="_blank" rel="noopener noreferrer">${fullName}</a>`
+		
 		let elemName = document.createElement('a')
 		elemName.href = `/profile/${ID}/`
 		elemName.target = '_black'
@@ -501,36 +501,73 @@ export class AdminPanel
 
 		elem.appendChild(elemRole)
 
-		let blockButton = this.#createButton(
-			'hsl(348, 100%, 61%)', 'hsl(348, 100%, 70%)',
-			'Block', () => {
-				BX.ajax({
-					url: blockAddress,
-					data: {
-						userID: ID,
-						blocked: 'Y',
-						sessid: BX.bitrix_sessid(),
-					},
-					method: 'POST',
-					dataType: 'json',
-					timeout: 30,
-					onsuccess: (res) => {
-						console.log(res)
-						if (JSON.parse(res) === true) {
-							blockButton.replaceWith(
-								this.#createUnblockButton(blockAddress, ID, blockButton)
-							)
-						}
-					},
-					onfailure: (e) => {
-						console.log(e)
-					}
-				})
+		let generalCallback = (action) => {
+			BX.ajax({
+				url: blockAddress,
+				data: {
+					userID: ID,
+					blocked: action,
+					sessid: BX.bitrix_sessid(),
+				},
+				method: 'POST',
+				dataType: 'json',
+				timeout: 30,
+				onsuccess: (res) => {
+					console.log(res)
+				},
+				onfailure: (e) => {
+					console.log(e)
+				}
 			})
+		}
 
-		blockButton.style.marginLeft = '20px'
+		let blockCallback = () => { generalCallback('Y') }
 
-		elem.appendChild(blockButton)
+		let unblockCallback = () => { generalCallback('N')  }
+
+		console.log(blocked)
+
+		let blockButton = new SwitchButton({
+			firstCallback: !blocked ? blockCallback : unblockCallback,
+			secondCallback: !blocked ? unblockCallback : blockCallback,
+			firstColor: !blocked ? 'hsl(348, 100%, 61%)' : 'hsl(0,0%,85%)',
+			firstHoverColor: !blocked ? 'hsl(348, 100%, 70%)' : 'hsl(0,0%,70%)',
+			secondColor: !blocked ? 'hsl(0,0%,85%)' : 'hsl(348, 100%, 61%)',
+			secondHoverColor: !blocked ? 'hsl(0,0%,70%)' : 'hsl(348, 100%, 61%)',
+			firstText: !blocked ? 'Block' : 'Unblock',
+			secondText: !blocked ? 'Unblock' : 'Block',
+		})
+
+		// let blockButton = this.#createButton(
+		// 	'hsl(348, 100%, 61%)', 'hsl(348, 100%, 70%)',
+		// 	'Block', () => {
+		// 		BX.ajax({
+		// 			url: blockAddress,
+		// 			data: {
+		// 				userID: ID,
+		// 				blocked: 'Y',
+		// 				sessid: BX.bitrix_sessid(),
+		// 			},
+		// 			method: 'POST',
+		// 			dataType: 'json',
+		// 			timeout: 30,
+		// 			onsuccess: (res) => {
+		// 				console.log(res)
+		// 				if (JSON.parse(res) === true) {
+		// 					blockButton.replaceWith(
+		// 						this.#createUnblockButton(blockAddress, ID, blockButton)
+		// 					)
+		// 				}
+		// 			},
+		// 			onfailure: (e) => {
+		// 				console.log(e)
+		// 			}
+		// 		})
+		// 	})
+
+		blockButton.buttonEntity.style.marginLeft = '20px'
+
+		elem.appendChild(blockButton.buttonEntity)
 
 		return elem
 	}
@@ -625,54 +662,37 @@ export class AdminPanel
         		</article>`
 	}
 
-	#createUnblockButton(blockAddress, userID, blockButton)
-	{
-		let unblockButton = this.#createButton(
-			'hsl(0,0%,85%)', 'hsl(0,0%,70%)', 'Unblock',
-			() => {
-				BX.ajax({
-					url: blockAddress,
-					data: {
-						userID: userID,
-						blocked: 'N',
-						sessid: BX.bitrix_sessid(),
-					},
-					method: 'POST',
-					dataType: 'json',
-					timeout: 30,
-					onsuccess: (res) => {
-						console.log(res)
-						if (JSON.parse(res) === true) {
-							unblockButton.replaceWith(blockButton)
-						}
-					},
-					onfailure: (e) => {
-						console.log(e)
-					}
-				})
-				// BX.ajax.post(
-				// 	blockAddress,
-				// 	{
-				// 		userID: userID,
-				// 		blocked: 'N',
-				// 		sessid: BX.bitrix_sessid(),
-				// 	},
-				// 	(res) => {
-				// 		console.log(res)
-				// 	},
-				// 	(e) => {
-				// 		console.log(e)
-				// 	}
-				// )
-			})
-
-		unblockButton.style.marginLeft = '20px'
-
-		// unblockButton.onclick = () => {
-		// 	unblockButton.replaceWith(blockButton)
-		// }
-		return unblockButton
-	}
+	// #createUnblockButton(blockAddress, userID, blockButton)
+	// {
+	// 	let unblockButton = this.#createButton(
+	// 		'hsl(0,0%,85%)', 'hsl(0,0%,70%)', 'Unblock',
+	// 		() => {
+	// 			BX.ajax({
+	// 				url: blockAddress,
+	// 				data: {
+	// 					userID: userID,
+	// 					blocked: 'N',
+	// 					sessid: BX.bitrix_sessid(),
+	// 				},
+	// 				method: 'POST',
+	// 				dataType: 'json',
+	// 				timeout: 30,
+	// 				onsuccess: (res) => {
+	// 					console.log(res)
+	// 					if (JSON.parse(res) === true) {
+	// 						unblockButton.replaceWith(blockButton)
+	// 					}
+	// 				},
+	// 				onfailure: (e) => {
+	// 					console.log(e)
+	// 				}
+	// 			})
+	// 		})
+	//
+	// 	unblockButton.style.marginLeft = '20px'
+	//
+	// 	return unblockButton
+	// }
 
 	#bindPaginationButtons(page, maxPage)
 	{
@@ -707,9 +727,109 @@ export class AdminPanel
 	}
 }
 
-class Page {
+class Page
+{
 	value = 0
 	constructor(value = 0) {
 		this.value = value
+	}
+}
+
+class SwitchButton
+{
+	currentCallback
+	currentHoverColor
+	currentColor
+	constructor(params = {}) {
+		if (typeof params.firstCallback != 'function') {
+			throw new Error('SwitchButton: firstCallback is required')
+		}
+		this.firstCallback = params.firstCallback
+		if (typeof params.secondCallback != 'function') {
+			throw new Error('SwitchButton: secondCallback is required')
+		}
+		this.secondCallback = params.secondCallback
+		this.currentCallback = this.firstCallback
+
+		if (!Type.isStringFilled(params.firstColor)) {
+			throw new Error('SwitchButton: firstColor is required')
+		}
+		this.firstColor = params.firstColor
+		this.secondColor =  Type.isStringFilled(params.secondColor) ? params.secondColor : this.firstColor
+		this.currentColor = this.firstColor
+
+		this.firstHoverColor = Type.isStringFilled(params.firstHoverColor) ? params.firstHoverColor : this.firstColor
+		this.secondHoverColor = Type.isStringFilled(params.secondHoverColor) ? params.secondHoverColor : this.secondColor
+		this.currentHoverColor = this.firstHoverColor
+
+		if (!Type.isStringFilled(params.firstText)) {
+			throw new Error('SwitchButton: firstText is required')
+		}
+		this.firstText = params.firstText
+		this.secondText =  Type.isStringFilled(params.secondText) ? params.secondText : this.firstText
+
+		this.buttonEntity = document.createElement('button')
+		this.buttonEntity.onclick = () => {
+			console.log(this.firstCallback)
+			this.firstCallback()
+			this.switch()
+		}
+
+		if (Type.isStringFilled(params.styleClass)) {
+			this.buttonEntity.classList.add(params.styleClass)
+		}
+		this.setDefaultStyle()
+	}
+
+	switch()
+	{
+		this.switchCallback()
+		this.switchColor()
+		this.switchText()
+		this.buttonEntity.onclick = () => {
+			console.log(this.currentCallback)
+			this.currentCallback()
+			this.switch()
+		}
+	}
+
+	switchCallback()
+	{
+		this.currentCallback = this.currentCallback === this.firstCallback ?
+			this.secondCallback : this.firstCallback
+	}
+
+	switchColor()
+	{
+		this.currentColor = this.currentColor === this.firstColor ?
+			this.secondColor : this.firstColor
+		this.currentHoverColor = this.currentHoverColor === this.firstHoverColor ?
+			this.secondHoverColor : this.firstHoverColor
+		this.buttonEntity.style.backgroundColor = this.currentColor
+	}
+
+	switchText()
+	{
+		this.buttonEntity.innerText =
+			this.buttonEntity.innerText === this.firstText ?
+			this.secondText : this.firstText
+	}
+
+	setDefaultStyle()
+	{
+		this.buttonEntity.innerText = this.firstText
+		this.buttonEntity.style.margin = '0 5px'
+		this.buttonEntity.style.minHeight = '3rem'
+		this.buttonEntity.style.minWidth = '5rem'
+		this.buttonEntity.style.backgroundColor = this.firstColor
+		this.buttonEntity.style.border = 'none'
+		this.buttonEntity.style.borderRadius = '10px'
+
+		this.buttonEntity.addEventListener('mouseenter', () => {
+			this.buttonEntity.style.backgroundColor = this.currentHoverColor
+		})
+		this.buttonEntity.addEventListener('mouseleave', () => {
+			this.buttonEntity.style.backgroundColor = this.currentColor
+		})
 	}
 }
