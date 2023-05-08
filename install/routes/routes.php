@@ -62,7 +62,7 @@ return function (RoutingConfigurator $routes) {
         ProfileController::deleteSubject(getPostList());
     });
     $routes->post('/profile/settings/addTime/', function (){
-        ProfileController::createTime(getPostList());
+        return json_encode(ProfileController::createTime(getPostList()));
     });
     $routes->post('/profile/settings/deleteTime/', function (){
         ProfileController::deleteTime(getPostList());

@@ -31,18 +31,18 @@ class UserRegisterForm
     public function __construct(ParameterDictionary $post)
     {
         $this->login = $post['login'] ?? '';
-        $this->name = $post['name'];
-        $this->lastName = $post['lastName'];
-        $this->middleName = $post['middleName'] ?? '';
-        $this->password = $post['password'] ?? '';
-        $this->confirmPassword = $post['confirmPassword'] ?? '';
-        $this->email = $post['email'] ?? '';
-        $this->workingEmail = $post['workingEmail'];
-        $this->phoneNumber = $post['phoneNumber'];
+        $this->name = trim($post['name']);
+        $this->lastName = trim($post['lastName']);
+        $this->middleName = trim($post['middleName']) ?? '';
+        $this->password = trim($post['password']) ?? '';
+        $this->confirmPassword = trim($post['confirmPassword']) ?? '';
+        $this->email = trim($post['email']) ?? '';
+        $this->workingEmail = trim($post['workingEmail']);
+        $this->phoneNumber = trim($post['phoneNumber']);
         $this->edFormatsIDs = $post['edFormats'] ?? [];
         $this->description = $post['description'];
         $this->cityID = !is_numeric($post['city']) ? '' : (int)$post['city'];
-        $this->roleID = (int)$post['role'] ?? 1;
+        $this->roleID = !is_numeric($post['role']) ? 1 : (int)$post['role'];
         $this->subjectsIDs = $post['subjects'] ?? [];
         foreach ($post['subjectsPrices'] as $ID => $subjectPrice)
         {

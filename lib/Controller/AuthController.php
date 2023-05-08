@@ -103,12 +103,10 @@ class AuthController extends Controller
             LocalRedirect('/registration/?err=invalid_city');
         }
 
-        foreach ($userForm->getEdFormatsIDs() as $edFormatID)
+
+        if (!Validator::validateEducationFormatIDs($userForm->getEdFormatsIDs(), false))
         {
-            if (!Validator::validateEducationFormatID($edFormatID, false))
-            {
-                LocalRedirect('/registration/?err=invalid_ed_format');
-            }
+            LocalRedirect('/registration/?err=invalid_ed_format');
         }
 
         if (!Validator::validateRole($userForm->getRoleID()))

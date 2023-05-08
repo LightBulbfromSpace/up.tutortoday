@@ -11,13 +11,15 @@ class Validator
     {
         return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
-    public static function validatePassword(string $password, string $repeat = null) : string|bool
+    public static function validatePassword(string $password, string $repeat = '') : string|bool
     {
+        $password = trim($password);
+        $repeat = trim($repeat);
         if (strlen($password) < 8 || strlen($password) > 100)
         {
-            return 'pass_too_short';
+            return 'pass_inval_len';
         }
-        if ($repeat !== null && $password !== $repeat)
+        if ($repeat !== '' && $password !== $repeat)
         {
             return 'pass_match';
         }
@@ -31,6 +33,7 @@ class Validator
 
     public static function validateNameField(string $name, bool $required = true,  int $maxLen = 100, int $minLen = 1) : bool
     {
+        $name = trim($name);
         if ($required === false && $name === '')
         {
             return true;
@@ -59,13 +62,26 @@ class Validator
         return true;
     }
 
-    public static function validateEducationFormatID(int $ID, bool $required = true) : bool
+    public static function validateEducationFormatIDs(array $edFormatsIDs, bool $required = true) : bool
     {
-        if (!$required && $ID === 0)
+        if ($edFormatsIDs === [])
         {
-            return true;
+            return !$required;
         }
-        return !((new EducationService([$ID]))->getEducationFormatByID() == null);
+
+        $allEdFormats = EducationService::getAllEdFormats();
+        $allEdFormatsIDs = [];
+        foreach ($allEdFormats as $edFormat) {
+            $allEdFormatsIDs[] = $edFormat->getID();
+        }
+        foreach ($edFormatsIDs as $edFormatID)
+        {
+            if (!in_array($edFormatID, $allEdFormatsIDs))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static function validateCitiesIDs(array $citiesIDs, bool $required = true) : bool
@@ -79,7 +95,7 @@ class Validator
         foreach ($allCities as $city) {
             $allCitiesIDs[] = $city->getID();
         }
-        foreach ($allCitiesIDs as $cityID)
+        foreach ($citiesIDs as $cityID)
         {
             if (!in_array($cityID, $allCitiesIDs))
             {

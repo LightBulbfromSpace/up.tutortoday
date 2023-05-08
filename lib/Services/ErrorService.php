@@ -21,7 +21,7 @@ class ErrorService
         return match ($this->errorCodes[count($this->errorCodes)-1]) {
             'empty_field' => "Required fields can't be empty",
             'auth' => "Invalid login or password",
-            'pass_too_short' => "Password is too short",
+            'pass_inval_len' => "Invalid length of password",
             'pass_match' => "Password's repetition doesn't match",
             'invalid_email' => "E-mail is invalid",
             'user_exists' => "User already exists",

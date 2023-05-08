@@ -89,6 +89,15 @@ class ProfileController
         {
             return null;
         }
+
+        $start = date_timestamp_get(new \DateTime($post['timeFrom']));
+        $end = date_timestamp_get(new \DateTime($post['timeTo']));
+
+        if (($end - $start) < 0)
+        {
+            return null;
+        }
+
         $timeToAdd = [
             'timeFrom' => $post['timeFrom'],
             'timeTo' => $post['timeTo'],
@@ -121,7 +130,30 @@ class ProfileController
             LocalRedirect("/profile/$this->userID/");
             return;
         }
+
         $user = new UserRegisterForm(getPostList());
+
+        $cities = $user->getCityID() == null ? [] : [$user->getCityID()];
+        $newSubjectsIDs = [];
+
+        foreach ($user->getNewSubjects() as $subject)
+        {
+            $newSubjectsIDs[] = $subject['ID'];
+        }
+
+        if (!Validator::validateNameField($user->getName())
+            || !Validator::validateNameField($user->getLastName())
+            || !Validator::validatePhoneNumber($user->getPhoneNumber())
+            || !Validator::validateEmail($user->getWorkingEmail())
+            || !Validator::validateSubjectsIDs($user->getSubjectsIDs(), false)
+            || !Validator::validateSubjectsIDs($newSubjectsIDs, false)
+            || !Validator::validateEducationFormatIDs($user->getEdFormatsIDs(), false)
+            || !Validator::validateCitiesIDs($cities, false)
+        )
+        {
+            LocalRedirect("/profile/$this->userID/settings/");
+            return;
+        }
         (new UserService($this->userID))->UpdateUser($user);
 
         LocalRedirect("/profile/$this->userID/");

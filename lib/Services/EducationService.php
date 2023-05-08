@@ -118,9 +118,9 @@ class EducationService
         return RolesTable::query()->setSelect(['*'])->fetchCollection();
     }
 
-    public function getSubjectsByIDs(array $ID)
+    public static function getSubjectsByID(int $ID)
     {
-        $subject = SubjectTable::query()->setSelect(['*'])->whereIn('ID', $this->usersIDs);
+        $subject = SubjectTable::query()->setSelect(['*'])->where('ID', $ID);
         if ($subject === null)
         {
             return null;
@@ -139,11 +139,11 @@ class EducationService
         return $role->fetchObject()->getID();
     }
 
-    public function getEducationFormatByID()
+    public static function getEducationFormatByID(int $edFormatID)
     {
         $edFormat = EducationFormatTable::query()
             ->setSelect(['*'])
-            ->whereIn('ID', $this->usersIDs);
+            ->whereIn('ID', $edFormatID);
         if ($edFormat === null)
         {
             return null;

@@ -116,7 +116,7 @@ class UserService
 
         if ($resultUser['TYPE'] !== 'OK')
         {
-            $DB->rollback();
+            $DB->Rollback();
             return $resultUser;
         }
 
@@ -131,7 +131,7 @@ class UserService
 
         if (!$resultUser)
         {
-            $DB->rollback();
+            $DB->Rollback();
             return $resultUser;
         }
 
@@ -141,7 +141,7 @@ class UserService
         ]);
         if (!$resultRole->isSuccess())
         {
-            $DB->rollback();
+            $DB->Rollback();
             return $resultRole->getErrorMessages();
         }
 
@@ -164,7 +164,7 @@ class UserService
             ]);
             if (!$resultSubject->isSuccess())
             {
-                $DB->rollback();
+                $DB->Rollback();
                 return $resultSubject->getErrorMessages();
             }
         }
@@ -175,7 +175,7 @@ class UserService
         ]);
         if (!$resultDescription->isSuccess())
         {
-            $DB->rollback();
+            $DB->Rollback();
             return $resultDescription->getErrorMessages();
         }
 
@@ -431,6 +431,8 @@ class UserService
 
     public function UpdateUser(UserRegisterForm $userForm)
     {
+        global $DB;
+        $DB->StartTransaction();
         $user = new \CUser();
         $userResult = $user->update($this->observedUserID, [
                 'NAME' => $userForm->getName(),
@@ -442,6 +444,7 @@ class UserService
         ]);
         if ($userResult !== true)
         {
+            $DB->Rollback();
             return $userResult;
         }
 
@@ -450,6 +453,7 @@ class UserService
         ]);
         if (!$descriptionResult->isSuccess())
         {
+            $DB->Rollback();
             return 'description update error';
         }
 
@@ -466,6 +470,7 @@ class UserService
             ]);
             if (!$edFormatResult->isSuccess())
             {
+                $DB->Rollback();
                 return 'education format update error';
             }
         }
@@ -478,6 +483,7 @@ class UserService
             ]);
             if (!$edFormatResult->isSuccess())
             {
+                $DB->Rollback();
                 return 'education format error';
             }
         }
@@ -495,6 +501,7 @@ class UserService
             ]);
             if (!$subjAddResult->isSuccess())
             {
+                $DB->Rollback();
                 return 'subject\'s price update error';
             }
         }
@@ -513,7 +520,7 @@ class UserService
                 $inArray = false;
                 foreach ($existingSubjectsIDs as $exSubjID)
                 {
-                    if ($newSubj['ID'] === $exSubjID)
+                    if ((int)$newSubj['ID'] === (int)$exSubjID)
                     {
                         $inArray = true;
                         break;
@@ -541,10 +548,11 @@ class UserService
             $addedSubjectsIDs[] = $subj['ID'];
             if (!$subjAddResult->isSuccess())
             {
+                $DB->Rollback();
                 return $subjAddResult->getErrorMessages();
             }
         }
-
+        $DB->Commit();
         return true;
     }
 
