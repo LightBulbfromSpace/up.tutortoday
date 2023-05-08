@@ -30,10 +30,10 @@ class ProfileController
         {
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
-        if (!$this->isOwnerOfProfile())
-        {
-            return (new ErrorService('perm_denied'))->getLastError();
-        }
+//        if (!$this->isOwnerOfProfile())
+//        {
+//            return (new ErrorService('perm_denied'))->getLastError();
+//        }
         if ($post['newPassword'] == '' || $post['passwordConfirm'] == '' || $post['oldPassword'] == '')
         {
             return (new ErrorService('empty_field'))->getLastError();
@@ -70,10 +70,10 @@ class ProfileController
         {
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
-        if(!$this->isOwnerOfProfile())
-        {
-            ShowMessage('permitted: not owner');
-        }
+//        if(!$this->isOwnerOfProfile())
+//        {
+//            ShowMessage('permitted: not owner');
+//        }
         (new UserService($this->userID))->deleteUser();
 
         LocalRedirect('/');
@@ -116,6 +116,10 @@ class ProfileController
 
     public static function getUserTimeByDayID(ParameterDictionary $post)
     {
+        if (!check_bitrix_sessid())
+        {
+            return (new ErrorService('invalid_csrf'))->getLastError();
+        }
         return DatetimeService::getWeekdayTimeByUserID($post['userID'], (int)$post['weekdayID']);
     }
 
@@ -125,11 +129,11 @@ class ProfileController
         {
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
-        if (!$this->isOwnerOfProfile())
-        {
-            LocalRedirect("/profile/$this->userID/");
-            return;
-        }
+//        if (!$this->isOwnerOfProfile())
+//        {
+//            LocalRedirect("/profile/$this->userID/");
+//            return;
+//        }
 
         $user = new UserRegisterForm(getPostList());
 

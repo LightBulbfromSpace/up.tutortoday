@@ -144,6 +144,11 @@ class AdminController
 
     public function addSubject(ParameterDictionary $dict)
     {
+        if (!check_bitrix_sessid())
+        {
+            return (new ErrorService('invalid_csrf'))->getLastError();
+        }
+
         if (!$this->isAdmin())
         {
             return (new ErrorService('perm_denied'))->getLastError();
@@ -164,6 +169,11 @@ class AdminController
 
     public function addEdFormat(ParameterDictionary $dict)
     {
+        if (!check_bitrix_sessid())
+        {
+            return (new ErrorService('invalid_csrf'))->getLastError();
+        }
+
         if (!$this->isAdmin())
         {
             return (new ErrorService('perm_denied'))->getLastError();
@@ -185,6 +195,11 @@ class AdminController
 
     public function addCity(ParameterDictionary $dict)
     {
+        if (!check_bitrix_sessid())
+        {
+            return (new ErrorService('invalid_csrf'))->getLastError();
+        }
+
         if (!$this->isAdmin())
         {
             return (new ErrorService('perm_denied'))->getLastError();
@@ -206,6 +221,11 @@ class AdminController
 
     public function deleteCity(ParameterDictionary $dict)
     {
+        if (!check_bitrix_sessid())
+        {
+            return (new ErrorService('invalid_csrf'))->getLastError();
+        }
+
         if (!$this->isAdmin())
         {
             return (new ErrorService('perm_denied'))->getLastError();
@@ -216,6 +236,10 @@ class AdminController
 
     public function deleteSubject(ParameterDictionary $dict)
     {
+        if (!check_bitrix_sessid())
+        {
+            return (new ErrorService('invalid_csrf'))->getLastError();
+        }
         if (!$this->isAdmin())
         {
             return (new ErrorService('perm_denied'))->getLastError();
@@ -226,6 +250,10 @@ class AdminController
 
     public function deleteEdFormat(ParameterDictionary $dict)
     {
+        if (!check_bitrix_sessid())
+        {
+            return (new ErrorService('invalid_csrf'))->getLastError();
+        }
         if (!$this->isAdmin())
         {
             return (new ErrorService('perm_denied'))->getLastError();
@@ -236,6 +264,11 @@ class AdminController
 
     public function editSubject(ParameterDictionary $dict)
     {
+        if (!check_bitrix_sessid())
+        {
+            return (new ErrorService('invalid_csrf'))->getLastError();
+        }
+
         if (!$this->isAdmin())
         {
             return (new ErrorService('perm_denied'))->getLastError();
@@ -258,6 +291,10 @@ class AdminController
 
     public function editEdFormat(ParameterDictionary $dict)
     {
+        if (!check_bitrix_sessid())
+        {
+            return (new ErrorService('invalid_csrf'))->getLastError();
+        }
         if (!$this->isAdmin())
         {
             return (new ErrorService('perm_denied'))->getLastError();
@@ -280,6 +317,10 @@ class AdminController
 
     public function editCity(ParameterDictionary $dict)
     {
+        if (!check_bitrix_sessid())
+        {
+            return (new ErrorService('invalid_csrf'))->getLastError();
+        }
         if (!$this->isAdmin())
         {
             return (new ErrorService('perm_denied'))->getLastError();

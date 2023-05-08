@@ -31,7 +31,7 @@ function displayTime(res, weekdayID) {
 
     if (res.length === 0) {
         let divElem = document.createElement('div');
-        divElem.classList.add('box-dark-element-custom', 'width-100', 'is-justified-center')
+        divElem.classList.add('box-dark-element-custom', 'width-100', 'is-justified-center', 'text-align-center')
         divElem.innerText = 'No time selected';
         area.appendChild(divElem);
     } else {

@@ -426,6 +426,7 @@ export class AdminPanel
 							{
 								ID: ID,
 								name: elemNameInput.value,
+								sessid: BX.bitrix_sessid(),
 							},
 							(res) => {
 								console.log(res)
@@ -450,6 +451,7 @@ export class AdminPanel
 					deleteAddress,
 					{
 						ID: ID,
+						sessid: BX.bitrix_sessid(),
 					},
 					(res) => {
 						console.log(res)
@@ -605,6 +607,7 @@ export class AdminPanel
 					addItemAddress,
 					{
 						name: input.value,
+						sessid: BX.bitrix_sessid(),
 					},
 					(res) => {
 						console.log(res)

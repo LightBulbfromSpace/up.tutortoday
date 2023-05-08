@@ -170,7 +170,17 @@
     height: 100%;
 }
 .is-aligned-center {
+    display: flex;
     align-items: center;
+}
+
+.text-align-center {
+    text-align: center;
+}
+
+.is-justified-center {
+    display: flex;
+    justify-content: center;
 }
 
 .button-plus-minus {
