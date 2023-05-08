@@ -1,5 +1,45 @@
 @import 'normalize.css';
 
+@media screen and (max-width: 900px) {
+
+    .content-container {
+        margin: 0 3%;
+    }
+
+    .header__links-item {
+        font-size: 12px !important;
+    }
+
+    .header__mainLink {
+        font-size: 14px !important;
+    }
+
+    .header__container {
+        justify-content: space-evenly !important;
+    }
+
+    .footer__content {
+        justify-content: center !important;
+    }
+
+    .desktop-only {
+        display: none !important;
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .header__links-item {
+        font-size: 15px;
+    }
+
+    .header__container {
+        justify-content: space-between;
+    }
+
+    .footer__content {
+        justify-content: space-between;
+    }
+}
 
 html{
     display: flex;
@@ -48,9 +88,7 @@ body{
 
 .header__links-item{
     cursor: pointer;
-
     font-weight: bold;
-    font-size: 15px;
     color: #FFF;
 }
 

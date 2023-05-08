@@ -8,7 +8,6 @@ global $USER, $APPLICATION;
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 ?>
 
-<link rel="stylesheet" href="/local/components/up/tutortoday.main/templates/.default/styles/style.css">
     <main>
        <div class="main__promo">
            <div class="main__promo-wrapper">
@@ -36,7 +35,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <span class="footer__content-link">Kaliningrad, WantingTheWeekends St., 15</span>
                 </div>
             </div>
-            <div class="footer__content-row">
+            <div class="footer__content-row desktop-only">
                 <span class="footer__content-category">Subjects</span>
                 <?php foreach ($arResult['subjects'] as $i => $subject): ?>
                     <a class="footer__content-link link" href="/overview/?subjects%5B%5D=<?=$subject['ID']?>"><?=$subject['NAME']?></a>
@@ -44,14 +43,14 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <?php endforeach; ?>
                 <div class="footer__content">and other</div>
             </div>
-            <div class="footer__content-row">
+            <div class="footer__content-row desktop-only">
                 <span class="footer__content-category">Education formats</span>
                 <?php foreach ($arResult['edFormats'] as $i => $edFormat): ?>
                     <a class="footer__content-link link" href="/overview/?edFormats%5B%5D=<?=$edFormat['ID']?>"><?=$edFormat['NAME']?></a>
                     <?php if ($i === 3) { break; }?>
                 <?php endforeach; ?>
             </div>
-            <div class="footer__content-row">
+            <div class="footer__content-row desktop-only">
                 <span class="footer__content-category">Cities</span>
                 <?php foreach ($arResult['cities'] as $i => $city): ?>
                     <a class="footer__content-link link" href="/overview/?cities%5B%5D=<?=$city['ID']?>"><?=$city['NAME']?></a>

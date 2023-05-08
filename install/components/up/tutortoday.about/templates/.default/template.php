@@ -30,18 +30,18 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                            Tutors offer their services and prices.
                            Choose the right one: by reviews,<br> rating and subject. The search for a specialist is free. And for the work done, you pay the specialist directly in a convenient way.
                        </div>
-                        <div class="main__content-item  main__content-item--subtitle">
+                        <div class="main__content-item  main__content-item--subtitle desktop-only">
                             How can a tutor find a client?
                         </div>
-                        <div class="main__content-text">
+                        <div class="main__content-text desktop-only">
                             During the registration tutors enter their phone number and e-mail, which will be visible for site visitors.
                             Also tutors<br> can choose the subject they are going to teach. This subject can be changed in profile settings later.
                             After completing<br> the lesson, you will receive the money directly from the student, the entire amount will remain to you.
                         </div>
-                       <div class="main__content-item  main__content-item--subtitle">
+                       <div class="main__content-item  main__content-item--subtitle desktop-only">
                            Who is responsible for the result?
                        </div>
-                       <div class="main__content-text">
+                       <div class="main__content-text desktop-only">
                            <div>
                                We do not provide services, but help the tutor and students to meet. It is important for us that the service<br> we create is reliable and secure.
                            </div>
@@ -93,7 +93,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <span class="footer__content-link">Kaliningrad, WantingTheWeekends St., 15</span>
                 </div>
             </div>
-            <div class="footer__content-row">
+            <div class="footer__content-row desktop-only">
                 <span class="footer__content-category">Subjects</span>
                 <?php foreach ($arResult['subjects'] as $i => $subject): ?>
                     <a class="footer__content-link link" href="/overview/?subjects%5B%5D=<?=$subject['ID']?>"><?=$subject['NAME']?></a>
@@ -101,14 +101,14 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                 <?php endforeach; ?>
                 <div class="footer__content">and other</div>
             </div>
-            <div class="footer__content-row">
+            <div class="footer__content-row desktop-only">
                 <span class="footer__content-category">Education formats</span>
                 <?php foreach ($arResult['edFormats'] as $i => $edFormat): ?>
                     <a class="footer__content-link link" href="/overview/?edFormats%5B%5D=<?=$edFormat['ID']?>"><?=$edFormat['NAME']?></a>
                     <?php if ($i === 3) { break; }?>
                 <?php endforeach; ?>
             </div>
-            <div class="footer__content-row">
+            <div class="footer__content-row desktop-only">
                 <span class="footer__content-category">Cities</span>
                 <?php foreach ($arResult['cities'] as $i => $city): ?>
                     <a class="footer__content-link link" href="/overview/?cities%5B%5D=<?=$city['ID']?>"><?=$city['NAME']?></a>
