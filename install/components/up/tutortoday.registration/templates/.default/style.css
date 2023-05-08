@@ -1,11 +1,31 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
 
+@media screen and (min-width: 900px) {
+    .container-custom {
+        padding: 100px 0 30px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .container-custom {
+        padding: 100px 5% 30px;
+    }
+
+    .is-grouped {
+        flex-direction: column;
+    }
+
+    .is-justify-content-center {
+        display: flex;
+        justify-content: center;
+    }
+}
+
 .container-custom {
     max-width: 600px;
     flex-grow: 1;
     position: relative;
     margin: 0 auto;
-    padding: 100px 0 30px;
 }
 
 .input-custom:focus, .input-custom:focus-visible, .textarea-custom:focus, .textarea-custom:focus-visible {

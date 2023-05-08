@@ -16,7 +16,9 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 <div class="container-custom">
     <div class="container-narrow-custom">
         <div class="box">
-            <img src="<?=$arResult['user']['photo']?>" class="img-rounded img-fixed-size" alt="avatar">
+            <div class="photo-container">
+                <img src="<?=$arResult['user']['photo']?>" class="img-rounded img-fixed-size" alt="avatar">
+            </div>
             <div class="box-dark-element-custom">
                 <?=htmlspecialchars($arResult['user']['mainData']['NAME'])?>
                 <?=htmlspecialchars($arResult['user']['mainData']['LAST_NAME'])?>
@@ -83,12 +85,12 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <?=htmlspecialchars($arResult['user']['description'])?>
         </div>
         <div class="container-large-column-custom">
-            <div class="container-row-custom">
+            <div class="container-widgets-custom">
                 <div class="container-column-custom">
                     <label class="label">Days of week</label>
                     <div class="box-stretched-custom">
                         <?php foreach ($arResult['weekdays'] as $weekday): ?>
-                            <button class="box-button" onclick="getTime(<?=$arResult['user']['mainData']['ID']?>, <?=$weekday['ID']?>)" id="weekday-<?=$weekday['ID']?>"><?=htmlspecialchars($weekday['NAME'])?></button>
+                            <button class="box-button" onclick="getTime(<?=$weekday['ID']?>)" id="weekday-<?=$weekday['ID']?>"><?=htmlspecialchars($weekday['NAME'])?></button>
                         <?php endforeach; ?>
                     </div>
                 </div>
@@ -101,7 +103,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     </div>
                     <div class="container-column-custom">
                         <label class="label">Subjects</label>
-                        <div class="box">
+                        <div class="box-stretched-custom is-aligned-center">
                             <?php if(count($arResult['user']['subjects']) === 0): ?>
                                 No subjects selected
                             <?php endif; ?>

@@ -166,8 +166,8 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
         <?=bitrix_sessid_post()?>
 
-        <div class="field is-grouped is-justify-content-center">
-            <div class="control">
+        <div class="field is-grouped">
+            <div class="control is-justify-content-center">
                 <button class="button is-dark" id="confirm-registration-button">Register me</button>
             </div>
         </div>

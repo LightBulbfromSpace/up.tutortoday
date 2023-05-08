@@ -79,7 +79,7 @@ class ProfileController
         LocalRedirect('/');
     }
 
-    public static function createTime(ParameterDictionary $post)
+    public function createTime(ParameterDictionary $post)
     {
         if (!check_bitrix_sessid())
         {
@@ -102,7 +102,7 @@ class ProfileController
             'timeFrom' => $post['timeFrom'],
             'timeTo' => $post['timeTo'],
         ];
-        return DatetimeService::createTime((int)$post['userID'], (int)$post['weekdayID'], $timeToAdd);
+        return DatetimeService::createTime($this->userID, (int)$post['weekdayID'], $timeToAdd);
     }
 
     public static function deleteTime(ParameterDictionary $post)
@@ -114,13 +114,13 @@ class ProfileController
         return DatetimeService::deleteTime($post['timeID']);
     }
 
-    public static function getUserTimeByDayID(ParameterDictionary $post)
+    public function getUserTimeByDayID(ParameterDictionary $post)
     {
         if (!check_bitrix_sessid())
         {
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
-        return DatetimeService::getWeekdayTimeByUserID($post['userID'], (int)$post['weekdayID']);
+        return DatetimeService::getWeekdayTimeByUserID($this->userID, (int)$post['weekdayID']);
     }
 
     public function updateUser()
@@ -163,13 +163,13 @@ class ProfileController
         LocalRedirect("/profile/$this->userID/");
     }
 
-    public static function deleteSubject(ParameterDictionary $post)
+    public function deleteSubject(ParameterDictionary $post)
     {
         if (!check_bitrix_sessid())
         {
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
-        (new EducationService([$post['userID']]))->deleteUserSubject($post['subjectID']);
+        (new EducationService([$this->userID]))->deleteUserSubject($post['subjectID']);
     }
 
     public static function getAllSubjectsJSON()

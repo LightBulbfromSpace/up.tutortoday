@@ -51,23 +51,27 @@ return function (RoutingConfigurator $routes) {
         AuthController::RegistrationAction();
     });
     $routes->post('/profile/weekday/', function () {
-        return ProfileController::getUserTimeByDayID(getPostList());
+        global $USER;
+        return json_encode((new ProfileController((int)$USER->getID()))->getUserTimeByDayID(getPostList()));
     });
+
     $routes->post('/profile/{id}/settings/', function () {
         global $USER;
         (new ProfileController((int)$USER->GetID()))->updateUser();
     });
 
     $routes->post('/profile/settings/deleteSubject/', function () {
-        ProfileController::deleteSubject(getPostList());
+        global $USER;
+        (new ProfileController((int)$USER->GetID()))->deleteSubject(getPostList());
     });
     $routes->post('/profile/settings/addTime/', function (){
-        return json_encode(ProfileController::createTime(getPostList()));
+        global $USER;
+        return json_encode((new ProfileController((int)$USER->getID()))->createTime(getPostList()));
     });
     $routes->post('/profile/settings/deleteTime/', function (){
         ProfileController::deleteTime(getPostList());
     });
-    $routes->post('/profile/{id}/delete/', function () {
+    $routes->post('/profile/delete/', function () {
         global $USER;
         (new ProfileController((int)$USER->GetID()))->deleteProfile();
     });

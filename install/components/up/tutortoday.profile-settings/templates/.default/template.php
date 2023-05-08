@@ -90,7 +90,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <a class="link-button" href="/profile/<?=$arResult['user']['mainData']['ID']?>/">Back</a>
                 </div>
                 <div class="save-button-container">
-                    <button type="button" class="button-plus-minus button-small-custom container-margin-top-bottom" onclick="openDeleteProfileForm(<?=$arResult['user']['mainData']['ID']?>)">Delete Profile</button>
+                    <button type="button" class="button-plus-minus button-small-custom container-margin-top-bottom" onclick="openDeleteProfileForm()">Delete Profile</button>
                     <button type="submit" class="button-plus-minus button-small-custom container-margin-top-bottom">Save Changes</button>
                 </div>
             </div>
@@ -98,7 +98,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <div class="box-dark-element-custom">
                 <textarea class="textarea-custom" name="description" placeholder="No description"><?=htmlspecialchars($arResult['user']['description'])?></textarea>
             </div>
-            <div class="container-row-custom">
+            <div class="container-widgets-custom">
                 <div class="container-column-custom">
                     <div class="container-column-custom">
                         <label class="label">Education format</label>
@@ -145,7 +145,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                                     <div class="price">rub/hour</div>
                                                 </div>
                                         </div>
-                                        <button type="button" class="button-plus-minus button-large-custom" onclick="deleteSubject(<?=$subject['SUBJECT']['ID']?>, <?=$arResult['user']['mainData']['ID']?>)">-</button>
+                                        <button type="button" class="button-plus-minus button-large-custom" onclick="deleteSubject(<?=$subject['SUBJECT']['ID']?>)">-</button>
                                     </div>
                                 <?php endforeach; ?>
                                 <div class="br"></div>
@@ -166,7 +166,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <label class="label">Days of week</label>
                     <div class="box-stretched-custom">
                         <?php foreach ($arResult['weekdays'] as $weekday): ?>
-                            <button type="button" class="box-button" id="weekday-<?=$weekday['ID']?>" onclick="getTime(<?=$arResult['user']['mainData']['ID']?>, <?=$weekday['ID']?>)"><?=$weekday['NAME']?></button>
+                            <button type="button" class="box-button" id="weekday-<?=$weekday['ID']?>" onclick="getTime(<?=$weekday['ID']?>)"><?=$weekday['NAME']?></button>
                         <?php endforeach; ?>
                     </div>
                 </div>
@@ -190,7 +190,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                         <input type="time" id="time-to" name="time-to" min="00:00" max="23:59"/>
                                     </div>
                                 </form>
-                                <button type="button" class="button-plus-minus button-small-custom" onclick="addTime(<?=$arResult['user']['mainData']['ID']?>); closeTimepicker()">OK</button>
+                                <button type="button" class="button-plus-minus button-small-custom" onclick="addTime(); closeTimepicker()">OK</button>
                             </div>
                         </div>
                     </div>

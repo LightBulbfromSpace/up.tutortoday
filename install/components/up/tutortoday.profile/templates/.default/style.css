@@ -1,5 +1,109 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
 
+@media screen and (min-width: 900px) {
+    .container-large-custom {
+        min-width: 400px;
+        flex: 2;
+        margin-left: 100px;
+    }
+
+    .container-widgets-custom {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex: 1;
+    }
+
+    .container-narrow-custom {
+        flex: 1;
+    }
+
+    .box-button {
+        width: 150px;
+    }
+
+    .container-column-custom {
+        margin-right: 5%;
+    }
+
+    .feedbacks-container {
+        margin-left: -75px;
+        margin-right: -75px;
+    }
+
+    .box-dark-element-custom {
+        display: block;
+    }
+
+    #feedback-form-area {
+        width: 80%;
+    }
+
+    .feedback-card-custom {
+        width: 100%;
+    }
+
+    .title-custom {
+        font-size: 24px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .container-large-custom {
+        width: 100%;
+        margin: 15px 5% 0;
+    }
+
+    .container-widgets-custom {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+    }
+
+    .container-narrow-custom {
+        margin: 0 5%;
+        width: 100%;
+    }
+
+    .box-dark-element-custom,
+    .container-column-custom,
+    .box-button,
+    #feedback-form-area,
+    .feedback-cards-container {
+        width: 100%;
+    }
+
+    .box-dark-element-custom {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #feedbacks-area {
+        flex-direction: column;
+    }
+
+    .feedback-button {
+        rotate: 90deg;
+    }
+
+    .feedback-card-custom {
+        flex: 1;
+    }
+
+    .title-custom {
+        font-size: 18px;
+    }
+
+    .box {
+        text-align: center;
+    }
+}
+
 .container-custom {
     display: flex;
     flex-wrap: wrap;
@@ -68,7 +172,6 @@
     border-radius: 6px;
     box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%), 0 0 0 1px rgb(10 10 10 / 0.1%);
     color: #4a4a4a;
-    display: block;
     padding: 1.25rem;
     margin: 10px 0;
 }
@@ -116,16 +219,6 @@
     display: flex;
 }
 
-.container-narrow-custom {
-    flex: 1;
-}
-
-.container-large-custom {
-    min-width: 400px;
-    flex: 2;
-    margin-left: 100px;
-}
-
 .container-row-custom {
     width: 100%;
     display: flex;
@@ -156,7 +249,6 @@
     flex-direction: column;
     min-width: 200px;
     margin-bottom: 15px;
-    margin-right: 5%;
 }
 
 .box-stretched-custom {
@@ -210,7 +302,6 @@
     color: #4a4a4a;
     display: block;
     padding: 0.5rem;
-    width: 150px;
     margin: 8px 0;
     font-size: medium;
 }
@@ -288,10 +379,6 @@ body::-webkit-scrollbar-thumb {
     margin: 0.5rem 0;
 }
 
-#feedback-form-area {
-    width: 80%;
-}
-
 .input-custom:focus, .input-custom:focus-visible,
 .textarea-custom:focus, .textarea-custom:focus-visible {
     border: 1px solid #888888;
@@ -319,13 +406,15 @@ button:focus, button:focus-visible,
 /*    color: orange;*/
 /*}*/
 
-.feedback-card-custom {
-    width: 100%;
-}
+
 
 .title-custom {
     font-weight: 500;
-    font-size: 24px;
+    word-break: break-all;
+}
+
+.feedback-body-custom {
+    word-break: break-all;
 }
 
 .feedback-card-container {
@@ -348,6 +437,13 @@ button:focus, button:focus-visible,
     max-width: 60px;
 }
 
+.photo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 300px;
+}
+
 #feedbacks-area{
     width: 100%;
     display: flex;
@@ -363,11 +459,8 @@ button:focus, button:focus-visible,
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.feedbacks-container {
-    margin-left: -75px;
-    margin-right: -75px;
+    margin-right: 15px;
+    word-break: break-all;
 }
 
 .feedback-button {

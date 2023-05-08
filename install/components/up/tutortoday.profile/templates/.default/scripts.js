@@ -1,8 +1,7 @@
-function getTime(userID, dayID) {
+function getTime(dayID) {
     BX.ajax({
         url: '/profile/weekday/',
         data: {
-            userID: userID,
             weekdayID: dayID,
             sessid: BX.bitrix_sessid(),
         },

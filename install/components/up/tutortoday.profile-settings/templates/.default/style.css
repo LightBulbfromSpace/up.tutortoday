@@ -1,5 +1,71 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
 
+@media screen and (min-width: 900px) {
+    .container-large-custom {
+        min-width: 400px;
+        flex: 2;
+        margin-left: 100px;
+    }
+
+    .container-widgets-custom {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex: 1;
+    }
+
+    .container-narrow-custom {
+        flex: 1;
+    }
+
+    .box-button {
+        width: 150px;
+    }
+
+    .container-column-custom {
+        margin-right: 5%;
+    }
+
+    .formfield {
+        width: 190px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .container-narrow-custom {
+        margin: 0 5%;
+        width: 100%;
+    }
+
+    .container-large-custom {
+        width: 100%;
+        margin: 15px 5% 0;
+    }
+
+    .container-widgets-custom {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+    }
+
+    .container-column-custom,
+    .box-button,
+    .box-dark-element-custom,
+    .container-row-custom,
+    #timepicker-form,
+    .formfield {
+        width: 100%;
+    }
+
+    .formfield {
+        margin: 5px 0;
+    }
+}
+
 .container-custom {
     display: flex;
     flex-wrap: wrap;
@@ -194,16 +260,6 @@ input[type="file"] {
     margin-top: 1rem;
 }
 
-.container-narrow-custom {
-    flex: 1;
-}
-
-.container-large-custom {
-    min-width: 400px;
-    flex: 2;
-    margin-left: 100px;
-}
-
 .container-row-custom {
     display: flex;
     justify-content: space-between;
@@ -269,7 +325,6 @@ input[type="file"] {
     color: #4a4a4a;
     display: block;
     padding: 0.5rem;
-    width: 150px;
     margin: 8px 0;
     font-size: medium;
 }
@@ -446,7 +501,6 @@ button:focus, button:focus-visible,
     justify-content: space-between;
     gap: 1rem;
     height: 44px;
-    width: 190px;
     background-color: #fafafa;
     border: 1px solid #ebebeb;
     border-radius: 4px;

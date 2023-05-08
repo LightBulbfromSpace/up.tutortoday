@@ -27,11 +27,10 @@
 //
 //     // return result
 // }
-function getTime(userID, dayID) {
+function getTime(dayID) {
     BX.ajax({
         url: '/profile/weekday/',
         data: {
-            userID: userID,
             weekdayID: dayID,
             sessid: BX.bitrix_sessid(),
         },
@@ -39,7 +38,7 @@ function getTime(userID, dayID) {
         dataType: 'json',
         timeout: 10,
         onsuccess: function (res) {
-            displayTime(res, dayID, userID)
+            displayTime(JSON.parse(res), dayID)
         },
         onfailure: e => {
             console.error(e)
@@ -47,7 +46,7 @@ function getTime(userID, dayID) {
     })
 }
 
-function displayTime(res, weekdayID, userID) {
+function displayTime(res, weekdayID) {
     if (res == null) {
         return
     }
@@ -71,7 +70,7 @@ function displayTime(res, weekdayID, userID) {
             button.classList.add('button-plus-minus', 'button-large-custom')
             button.onclick = () => {
                 deleteTime(interval['ID'])
-                getTime(userID, weekdayID)
+                getTime(weekdayID)
             }
             area.appendChild(time);
             area.appendChild(button);
@@ -96,12 +95,11 @@ function closeSubjectForm() {
     document.getElementById('add-subject-area').lastChild.remove()
 }
 
-function deleteSubject(subjID, userID) {
+function deleteSubject(subjID) {
     BX.ajax({
         url: '/profile/settings/deleteSubject/',
         data: {
             subjectID: subjID,
-            userID: userID,
             sessid: BX.bitrix_sessid(),
         },
         method: 'POST',
@@ -159,7 +157,7 @@ function openSubjectForm(weekdays) {
     addArea.appendChild(form)
 }
 
-function addTime(userID) {
+function addTime() {
 
     let weekdayID = null
     for(let i = 1; i < 8; i++)
@@ -180,7 +178,6 @@ function addTime(userID) {
         data: {
             timeFrom: from,
             timeTo: to,
-            userID: userID,
             weekdayID: weekdayID,
             sessid: BX.bitrix_sessid(),
         },
@@ -194,7 +191,7 @@ function addTime(userID) {
             console.log(e)
         },
     })
-    getTime(userID, weekdayID)
+    getTime(weekdayID)
 }
 
 function deleteTime(timeID) {
@@ -216,10 +213,10 @@ function deleteTime(timeID) {
     })
 }
 
-function openDeleteProfileForm(userID) {
+function openDeleteProfileForm() {
     let formElem = document.createElement('form')
     formElem.id = 'delete-profile-form'
-    formElem.action = '/profile/'+ userID + '/delete/'
+    formElem.action = '/profile/delete/'
     formElem.method = 'post'
     formElem.style.zIndex = '36'
     formElem.classList.add('box', 'delete-form-container')

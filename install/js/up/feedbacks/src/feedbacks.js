@@ -254,7 +254,9 @@ export class Feedbacks
 										</div>
 									</div>
 									<div class="br"></div>
-									<div>${this.#sanitize(feedbacks['feedbacks'][i]['description']) === '' ? 'No description' : this.#sanitize(feedbacks['feedbacks'][i]['description'])}</div>
+									<div class="feedback-body-custom">
+										${this.#sanitize(feedbacks['feedbacks'][i]['description']) === '' ? 'No description' : this.#sanitize(feedbacks['feedbacks'][i]['description'])}
+									</div>
 								</div>`
 			feedbacksContainer.appendChild(elem)
 			for (let j = 1; j <= feedbacks['feedbacks'][i]['stars']; j++) {
