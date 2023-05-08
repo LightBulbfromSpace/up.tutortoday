@@ -706,17 +706,22 @@ class UserService
         ]);
     }
 
-    
+    public static function getUserIDbyLogin($login) : int
+    {
+        $result = UserTable::query()
+            ->setSelect(['ID'])
+            ->where('LOGIN', $login)
+            ->fetchObject();
+        return (int)$result['ID'];
+    }
 
     public function isBlocked()
     {
         $result = UserTable::query()
-            ->setSelect(['ID'])
+            ->setSelect(['BLOCKED'])
             ->where('ID', $this->observedUserID)
             ->fetchObject();
 
-        var_dump($result['ID']);die;
-
-        return $result['BLOCKED'] === 'Y';
+        return $result['BLOCKED'];
     }
 }
