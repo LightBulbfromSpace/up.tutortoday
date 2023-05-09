@@ -1,0 +1,31 @@
+<!DOCTYPE html><div style="color: #000000">[05.05.2023 09:48:14.227][INFO] ---------------Запуск кейса 'Регистрация репетитора'---------------</div>
+<div style="color: #000000">[05.05.2023 09:48:14.227][INFO] OpenUri: http://bitrix.dev.bx/</div>
+<div style="color: #000000">[05.05.2023 09:48:16.802][INFO] Начало регистрации репетитора Serg-83b73f139275d</div>
+<div style="color: #000000">[05.05.2023 09:48:16.806][INFO] Ожидание отображения элемента 'Перейти к регистрации' локаторы: //div[@id='navbarNav']//a[@href='/registration/']</div>
+<div style="color: #000000">[05.05.2023 09:48:16.831][INFO] Click: 'Перейти к регистрации' локаторы: //div[@id='navbarNav']//a[@href='/registration/']</div>
+<div style="color: #000000">[05.05.2023 09:48:18.363][INFO] Ожидание отображения элемента 'Поле ввода имени' локаторы: //input[@name='name']</div>
+<div style="color: #000000">[05.05.2023 09:48:18.380][INFO] Ввод текста 'Serg-83b73f139275d' в элемент: 'Поле ввода имени' локаторы: //input[@name='name']</div>
+<div style="color: #000000">[05.05.2023 09:48:18.435][INFO] Ожидание отображения элемента 'Поле ввода фамилии' локаторы: //input[@name='lastName']</div>
+<div style="color: #000000">[05.05.2023 09:48:18.454][INFO] Ввод текста 'Vasch-83b73f1392786' в элемент: 'Поле ввода фамилии' локаторы: //input[@name='lastName']</div>
+<div style="color: #000000">[05.05.2023 09:48:18.498][INFO] Ожидание отображения элемента 'Поле ввода отчества' локаторы: //input[@name='middleName']</div>
+<div style="color: #000000">[05.05.2023 09:48:18.513][INFO] Ввод текста 'Serg-83b73f1392788' в элемент: 'Поле ввода отчества' локаторы: //input[@name='middleName']</div>
+<div style="color: #000000">[05.05.2023 09:48:18.560][INFO] Ожидание отображения элемента 'Поле ввода логина' локаторы: //input[@name='login']</div>
+<div style="color: #000000">[05.05.2023 09:48:18.573][INFO] Ввод текста 'Vasch-83b73f1392789' в элемент: 'Поле ввода логина' локаторы: //input[@name='login']</div>
+<div style="color: #000000">[05.05.2023 09:48:18.618][INFO] Ожидание отображения элемента 'Поле ввода пароля' локаторы: //input[@name='password']</div>
+<div style="color: #000000">[05.05.2023 09:48:18.632][INFO] Ввод текста 'vaschanya' в элемент: 'Поле ввода пароля' локаторы: //input[@name='password']</div>
+<div style="color: #000000">[05.05.2023 09:48:18.674][INFO] Ожидание отображения элемента 'Поле подтверждения пароля' локаторы: //input[@name='confirmPassword']</div>
+<div style="color: #000000">[05.05.2023 09:48:18.688][INFO] Ввод текста 'vaschanya' в элемент: 'Поле подтверждения пароля' локаторы: //input[@name='confirmPassword']</div>
+<div style="color: #000000">[05.05.2023 09:48:18.728][INFO] Ожидание отображения элемента 'Поле подтверждения пароля' локаторы: //input[@name='confirmPassword']</div>
+<div style="color: #000000">[05.05.2023 09:48:18.742][INFO] Ожидание отображения элемента 'Поле подтверждения пароля' локаторы: //input[@name='confirmPassword']</div>
+<div style="color: #000000">[05.05.2023 09:48:18.752][INFO] Выбор пункта списка 'vaschanya' в списке: 'Поле подтверждения пароля' локаторы: //input[@name='confirmPassword']</div>
+<div style="color: #FF0000">[05.05.2023 09:48:18.847][ERROR] Кейс не пройден, причина:</div>
+<div style="color: #FF0000">OpenQA.Selenium.Support.UI.UnexpectedTagNameException: Element should have been select but was input</div>
+<div style="color: #FF0000">at OpenQA.Selenium.Support.UI.SelectElement..ctor(IWebElement element)</div>
+<div style="color: #FF0000">at atFrameWork2.SeleniumFramework.WebItem.<>c__DisplayClass21_0.<SelectListItemByText>b__0(IWebElement select, IWebDriver drv) in F:\учеба тестирование\Bitrix24\3. Проект\AutoTests\ATlearning\ATframework3demo\SeleniumFramework\WebItem.cs:line 123</div>
+<div style="color: #FF0000">at atFrameWork2.SeleniumFramework.WebItem.Execute(Action`2 seleniumCode, IWebDriver driver, Boolean throwAtDebug) in F:\учеба тестирование\Bitrix24\3. Проект\AutoTests\ATlearning\ATframework3demo\SeleniumFramework\WebItem.cs:line 305</div>
+<div style="color: #FF0000">at atFrameWork2.SeleniumFramework.WebItem.SelectListItemByText(String listItemToSelect, IWebDriver driver) in F:\учеба тестирование\Bitrix24\3. Проект\AutoTests\ATlearning\ATframework3demo\SeleniumFramework\WebItem.cs:line 121</div>
+<div style="color: #FF0000">at atFrameWork2.PageObjects.RegistrationTT.enterRegTutorConfirmPassword(String ConfirmPassword) in F:\учеба тестирование\Bitrix24\3. Проект\AutoTests\ATlearning\ATframework3demo\PageObjects\RegistrationTT.cs:line 53</div>
+<div style="color: #FF0000">at ATframework3demo.TestCases.Case_Tutor_Registration_.RegTutor(TutorPortalHomePage homePage) in F:\учеба тестирование\Bitrix24\3. Проект\AutoTests\ATlearning\ATframework3demo\TestCases\Case_Tutor_Registration_.cs:line 55</div>
+<div style="color: #FF0000">at ATframework3demo.TestCases.Case_Tutor_Registration_.<GetCases>b__0_0(TutorPortalHomePage homePage) in F:\учеба тестирование\Bitrix24\3. Проект\AutoTests\ATlearning\ATframework3demo\TestCases\Case_Tutor_Registration_.cs:line 16</div>
+<div style="color: #FF0000">at atFrameWork2.BaseFramework.TestCase.Execute(PortalInfo testPortal, Action uiRefresher) in F:\учеба тестирование\Bitrix24\3. Проект\AutoTests\ATlearning\ATframework3demo\BaseFramework\TestCase.cs:line 47</div>
+<div style="color: #000000">[05.05.2023 09:48:18.847][INFO] ---------------Кейс 'Регистрация репетитора' завершён---------------</div>
