@@ -26,10 +26,10 @@ function __tutortodayMigrate(int $nextVersion, callable $callback)
     }
 }
 
-__tutortodayMigrate(3, function($updater, $DB)
-{
-    if ($updater->CanUpdateDatabase())
-    {
-        $DB->RunSQLBatch($_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tutortoday/install/db/install_data.sql');
-    }
-});
+//__tutortodayMigrate(3, function($updater, $DB)
+//{
+//    if ($updater->CanUpdateDatabase())
+//    {
+//        $DB->RunSQLBatch($_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tutortoday/install/db/install_data.sql');
+//    }
+//});

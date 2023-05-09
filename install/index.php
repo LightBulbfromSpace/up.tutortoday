@@ -33,6 +33,7 @@ class up_tutortoday extends CModule
         global $DB;
 
         $DB->RunSQLBatch($_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tutortoday/install/db/install.sql');
+        $DB->RunSQLBatch($_SERVER['DOCUMENT_ROOT'] . '/local/modules/up.tutortoday/install/db/install_data.sql');
 
         ModuleManager::registerModule($this->MODULE_ID);
     }
