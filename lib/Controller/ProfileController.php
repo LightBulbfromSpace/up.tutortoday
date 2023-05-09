@@ -30,22 +30,14 @@ class ProfileController
         {
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
-//        if (!$this->isOwnerOfProfile())
-//        {
-//            return (new ErrorService('perm_denied'))->getLastError();
-//        }
+
         if ($post['newPassword'] == '' || $post['passwordConfirm'] == '' || $post['oldPassword'] == '')
         {
             return (new ErrorService('empty_field'))->getLastError();
         }
 
-        $result = (new UserService($this->userID))
+        return (new UserService($this->userID))
             ->UpdatePassword($post['oldPassword'], $post['newPassword'], $post['passwordConfirm']);
-        if ($result['TYPE'] === 'OK')
-        {
-            return (new ErrorService('ok'))->getLastErrorText();
-        }
-        return $result;
     }
 
     public function isOwnerOfProfile() : bool

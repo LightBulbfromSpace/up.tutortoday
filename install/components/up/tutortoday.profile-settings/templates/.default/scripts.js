@@ -1,32 +1,4 @@
 
-// function getUserID() {
-//     // let result =  BX.ajax({
-//     //     url: '/profile/getID/',
-//     //     data: {
-//     //         sessid: BX.bitrix_sessid(),
-//     //     },
-//     //     method: 'POST',
-//     //     dataType: 'json',
-//     //     timeout: 10,
-//     //     onsuccess: function (res) {
-//     //         console.log(res)
-//     //     },
-//     //     onfailure: e => {
-//     //         console.error(e)
-//     //     }
-//     // })
-//
-//     return BX.ajax.post(
-//         '/profile/getID/',
-//         {
-//             sessid: BX.bitrix_sessid(),
-//         },
-//         function (res) {
-//             return res
-//         });
-//
-//     // return result
-// }
 function getTime(dayID, userID) {
     BX.ajax({
         url: '/profile/weekday/',
@@ -39,6 +11,7 @@ function getTime(dayID, userID) {
         dataType: 'json',
         timeout: 10,
         onsuccess: function (res) {
+            console.log(res)
             displayTime(res, dayID)
         },
         onfailure: e => {
@@ -48,9 +21,6 @@ function getTime(dayID, userID) {
 }
 
 function displayTime(res, weekdayID) {
-    if (res == null) {
-        return
-    }
     let area = document.getElementById('free-time-area')
     while (area.lastElementChild) {
         area.removeChild(area.lastElementChild);
@@ -185,9 +155,9 @@ function addTime() {
         method: 'POST',
         dataType: 'json',
         timeout: 10,
-        onsuccess: (res) => {
-            getTime(weekdayID, res)
-            console.log(res)
+        onsuccess: (userID) => {
+            getTime(weekdayID, userID)
+            console.log(userID)
         },
         onfailure: (e) => {
             console.log(e)

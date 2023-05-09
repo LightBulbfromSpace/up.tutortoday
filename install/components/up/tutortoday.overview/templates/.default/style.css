@@ -13,6 +13,12 @@
         justify-content: center;
         align-items: center;
     }
+    .popup-message-custom {
+        position: fixed;
+        z-index: 100;
+        bottom: 70px;
+        right: 70px;
+    }
 }
 @media screen and (max-width: 900px) {
     .container-main-body-custom {
@@ -51,6 +57,14 @@
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    .popup-message-custom {
+        position: fixed;
+        z-index: 100;
+        bottom: 20px;
+        right: 20px;
+        margin-left: 20px;
     }
 }
 

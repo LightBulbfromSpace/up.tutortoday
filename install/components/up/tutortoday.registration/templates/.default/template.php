@@ -59,6 +59,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
             <label class="label">Email</label>
             <div class="control">
                 <input class="input-custom" type="email" placeholder="Email input" name="email" maxlength="255" required>
+                <p class="help">Attention! This email cannot be changed in the future.</p>
             </div>
         </div>
 
@@ -154,7 +155,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <?php endforeach; ?>
                 </select>
             </div>
-            <p class="help">Attention! Role cannot be changed in future.</p>
+            <p class="help">Attention! Role cannot be changed in the future.</p>
         </div>
 
         <div class="field">

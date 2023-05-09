@@ -40,7 +40,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                         <input type="password" class="input-custom" placeholder="Old password" id="oldPassword" autocomplete="off">
                     </div>
                     <div class="box-dark-element-custom">
-                        <input type="password" class="input-custom" placeholder="Password" id="newPassword" autocomplete="off">
+                        <input type="password" class="input-custom" placeholder="New password" id="newPassword" autocomplete="off">
                     </div>
                     <div class="box-dark-element-custom">
                         <input type="password" class="input-custom" placeholder="Confirm password" id="passwordConfirm" autocomplete="off">

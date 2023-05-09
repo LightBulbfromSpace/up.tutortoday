@@ -65,9 +65,7 @@ export class OverviewPopup
 							  </div>`
 
 
-		message.style.position = 'fixed'
-		message.style.margin = '35% 5% 5% 75%'
-		message.style.zIndex = '100'
+		message.classList.add('popup-message-custom')
 
 		this.node.appendChild(message)
 

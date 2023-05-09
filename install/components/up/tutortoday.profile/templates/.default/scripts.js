@@ -10,7 +10,7 @@ function getTime(dayID, userID) {
         dataType: 'json',
         timeout: 10,
         onsuccess: function (res) {
-            console.error(res)
+            console.log(res)
             displayTime(res, dayID)
         },
         onfailure: e => {
