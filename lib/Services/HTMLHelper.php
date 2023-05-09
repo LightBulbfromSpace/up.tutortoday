@@ -11,12 +11,10 @@ class HTMLHelper
             return null;
         }
 
-        if (strlen(mb_substr($text, 0, 1, 'UTF-8')) === 2) {
-            $maxLength *= 1.7;
-        }
+        $charLen = strlen(mb_substr($text, 0, 1));
 
-        return mb_strlen($text) > $maxLength - 3 ?
-            mb_strcut($text, 0, $maxLength) . '...' :
+        return mb_strlen($text) > ($maxLength - 3) * $charLen ?
+            mb_strcut($text, 0, $maxLength * $charLen) . '...' :
             $text;
     }
 }

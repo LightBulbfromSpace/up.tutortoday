@@ -32,10 +32,6 @@
         margin-right: -75px;
     }
 
-    .box-dark-element-custom {
-        display: block;
-    }
-
     #feedback-form-area {
         width: 80%;
     }
@@ -69,7 +65,6 @@
         width: 100%;
     }
 
-    .box-dark-element-custom,
     .container-column-custom,
     .box-button,
     #feedback-form-area,
@@ -174,6 +169,7 @@
     color: #4a4a4a;
     padding: 1.25rem;
     margin: 10px 0;
+    width: 100%;
 }
 
 .box-small-dark-custom {

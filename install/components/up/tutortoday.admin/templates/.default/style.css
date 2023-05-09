@@ -177,3 +177,7 @@ a:hover {
     padding: 1.25rem;
     margin-bottom: 1rem;
 }
+
+.phofile-link:hover {
+    text-shadow: #BBB 1px 0 10px;
+}

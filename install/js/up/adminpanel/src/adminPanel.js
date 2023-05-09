@@ -491,6 +491,7 @@ export class AdminPanel
 		elemName.innerText = fullName
 		elemName.style.minWidth ='230px'
 		elemName.style.color = '#4a4a4a'
+		elemName.classList.add('phofile-link')
 
 		elem.appendChild(elemName)
 

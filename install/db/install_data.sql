@@ -17,6 +17,7 @@ INSERT INTO up_tutortoday_subject (NAME) VALUES
     ('physics'),
     ('astronomy'),
     ('chemistry'),
+    ('biology'),
     ('geography');
 
 INSERT INTO up_tutortoday_education_format (NAME) VALUES

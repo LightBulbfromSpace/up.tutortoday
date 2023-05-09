@@ -438,7 +438,7 @@ class UserService
                 'NAME' => $userForm->getName(),
                 'LAST_NAME' => $userForm->getLastName(),
                 'SECOND_NAME' => $userForm->getMiddleName(),
-                'WORK_CITY' => $userForm->getCityID(),
+                'WORK_CITY' => $userForm->getCityID() ?? '',
                 'WORK_PHONE' => $userForm->getPhoneNumber(),
                 'WORK_MAILBOX' => $userForm->getWorkingEmail(),
         ]);

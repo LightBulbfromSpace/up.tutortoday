@@ -111,7 +111,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                                 <div class="box-dark-element-custom">
                                     <?=htmlspecialchars($subject['SUBJECT']['NAME'])?>
                                 </div>
-                                <div class="box-invisible-custom">
+                                <div class="box-invisible-custom is-justified-center">
                                     <?=htmlspecialchars($subject['PRICE'])?> rub/hour
                                 </div>
                             <?php endforeach; ?>
