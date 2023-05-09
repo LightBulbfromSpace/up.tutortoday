@@ -97,6 +97,18 @@
     .box {
         text-align: center;
     }
+
+    .desc-text {
+        text-align: left !important;
+    }
+}
+
+.feedback-card-custom {
+    border: 1px solid #D9D9D9;
+    border-radius: 12px;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 1px 5px 1px rgba(54, 54, 54, 0.2);
+    padding: 20px;
 }
 
 .container-custom {
@@ -267,7 +279,7 @@
 }
 
 .is-justified-center {
-    display: flex;
+    display: flex !important;
     justify-content: center;
 }
 
@@ -307,7 +319,7 @@
 }
 
 .weekday-selected {
-    background-color: #D9D9D9;
+    background-color: rgb(232, 155, 100);
 }
 
 .link-button {
@@ -410,7 +422,11 @@ button:focus, button:focus-visible,
 }
 
 .feedback-body-custom {
+    border: 1px solid #D9D9D9;
+    border-radius: 12px;
     word-break: break-all;
+    margin: 1rem 0;
+    padding: 20px;
 }
 
 .feedback-card-container {
@@ -462,7 +478,7 @@ button:focus, button:focus-visible,
 .feedback-button {
     width: 2rem;
     height: 4rem;
-    background-color: #fff;
+    background-color: transparent;
     border-radius: 6px;
     border-color: #D9D9D9;
     box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%), 0 0 0 1px rgb(10 10 10 / 2%);
@@ -497,7 +513,8 @@ button:focus, button:focus-visible,
 #s1:hover, #s2:hover,
 #s3:hover, #s4:hover,
 #s5:hover, .star-selected  {
-    color: orange;
+    color: rgb(179, 18, 18);
+    /*filter: drop-shadow(0 0 5px rgb(113, 3, 3));*/
 }
 
 .stars-container {
@@ -517,3 +534,45 @@ button:focus, button:focus-visible,
 }
 
 /* stars rating */
+
+.inner-box-shadow {
+
+}
+
+.round-corners {
+    border-radius: 18px !important;
+}
+
+.cards-background {
+    background-color: rgb(232, 155, 100) !important;
+}
+
+.desc-background {
+    background-color: rgba(255, 170, 110, 0.5) !important;
+}
+
+.card-title-custom {
+    font-weight: 500;
+    font-size: 17px;
+}
+
+.card-subtitle-custom {
+    font-weight: 400;
+}
+
+.card-text-custom {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    border: 1px solid #D9D9D9;
+    border-radius: 12px;
+    padding: 0.5rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 1px 5px 1px rgba(54, 54, 54, 0.2);
+}
+
+.hidden {
+    display: none !important;
+}

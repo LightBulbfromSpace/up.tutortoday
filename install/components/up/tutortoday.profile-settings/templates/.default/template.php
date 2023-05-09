@@ -59,7 +59,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                         <input class="input-custom" name="phoneNumber" value="<?=htmlspecialchars($arResult['user']['contacts']['phone'])?>">
                     </div>
                 </div>
-                <div class="container-contacts">
+                <div class="container-contacts hidden">
                     <label class="label">VK</label>
                     <?php foreach ($arResult['user']['contacts']['vk'] as $contact): ?>
                         <div class="container-row-custom items-aligned-center">
@@ -70,7 +70,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <?php endforeach; ?>
                     <button type="button" class="button-plus-minus button-large-custom">+</button>
                 </div>
-                <div class="container-contacts">
+                <div class="container-contacts hidden">
                     <label class="label">Telegram</label>
                     <?php foreach ($arResult['user']['contacts']['telegram'] as $contact): ?>
                         <div class="container-row-custom items-aligned-center">

@@ -78,7 +78,7 @@ export class Feedbacks
 			return
 		}
 		this.form.style.margin = '0.5rem 0 1rem 0'
-		this.form.innerHTML = `<div class="container-feedback-custom">
+		this.form.innerHTML = `<div class="container-feedback-custom cards-background round-corners">
 										  <input type="text" class="input-custom" id="feedback-title" placeholder="Title" maxlength="100">
 										  <textarea class="textarea-custom" id="feedback-description" placeholder="Description"></textarea>
 										  <div class="stars-button-container">
@@ -236,14 +236,14 @@ export class Feedbacks
 
 		for (let i= 0; i < feedbacks['feedbacks'].length; i++) {
 			let elem = document.createElement('div')
-			elem.classList.add('feedback-card-container')
+			elem.classList.add('feedback-card-container', 'round-corners')
 			elem.innerHTML =   `<a class="feedback-card-user-info-container" href="/profile/${feedbacks['feedbacks'][i]['student']['ID']}/">
 									<img src="${this.#sanitize(feedbacks['feedbacks'][i]['student']['photo'])}" class="photo-small img-rounded" alt="avatar">
 									<div class="help">${this.#sanitize(feedbacks['feedbacks'][i]['student']['surname'])}</div>
 									<div class="help">${this.#sanitize(feedbacks['feedbacks'][i]['student']['name'])}</div>
 								</a>
-								<div class="box feedback-card-custom">
-									<div class="title-feedback-custom">
+								<div class="feedback-card-custom">
+									<div class="title-feedback-custom ml-2">
 										<div class="title-custom">${this.#sanitize(feedbacks['feedbacks'][i]['title'])}</div>
 										<div class="stars-container">
 											<div id="s5-${i}-disabled" class="fa fa-star"></div>
@@ -253,8 +253,8 @@ export class Feedbacks
 											<div id="s1-${i}-disabled" class="fa fa-star"></div>
 										</div>
 									</div>
-									<div class="br"></div>
-									<div class="feedback-body-custom">
+<!--									<div class="br"></div>-->
+									<div class="feedback-body-custom desc-background">
 										${this.#sanitize(feedbacks['feedbacks'][i]['description']) === '' ? 'No description' : this.#sanitize(feedbacks['feedbacks'][i]['description'])}
 									</div>
 								</div>`

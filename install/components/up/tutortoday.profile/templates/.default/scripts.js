@@ -1,8 +1,9 @@
-function getTime(dayID) {
+function getTime(dayID, userID) {
     BX.ajax({
         url: '/profile/weekday/',
         data: {
             weekdayID: dayID,
+            userID: userID,
             sessid: BX.bitrix_sessid(),
         },
         method: 'POST',
@@ -10,7 +11,7 @@ function getTime(dayID) {
         timeout: 10,
         onsuccess: function (res) {
             console.error(res)
-            displayTime(res, dayID)
+            displayTime(JSON.parse(res), dayID)
         },
         onfailure: e => {
             console.error(e)
@@ -30,13 +31,13 @@ function displayTime(res, weekdayID) {
 
     if (res.length === 0) {
         let divElem = document.createElement('div');
-        divElem.classList.add('box-dark-element-custom', 'width-100', 'is-justified-center', 'text-align-center')
+        divElem.classList.add('card-text-custom', 'mr-2', 'ml-2', 'width-100', 'is-justified-center', 'text-align-center')
         divElem.innerText = 'No time selected';
         area.appendChild(divElem);
     } else {
         res.forEach((interval) => {
             let divElem = document.createElement('div');
-            divElem.classList.add('box-dark-element-custom', 'width-100', 'is-justified-center')
+            divElem.classList.add('card-text-custom', 'mr-2', 'ml-2', 'width-100', 'is-justified-center')
             divElem.innerText = interval['start'] + ' - ' + interval['end'];
             area.appendChild(divElem);
         });
