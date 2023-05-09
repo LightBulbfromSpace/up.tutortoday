@@ -11,7 +11,7 @@ function getTime(dayID, userID) {
         timeout: 10,
         onsuccess: function (res) {
             console.error(res)
-            displayTime(JSON.parse(res), dayID)
+            displayTime(res, dayID)
         },
         onfailure: e => {
             console.error(e)
@@ -29,13 +29,13 @@ function displayTime(res, weekdayID) {
         area.removeChild(area.lastElementChild);
     }
 
-    if (res.length === 0) {
+    if (res['time'].length === 0) {
         let divElem = document.createElement('div');
         divElem.classList.add('card-text-custom', 'mr-2', 'ml-2', 'width-100', 'is-justified-center', 'text-align-center')
         divElem.innerText = 'No time selected';
         area.appendChild(divElem);
     } else {
-        res.forEach((interval) => {
+        res['time'].forEach((interval) => {
             let divElem = document.createElement('div');
             divElem.classList.add('card-text-custom', 'mr-2', 'ml-2', 'width-100', 'is-justified-center')
             divElem.innerText = interval['start'] + ' - ' + interval['end'];

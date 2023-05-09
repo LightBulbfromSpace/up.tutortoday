@@ -27,18 +27,19 @@
 //
 //     // return result
 // }
-function getTime(dayID) {
+function getTime(dayID, userID) {
     BX.ajax({
         url: '/profile/weekday/',
         data: {
             weekdayID: dayID,
+            userID: userID,
             sessid: BX.bitrix_sessid(),
         },
         method: 'POST',
         dataType: 'json',
         timeout: 10,
         onsuccess: function (res) {
-            displayTime(JSON.parse(res), dayID)
+            displayTime(res, dayID)
         },
         onfailure: e => {
             console.error(e)
@@ -55,12 +56,12 @@ function displayTime(res, weekdayID) {
         area.removeChild(area.lastElementChild);
     }
 
-    if (res.length === 0) {
+    if (res['time'].length === 0) {
         let divElem = document.createElement('div');
         divElem.innerText = 'No time selected';
         area.appendChild(divElem);
     } else {
-        res.forEach((interval) => {
+        res['time'].forEach((interval) => {
             let time = document.createElement('div');
             time.innerText = interval['start'] + ' - ' + interval['end'];
             time.classList.add('box-dark-element-custom', 'width-100', 'is-justified-center')
@@ -70,7 +71,7 @@ function displayTime(res, weekdayID) {
             button.classList.add('button-plus-minus', 'button-large-custom')
             button.onclick = () => {
                 deleteTime(interval['ID'])
-                getTime(weekdayID)
+                getTime(weekdayID, res['userID'])
             }
             area.appendChild(time);
             area.appendChild(button);
@@ -185,13 +186,13 @@ function addTime() {
         dataType: 'json',
         timeout: 10,
         onsuccess: (res) => {
+            getTime(weekdayID)
             console.log(res)
         },
         onfailure: (e) => {
             console.log(e)
         },
     })
-    getTime(weekdayID)
 }
 
 function deleteTime(timeID) {

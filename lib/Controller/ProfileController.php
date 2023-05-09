@@ -120,7 +120,11 @@ class ProfileController
         {
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
-        return DatetimeService::getWeekdayTimeByUserID((int)$post['userID'], (int)$post['weekdayID']);
+
+        return [
+            'time' => DatetimeService::getWeekdayTimeByUserID((int)$post['userID'], (int)$post['weekdayID']),
+            'userID' => (int)$post['userID'],
+        ];
     }
 
     public function updateUser()

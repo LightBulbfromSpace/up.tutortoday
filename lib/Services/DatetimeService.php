@@ -8,7 +8,8 @@ use Up\Tutortoday\Model\Tables\WeekdaysTable;
 
 class DatetimeService
 {
-    public static function getWeekdayTimeByUserID(int $userID, int $weekdayID) {
+    public static function getWeekdayTimeByUserID(int $userID, int $weekdayID)
+    {
         $hours = FreeTimeTable::query()
             ->setSelect(['ID', 'START', 'END'])
             ->where('USER_ID', $userID)
@@ -23,7 +24,7 @@ class DatetimeService
                 'end' => $hour['END']->format('H:i')
             ];
         }
-        return json_encode($result);
+        return $result;
     }
 
     public static function getAllWeekdays()

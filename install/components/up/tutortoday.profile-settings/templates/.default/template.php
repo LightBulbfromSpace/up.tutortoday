@@ -166,7 +166,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
                     <label class="label">Days of week</label>
                     <div class="box-stretched-custom">
                         <?php foreach ($arResult['weekdays'] as $weekday): ?>
-                            <button type="button" class="box-button" id="weekday-<?=$weekday['ID']?>" onclick="getTime(<?=$weekday['ID']?>)"><?=$weekday['NAME']?></button>
+                            <button type="button" class="box-button" id="weekday-<?=$weekday['ID']?>" onclick="getTime(<?=$weekday['ID']?>, <?=$arResult['user']['mainData']['ID']?>)"><?=$weekday['NAME']?></button>
                         <?php endforeach; ?>
                     </div>
                 </div>

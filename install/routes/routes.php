@@ -52,7 +52,7 @@ return function (RoutingConfigurator $routes) {
     });
     $routes->post('/profile/weekday/', function () {
         global $USER;
-        return json_encode((new ProfileController((int)$USER->getID()))->getUserTimeByDayID(getPostList()));
+        return (new ProfileController((int)$USER->getID()))->getUserTimeByDayID(getPostList());
     });
 
     $routes->post('/profile/{id}/settings/', function () {
