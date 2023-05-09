@@ -35,12 +35,14 @@ class DatetimeService
 
     public static function createTime(int $userID, int $weekdayID, array $timeToAdd)
     {
-        return FreeTimeTable::add([
+        $result = FreeTimeTable::add([
             'USER_ID' => $userID,
             'WEEKDAY_ID' => $weekdayID,
             'START' => DateTime::createFromPhp(\DateTime::createFromFormat('H:i', $timeToAdd['timeFrom'])),
             'END' => DateTime::createFromPhp(\DateTime::createFromFormat('H:i', $timeToAdd['timeTo'])),
         ]);
+
+        return $result->isSuccess() ? $userID : null;
     }
 
     public static function deleteTime(mixed $timeID)

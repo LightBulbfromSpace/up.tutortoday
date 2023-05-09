@@ -186,7 +186,7 @@ function addTime() {
         dataType: 'json',
         timeout: 10,
         onsuccess: (res) => {
-            getTime(weekdayID)
+            getTime(weekdayID, res)
             console.log(res)
         },
         onfailure: (e) => {
