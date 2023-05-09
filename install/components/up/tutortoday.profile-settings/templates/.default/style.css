@@ -117,7 +117,7 @@
 
 .img-fixed-size {
     width: 300px;
-    height: 300px;
+    max-height: 300px;
 }
 
 .add-photo-img {
@@ -154,7 +154,6 @@ input[type="file"] {
 }
 
 .add-form-button {
-    min-width: 60%;
     margin: 1rem;
 }
 

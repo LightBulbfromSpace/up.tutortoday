@@ -247,7 +247,7 @@ class ProfileController
         }
         $feedbackForm = new FeedbackForm($post);
         $title = trim($feedbackForm->getTitle());
-        if(strlen($title) > 100 || strlen($title) < 5)
+        if(strlen($title) > 100 || strlen($title) < 1)
         {
             return (new ErrorService('invalid_len'))->getLastError();
         }
