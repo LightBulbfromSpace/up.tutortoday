@@ -44,6 +44,3 @@ local/routes/routes.php -> local/modules/up.tutortoday/install/routes/routes.php
 local/view/ -> local/modules/up.tutortoday/install/view
 local/js/ -> local/modules/up.tutortoday/install/js/up/
 ```
-
-## Examples of TutorToday
-To set up demonstrative content, run `install_data_example.sql` in `up.tutortoday/install/db/`
