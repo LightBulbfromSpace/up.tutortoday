@@ -351,15 +351,15 @@ a:active { text-decoration: none; }
     margin-left: 1rem;
 }
 
-body::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 5px;
 }
 
-body::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     background: transparent;
 }
 
-body::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background-color: #D9D9D9;
     border-radius: 20px;
     border: none;
