@@ -3,7 +3,7 @@
  * @var array $arResult
  */
 
-use Up\Tutortoday\Services\HTMLHelper;
+use Up\Tutortoday\Helpers\HTMLHelper;
 
 global $USER;
 

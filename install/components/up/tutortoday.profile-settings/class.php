@@ -1,12 +1,12 @@
 <?php
 
 use Bitrix\Main\Localization\Loc;
-use Up\Tutortoday\Controller\MainPageController;
 use Up\Tutortoday\Controller\ProfileController;
-use Up\Tutortoday\Services\DatetimeService;
-use Up\Tutortoday\Services\EducationService;
-use Up\Tutortoday\Services\ErrorService;
-use Up\Tutortoday\Services\LocationService;
+use Up\Tutortoday\Providers\DatetimeProvider;
+use Up\Tutortoday\Providers\EdFormatsProvider;
+use Up\Tutortoday\Providers\LocationProvider;
+use Up\Tutortoday\Providers\SubjectsProvider;
+use Up\Tutortoday\Services\EdFormatsService;
 use Up\Tutortoday\Services\UserService;
 
 Loc::loadMessages(__FILE__);
@@ -62,21 +62,21 @@ class TutorTodayProfileSettingsComponent extends CBitrixComponent {
 
     protected function fetchWeekdays()
     {
-        $this->arResult['weekdays'] = DatetimeService::getAllWeekdays();
+        $this->arResult['weekdays'] = DatetimeProvider::getAllWeekdays();
     }
 
     protected function fetchEducationFormats()
     {
-        $this->arResult['edFormats'] = EducationService::getAllEdFormats();
+        $this->arResult['edFormats'] = EdFormatsProvider::getAllEdFormats();
     }
 
     protected function fetchAllSubjects()
     {
-        $this->arResult['subjects'] = EducationService::getAllSubjects();
+        $this->arResult['subjects'] = SubjectsProvider::getAllSubjects();
     }
 
     protected function fetchAllCities()
     {
-        $this->arResult['cities'] = LocationService::getAllCities();
+        $this->arResult['cities'] = LocationProvider::getAllCities();
     }
 }

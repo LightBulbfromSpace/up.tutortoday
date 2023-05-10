@@ -3,50 +3,40 @@
 namespace Up\Tutortoday\Services;
 
 use Bitrix\Main\Type\DateTime;
+use Up\Tutortoday\Model\FormObjects\WeekdayTimeForm;
 use Up\Tutortoday\Model\Tables\FreeTimeTable;
 use Up\Tutortoday\Model\Tables\WeekdaysTable;
 
-class DatetimeService
+class DatetimeService extends BaseService
 {
-    public static function getWeekdayTimeByUserID(int $userID, int $weekdayID)
+    private ?int $userID;
+
+    public function __construct(?int $userID, WeekdayTimeForm $timeForm)
     {
-        $hours = FreeTimeTable::query()
-            ->setSelect(['ID', 'START', 'END'])
-            ->where('USER_ID', $userID)
-            ->where('WEEKDAY_ID', $weekdayID)
-            ->fetchCollection();
-        $result = [];
-        foreach ($hours as $hour)
+        parent::__construct(new FreeTimeTable(), $timeForm);
+        $this->userID = $userID;
+    }
+
+    public function addNewEntity() : ?int
+    {
+        try
         {
-            $result[] = [
-                'ID' => $hour['ID'],
-                'start' => $hour['START']->format('H:i'),
-                'end' => $hour['END']->format('H:i')
-            ];
+            $result = FreeTimeTable::add([
+                'USER_ID' => $this->userID,
+                'WEEKDAY_ID' => $this->entity->getWeekdayID(),
+                'START' => DateTime::createFromPhp(
+                    \DateTime::createFromFormat('H:i', $this->entity->getTimeFrom())
+                ),
+                'END' => DateTime::createFromPhp(
+                    \DateTime::createFromFormat('H:i', $this->entity->getTimeTo())
+                ),
+            ]);
         }
-        return $result;
-    }
+        catch (\Exception $e)
+        {
+            return null;
+        }
 
-    public static function getAllWeekdays()
-    {
-        $weekdays = WeekdaysTable::query()->setSelect(['*'])->fetchCollection();
-        return $weekdays === null ? false : $weekdays;
-    }
-
-    public static function createTime(int $userID, int $weekdayID, array $timeToAdd)
-    {
-        $result = FreeTimeTable::add([
-            'USER_ID' => $userID,
-            'WEEKDAY_ID' => $weekdayID,
-            'START' => DateTime::createFromPhp(\DateTime::createFromFormat('H:i', $timeToAdd['timeFrom'])),
-            'END' => DateTime::createFromPhp(\DateTime::createFromFormat('H:i', $timeToAdd['timeTo'])),
-        ]);
-
-        return $result->isSuccess() ? $userID : null;
-    }
-
-    public static function deleteTime(mixed $timeID)
-    {
-        return FreeTimeTable::delete($timeID);
+        return $result->isSuccess() ? $this->userID : null;
     }
 }

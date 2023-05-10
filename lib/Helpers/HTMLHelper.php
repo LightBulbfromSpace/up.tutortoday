@@ -1,6 +1,6 @@
 <?php
 
-namespace Up\Tutortoday\Services;
+namespace Up\Tutortoday\Helpers;
 
 class HTMLHelper
 {

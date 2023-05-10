@@ -1,9 +1,12 @@
 <?php
 
 use Bitrix\Main\Localization\Loc;
-use Up\Tutortoday\Services\EducationService;
+use Up\Tutortoday\Providers\EdFormatsProvider;
+use Up\Tutortoday\Providers\LocationProvider;
+use Up\Tutortoday\Providers\SubjectsProvider;
+use Up\Tutortoday\Providers\UserRolesProvider;
+use Up\Tutortoday\Services\EdFormatsService;
 use Up\Tutortoday\Services\ErrorService;
-use Up\Tutortoday\Services\LocationService;
 
 Loc::loadMessages(__FILE__);
 
@@ -23,10 +26,10 @@ class TutorTodayRegistrationComponent extends CBitrixComponent {
             $this->arResult['errText'] = (new ErrorService($arParams['err']))->getLastErrorText();
         }
 
-        $this->arResult['edFormats'] = EducationService::getAllEdFormats();
-        $this->arResult['subjects'] = EducationService::getAllSubjects();
-        $this->arResult['cities'] = LocationService::getAllCities();
-        $this->arResult['roles'] = EducationService::getAllRoles();
+        $this->arResult['edFormats'] = EdFormatsProvider::getAllEdFormats();
+        $this->arResult['subjects'] = SubjectsProvider::getAllSubjects();
+        $this->arResult['cities'] = LocationProvider::getAllCities();
+        $this->arResult['roles'] = UserRolesProvider::getAllRoles();
     }
 
     protected function prepareLocalization()

@@ -8,10 +8,6 @@ use Bitrix\Main\UserTable;
 use DirectoryIterator;
 use Up\Tutortoday\Model\Tables\ProfileImagesTable;
 
-//error_reporting(E_ALL); // or E_STRICT
-//ini_set("display_errors",1);
-//ini_set("memory_limit","1024M");
-
 class ImagesService
 {
     private const STORAGE_ROOT = MODULE_ROOT . '/images/';

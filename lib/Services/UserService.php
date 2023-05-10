@@ -9,7 +9,6 @@ use Bitrix\Main\UrlPreview\Parser\Vk;
 use Bitrix\Main\UserTable;
 use CUser;
 use Up\Tutortoday\Model\FormObjects\UserForm;
-use Up\Tutortoday\Model\FormObjects\UserRegisterForm;
 use Up\Tutortoday\Model\Tables\CitiesTable;
 use Up\Tutortoday\Model\Tables\FeedbacksTable;
 use Up\Tutortoday\Model\Tables\FreeTimeTable;
@@ -22,6 +21,8 @@ use Up\Tutortoday\Model\Tables\UserEdFormatTable;
 use Up\Tutortoday\Model\Tables\UserSubjectTable;
 use Up\Tutortoday\Model\Tables\VkTable;
 use Up\Tutortoday\Model\Validator;
+use Up\Tutortoday\Providers\FeedbackProvider;
+use Up\Tutortoday\Providers\LocationProvider;
 
 class UserService
 {
@@ -90,16 +91,7 @@ class UserService
         }
     }
 
-
-    /**
-     * @param int[] $rolesIDs
-     */
-    public function setRolesByIDs(array $rolesIDs): void
-    {
-            $this->roleIDs = $rolesIDs;
-    }
-
-    public static function CreateUser(UserRegisterForm $userForm) : bool|string|array
+    public static function CreateUser(UserForm $userForm) : bool|string|array
     {
         global $DB;
         $DB->StartTransaction();
@@ -221,7 +213,7 @@ class UserService
                 ->where('USER_ID', $this->observedUserID)
                 ->fetchObject();
 
-            $city = LocationService::getCityNameByID((int)$user['WORK_CITY']);
+            $city = LocationProvider::getCityNameByID((int)$user['WORK_CITY']);
 
             $photo = (new ImagesService($this->observedUserID))->getProfileImage();
             $feedbacks = [];
@@ -245,7 +237,7 @@ class UserService
 
                 if ($observerRole['NAME'] !== 'tutor')
                 {
-                    $feedbacks = (new FeedbackService($observerID))->getByPage($this->observedUserID, 0);
+                    $feedbacks = (new FeedbackProvider($observerID))->getByPage($this->observedUserID, 0);
                 }
             }
 
@@ -374,7 +366,7 @@ class UserService
             ->whereIn('USER_ID', $fetchedUserIDs)
             ->fetchCollection();
 
-        $cities = LocationService::getAllCities();
+        $cities = LocationProvider::getAllCities();
 
         $photos = (new ImagesService())->getProfileImages($this->userIDs);
 
@@ -439,7 +431,7 @@ class UserService
         return $result;
     }
 
-    public function UpdateUser(UserRegisterForm $userForm)
+    public function UpdateUser(UserForm $userForm)
     {
         global $DB;
         $DB->StartTransaction();
@@ -569,14 +561,6 @@ class UserService
     public function deleteUser()
     {
         \CUser::Delete($this->observedUserID);
-//        $roles = UserRoleTable::query()->setSelect(['*'])->where('USER_ID', $this->observedUserID)->fetchCollection();
-//        foreach ($roles as $role)
-//        {
-//            UserRoleTable::delete([
-//                'USER_ID' => $role['USER_ID'],
-//                'ROLE_ID' => $role['ROLE_ID'],
-//            ]);
-//        }
         $subjects = UserSubjectTable::query()->setSelect(['*'])->where('USER_ID', $this->observedUserID)->fetchCollection();
         foreach ($subjects as $subject)
         {
@@ -741,5 +725,19 @@ class UserService
             ->fetchObject();
 
         return $result['BLOCKED'];
+    }
+
+    public function deleteUserSubject(mixed $subjectID)
+    {
+            $result = UserSubjectTable::delete([
+                'USER_ID' => $this->observedUserID,
+                'SUBJECT_ID' => $subjectID,
+            ]);
+            if (!$result->isSuccess())
+            {
+                return $result->getErrorMessages();
+            }
+
+        return true;
     }
 }

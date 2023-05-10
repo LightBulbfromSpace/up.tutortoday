@@ -3,9 +3,16 @@
 namespace Up\Tutortoday\Controller;
 
 use Bitrix\Main\Type\ParameterDictionary;
-use Up\Tutortoday\Services\EducationService;
+use Up\Tutortoday\Model\FormObjects\CityForm;
+use Up\Tutortoday\Model\FormObjects\EdFormatForm;
+use Up\Tutortoday\Model\FormObjects\SubjectForm;
+use Up\Tutortoday\Providers\EdFormatsProvider;
+use Up\Tutortoday\Providers\LocationProvider;
+use Up\Tutortoday\Providers\SubjectsProvider;
+use Up\Tutortoday\Services\EdFormatsService;
 use Up\Tutortoday\Services\ErrorService;
 use Up\Tutortoday\Services\LocationService;
+use Up\Tutortoday\Services\SubjectsService;
 use Up\Tutortoday\Services\UserService;
 
 class AdminController
@@ -73,7 +80,7 @@ class AdminController
             return (new ErrorService('invalid_params'))->getLastError();
         }
 
-        $result = EducationService::getSubjectsPerPage((int)$dict['page'], (int)$dict['itemsPerPage']);
+        $result = SubjectsProvider::getSubjectsPerPage((int)$dict['page'], (int)$dict['itemsPerPage']);
         $subjects = [];
         foreach ($result as $item)
         {
@@ -83,7 +90,7 @@ class AdminController
         $result = [];
         $result['items'] = $subjects;
 
-        $result['total'] = EducationService::getNumberOfAllSubjects();
+        $result['total'] = SubjectsProvider::getNumberOfAllSubjects();
 
         return $result;
     }
@@ -100,7 +107,7 @@ class AdminController
             return (new ErrorService('invalid_params'))->getLastError();
         }
 
-        $result = EducationService::getEdFormatsPerPage((int)$dict['page'], (int)$dict['itemsPerPage']);
+        $result = EdFormatsProvider::getEdFormatsPerPage((int)$dict['page'], (int)$dict['itemsPerPage']);
         $edFormats = [];
         foreach ($result as $item)
         {
@@ -110,7 +117,7 @@ class AdminController
         $result = [];
         $result['items'] = $edFormats;
 
-        $result['total'] = EducationService::getNumberOfAllEdFormats();
+        $result['total'] = EdFormatsProvider::getNumberOfAllEdFormats();
 
         return $result;
     }
@@ -127,7 +134,7 @@ class AdminController
             return (new ErrorService('invalid_params'))->getLastError();
         }
 
-        $result = LocationService::getCitiesPerPage((int)$dict['page'], (int)$dict['itemsPerPage']);
+        $result = LocationProvider::getCitiesPerPage((int)$dict['page'], (int)$dict['itemsPerPage']);
         $cities = [];
         foreach ($result as $item)
         {
@@ -137,7 +144,7 @@ class AdminController
         $result = [];
         $result['items'] = $cities;
 
-        $result['total'] = LocationService::getNumberOfAllCities();
+        $result['total'] = LocationProvider::getNumberOfAllCities();
 
         return $result;
     }
@@ -159,12 +166,13 @@ class AdminController
             return (new ErrorService('empty_field'))->getLastError();
         }
 
-        $result = EducationService::addNewSubject($dict['name']);
-        if ($result === true)
+        $result = (new SubjectsService(new SubjectForm(null, $dict['name'])))->addNewEntity();
+        if ($result !== null)
         {
             return (new ErrorService('ok'))->getLastError();
         }
-        return json_encode($result);
+
+        return (new ErrorService('add_err'))->getLastError();
     }
 
     public function addEdFormat(ParameterDictionary $dict)
@@ -184,13 +192,13 @@ class AdminController
             return (new ErrorService('empty_field'))->getLastError();
         }
 
-        $result = EducationService::addNewEdFormat($dict['name']);
-        if ($result === true)
+        $result = (new EdFormatsService(new EdFormatForm(null, $dict['name'])))->addNewEntity();
+        if ($result !== null)
         {
             return (new ErrorService('ok'))->getLastError();
         }
 
-        return json_encode($result);
+        return (new ErrorService('add_err'))->getLastError();
     }
 
     public function addCity(ParameterDictionary $dict)
@@ -205,21 +213,21 @@ class AdminController
             return (new ErrorService('perm_denied'))->getLastError();
         }
 
-        if (trim($dict['name']) === '')
+        if (trim((string)$dict['name']) === '')
         {
             return (new ErrorService('empty_field'))->getLastError();
         }
 
-        $result = LocationService::addNewCity($dict['name']);
-        if ($result === true)
+        $result = (new LocationService(new CityForm(null, $dict['name'])))->addNewEntity();
+        if ($result !== null)
         {
             return (new ErrorService('ok'))->getLastError();
         }
 
-        return json_encode($result);
+        return (new ErrorService('add_err'))->getLastError();
     }
 
-    public function deleteCity(ParameterDictionary $dict)
+    public function deleteCity(ParameterDictionary $dict) : array
     {
         if (!check_bitrix_sessid())
         {
@@ -230,8 +238,18 @@ class AdminController
         {
             return (new ErrorService('perm_denied'))->getLastError();
         }
+        if ($dict['ID'] === null || !is_numeric($dict['ID']))
+        {
+            return (new ErrorService('del_err'))->getLastError();
+        }
 
-        return json_encode(LocationService::deleteCity((int)$dict['ID']));
+        $result = (new LocationService(new CityForm((int)$dict['ID'])))->deleteEntity();
+        if ($result)
+        {
+            return (new ErrorService('ok'))->getLastError();
+        }
+
+        return (new ErrorService('del_err'))->getLastError();
     }
 
     public function deleteSubject(ParameterDictionary $dict)
@@ -245,7 +263,7 @@ class AdminController
             return (new ErrorService('perm_denied'))->getLastError();
         }
 
-        return json_encode(EducationService::deleteSubject((int)$dict['ID']));
+        return json_encode((new SubjectsService(new SubjectForm((int)$dict['ID'])))->deleteEntity());
     }
 
     public function deleteEdFormat(ParameterDictionary $dict)
@@ -259,7 +277,7 @@ class AdminController
             return (new ErrorService('perm_denied'))->getLastError();
         }
 
-        return json_encode(EducationService::deleteEdFormat((int)$dict['ID']));
+        return json_encode((new EdFormatsService(new EdFormatForm((int)$dict['ID'])))->deleteEntity());
     }
 
     public function editSubject(ParameterDictionary $dict)
@@ -279,14 +297,14 @@ class AdminController
             return (new ErrorService('empty_field'))->getLastError();
         }
 
-        $result = EducationService::editSubject((int)$dict['ID'], $dict['name']);
+        $result = (new SubjectsService(new SubjectForm((int)$dict['ID'], $dict['name'])))->editEntity();
 
-        if ($result === true)
+        if ($result !== null)
         {
             return (new ErrorService('ok'))->getLastError();
         }
 
-        return json_encode($result);
+        return (new ErrorService('edit_err'))->getLastError();
     }
 
     public function editEdFormat(ParameterDictionary $dict)
@@ -305,14 +323,14 @@ class AdminController
             return (new ErrorService('empty_field'))->getLastError();
         }
 
-        $result = EducationService::editEdFormat((int)$dict['ID'], $dict['name']);
+        $result = (new EdFormatsService(new EdFormatForm((int)$dict['ID'], $dict['name'])))->editEntity();
 
-        if ($result === true)
+        if ($result !== null)
         {
             return (new ErrorService('ok'))->getLastError();
         }
 
-        return json_encode($result);
+        return (new ErrorService('edit_err'))->getLastError();
     }
 
     public function editCity(ParameterDictionary $dict)
@@ -326,19 +344,24 @@ class AdminController
             return (new ErrorService('perm_denied'))->getLastError();
         }
 
-        if (trim($dict['name']) === '')
+        if (trim((string)$dict['name']) === '')
         {
             return (new ErrorService('empty_field'))->getLastError();
         }
+        if ($dict['ID'] === null || !is_numeric($dict['ID']))
+        {
+            return (new ErrorService('edit_err'))->getLastError();
+        }
 
-        $result = LocationService::editCity((int)$dict['ID'], $dict['name']);
 
-        if ($result === true)
+        $result = (new LocationService(new CityForm((int)$dict['ID'], $dict['name'])))->editEntity();
+
+        if ($result !== null)
         {
             return (new ErrorService('ok'))->getLastError();
         }
 
-        return json_encode($result);
+        return (new ErrorService('edit_err'))->getLastError();
     }
 
     public function setUserBlockInfo(ParameterDictionary $dict)

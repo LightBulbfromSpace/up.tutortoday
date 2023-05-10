@@ -4,9 +4,11 @@ use Bitrix\Main\Context;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Type\ParameterDictionary;
 use Up\Tutortoday\Controller\MainPageController;
+use Up\Tutortoday\Providers\EdFormatsProvider;
+use Up\Tutortoday\Providers\LocationProvider;
+use Up\Tutortoday\Providers\SubjectsProvider;
 use Up\Tutortoday\Services\ErrorService;
-use Up\Tutortoday\Services\EducationService;
-use Up\Tutortoday\Services\LocationService;
+use Up\Tutortoday\Services\EdFormatsService;
 
 Loc::loadMessages(__FILE__);
 
@@ -122,12 +124,12 @@ class TutorTodayOverviewPageComponent extends CBitrixComponent {
 
 	protected function fetchSubjectFilters()
 	{
-		$this->arResult['subjects'] = EducationService::getAllSubjects();
+		$this->arResult['subjects'] = SubjectsProvider::getAllSubjects();
 	}
 
 	protected function fetchEducationFormatsFilters()
 	{
-		$this->arResult['edFormats'] = EducationService::getAllEdFormats();
+		$this->arResult['edFormats'] = EdFormatsProvider::getAllEdFormats();
 	}
 
     protected function fetchLoggedInUser()
@@ -138,6 +140,6 @@ class TutorTodayOverviewPageComponent extends CBitrixComponent {
 
     protected function fetchAllCities()
     {
-        $this->arResult['cities'] = LocationService::getAllCities();
+        $this->arResult['cities'] = LocationProvider::getAllCities();
     }
 }

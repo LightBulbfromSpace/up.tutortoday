@@ -137,22 +137,4 @@ class FiltersService
     {
         return $this->isFilterUsed;
     }
-
-    private function intersection(array $intersections)
-    {
-        if (count($intersections) < 2)
-        {
-            return $intersections;
-        }
-
-        $intersectionsLen = count($intersections);
-
-        for ($i = 0; $i < $intersectionsLen - 1; $i++)
-        {
-            $intersections[$i] = array_intersect($intersections[$i], $intersections[$i+1]);
-        }
-        unset($intersections[$intersectionsLen-1]);
-
-        return $this->intersection($intersections);
-    }
 }

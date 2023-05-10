@@ -1,6 +1,6 @@
 <?php
 
-namespace Up\Tutortoday\Services;
+namespace Up\Tutortoday\Providers;
 
 use Bitrix\Main\UserTable;
 use Up\Tutortoday\Model\Tables\CitiesTable;
@@ -9,7 +9,7 @@ use Up\Tutortoday\Model\Tables\SubjectTable;
 use Up\Tutortoday\Model\Tables\UserEdFormatTable;
 use Up\Tutortoday\Model\Tables\UserSubjectTable;
 
-class SearchService
+class SearchProvider
 {
     private string $search;
     private int $numberOfUsers = 0;

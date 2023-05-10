@@ -4,7 +4,6 @@ namespace Up\Tutortoday\Controller;
 
 use Bitrix\Main\Engine\Controller;
 use Up\Tutortoday\Model\FormObjects\UserForm;
-use Up\Tutortoday\Model\FormObjects\UserRegisterForm;
 use Up\Tutortoday\Model\Validator;
 use Up\Tutortoday\Services\UserService;
 use Bitrix\Main\PhoneNumber\Parser;
@@ -65,7 +64,7 @@ class AuthController extends Controller
         }
 
         $post = getPostList();
-        $userForm = new UserRegisterForm($post);
+        $userForm = new UserForm($post);
 
         if (\CUser::GetByLogin($userForm->getLogin())->Fetch())
         {

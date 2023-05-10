@@ -2,7 +2,11 @@
 
 namespace Up\Tutortoday\Model;
 
-use Up\Tutortoday\Services\EducationService;
+use Up\Tutortoday\Providers\EdFormatsProvider;
+use Up\Tutortoday\Providers\LocationProvider;
+use Up\Tutortoday\Providers\SubjectsProvider;
+use Up\Tutortoday\Providers\UserRolesProvider;
+use Up\Tutortoday\Services\EdFormatsService;
 use Up\Tutortoday\Services\LocationService;
 
 class Validator
@@ -47,7 +51,7 @@ class Validator
         {
             return !$required;
         }
-        $allSubjects = EducationService::getAllSubjects();
+        $allSubjects = SubjectsProvider::getAllSubjects();
         $allSubjectsIDs = [];
         foreach ($allSubjects as $subject) {
             $allSubjectsIDs[] = $subject->getID();
@@ -69,7 +73,7 @@ class Validator
             return !$required;
         }
 
-        $allEdFormats = EducationService::getAllEdFormats();
+        $allEdFormats = EdFormatsProvider::getAllEdFormats();
         $allEdFormatsIDs = [];
         foreach ($allEdFormats as $edFormat) {
             $allEdFormatsIDs[] = $edFormat->getID();
@@ -90,7 +94,7 @@ class Validator
         {
             return !$required;
         }
-        $allCities = LocationService::getAllCities();
+        $allCities = LocationProvider::getAllCities();
         $allCitiesIDs = [];
         foreach ($allCities as $city) {
             $allCitiesIDs[] = $city->getID();
@@ -111,7 +115,7 @@ class Validator
         {
             return false;
         }
-        $roles = EducationService::getAllRoles();
+        $roles = UserRolesProvider::getAllRoles();
         foreach ($roles as $role)
         {
             if ((int)$role['ID'] === $RoleID)

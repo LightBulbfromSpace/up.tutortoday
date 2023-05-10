@@ -6,7 +6,7 @@ use Up\Tutortoday\Controller\AdminController;
 use Up\Tutortoday\Controller\AuthController;
 use Up\Tutortoday\Controller\MainPageController;
 use Up\Tutortoday\Controller\ProfileController;
-use Up\Tutortoday\Services\EducationService;
+use Up\Tutortoday\Services\EdFormatsService;
 use Up\Tutortoday\Services\ErrorService;
 
 return function (RoutingConfigurator $routes) {
@@ -69,7 +69,7 @@ return function (RoutingConfigurator $routes) {
         return json_encode((new ProfileController((int)$USER->getID()))->createTime(getPostList()));
     });
     $routes->post('/profile/settings/deleteTime/', function (){
-        ProfileController::deleteTime(getPostList());
+        return ProfileController::deleteTime(getPostList());
     });
     $routes->post('/profile/delete/', function () {
         global $USER;

@@ -2,13 +2,15 @@
 
 namespace Up\Tutortoday\Controller;
 
-use Bitrix\Main\DB\Exception;
 use Bitrix\Main\Type\ParameterDictionary;
 use Up\Tutortoday\Model\FormObjects\FeedbackForm;
 use Up\Tutortoday\Model\FormObjects\UserForm;
-use Up\Tutortoday\Model\FormObjects\UserRegisterForm;
+use Up\Tutortoday\Model\FormObjects\WeekdayTimeForm;
 use Up\Tutortoday\Model\Validator;
-use Up\Tutortoday\Services\EducationService;
+use Up\Tutortoday\Providers\DatetimeProvider;
+use Up\Tutortoday\Providers\FeedbackProvider;
+use Up\Tutortoday\Providers\SubjectsProvider;
+use Up\Tutortoday\Services\EdFormatsService;
 use Up\Tutortoday\Services\ErrorService;
 use Up\Tutortoday\Services\FeedbackService;
 use Up\Tutortoday\Services\ImagesService;
@@ -95,20 +97,29 @@ class ProfileController
             return null;
         }
 
-        $timeToAdd = [
-            'timeFrom' => $post['timeFrom'],
-            'timeTo' => $post['timeTo'],
-        ];
-        return DatetimeService::createTime($this->userID, (int)$post['weekdayID'], $timeToAdd);
+        $timeForm = new WeekdayTimeForm(
+            null, (int)$post['weekdayID'], $post['timeFrom'], $post['timeTo']
+        );
+
+        return (new DatetimeService($this->userID, $timeForm))->addNewEntity();
     }
 
-    public static function deleteTime(ParameterDictionary $post)
+    public static function deleteTime(ParameterDictionary $post) : array
     {
         if (!check_bitrix_sessid())
         {
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
-        return DatetimeService::deleteTime($post['timeID']);
+
+        $timeFrom = new WeekdayTimeForm((int)$post['timeID']);
+
+        $result = (new DatetimeService(null, $timeFrom))->deleteEntity();
+        if ($result)
+        {
+            return (new ErrorService('ok'))->getLastError();
+        }
+
+        return (new ErrorService('del_err'))->getLastError();
     }
 
     public function getUserTimeByDayID(ParameterDictionary $post) : array
@@ -119,7 +130,7 @@ class ProfileController
         }
 
         return [
-            'time' => DatetimeService::getWeekdayTimeByUserID((int)$post['userID'], (int)$post['weekdayID']),
+            'time' => (new DatetimeProvider((int)$post['userID'], (int)$post['weekdayID']))->getWeekdayTimeByUserID(),
             'userID' => (int)$post['userID'],
         ];
     }
@@ -131,7 +142,7 @@ class ProfileController
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
 
-        $user = new UserRegisterForm(getPostList());
+        $user = new UserForm(getPostList());
 
         $cities = $user->getCityID() == null ? [] : [$user->getCityID()];
         $newSubjectsIDs = [];
@@ -165,12 +176,12 @@ class ProfileController
         {
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
-        (new EducationService([$this->userID]))->deleteUserSubject($post['subjectID']);
+        (new UserService($this->userID))->deleteUserSubject($post['subjectID']);
     }
 
     public static function getAllSubjects() : array
     {
-        $subjectsRaw = EducationService::getAllSubjects();
+        $subjectsRaw = SubjectsProvider::getAllSubjects();
         $subjects = [];
         foreach ($subjectsRaw as $subject)
         {
@@ -247,7 +258,7 @@ class ProfileController
         {
             return (new ErrorService('invalid_len'))->getLastError();
         }
-        return (new FeedbackService($this->userID))->add($feedbackForm);
+        return (new FeedbackService($this->userID, $feedbackForm))->addNewEntity();
     }
 
     public function getFeedbacks(ParameterDictionary $post)
@@ -257,7 +268,7 @@ class ProfileController
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
 
-        $fbService = new FeedbackService($this->userID);
+        $fbService = new FeedbackProvider($this->userID);
 
         $feedbacks =  $fbService->getByPage(
             $post['tutorID'], $post['page'], $post['tutorsPerPage']

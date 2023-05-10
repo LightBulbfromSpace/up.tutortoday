@@ -6,7 +6,7 @@ use Bitrix\Main\Type\ParameterDictionary;
 use Bitrix\Main\UserTable;
 use Up\Tutortoday\Services\DatetimeService;
 use Up\Tutortoday\Services\FiltersService;
-use Up\Tutortoday\Services\SearchService;
+use Up\Tutortoday\Providers\SearchProvider;
 use Up\Tutortoday\Services\UserService;
 
 class MainPageController
@@ -65,7 +65,7 @@ class MainPageController
             return [];
         }
 
-        $searchService = new SearchService($search);
+        $searchService = new SearchProvider($search);
         $foundUsersIDs = $searchService->generalSearch();
         $this->numberOfUsers = $searchService->getNumberOfUsers();
 
