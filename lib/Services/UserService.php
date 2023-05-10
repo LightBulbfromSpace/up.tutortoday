@@ -19,7 +19,6 @@ use Up\Tutortoday\Model\Tables\SubjectTable;
 use Up\Tutortoday\Model\Tables\TelegramTable;
 use Up\Tutortoday\Model\Tables\UserDescriptionTable;
 use Up\Tutortoday\Model\Tables\UserEdFormatTable;
-use Up\Tutortoday\Model\Tables\UserRoleTable;
 use Up\Tutortoday\Model\Tables\UserSubjectTable;
 use Up\Tutortoday\Model\Tables\VkTable;
 use Up\Tutortoday\Model\Validator;
@@ -135,16 +134,6 @@ class UserService
             return $resultUser;
         }
 
-        $resultRole = UserRoleTable::add([
-            'USER_ID' => $user->getID(),
-            'ROLE_ID' => $userForm->getRoleID(),
-        ]);
-        if (!$resultRole->isSuccess())
-        {
-            $DB->Rollback();
-            return $resultRole->getErrorMessages();
-        }
-
         foreach ($userForm->getEdFormatsIDs() as $edFormatID) {
             $resultEdFormat = UserEdFormatTable::add([
                 'USER_ID' => $user->getID(),
@@ -185,70 +174,91 @@ class UserService
 
     public function getUserByID(int $observerID = 0)
     {
-        $user = UserTable::query()
-            ->setSelect(['*'])
-            ->where('ID', $this->observedUserID)
-            ->fetchObject();
-
-        if ($user == null)
+        try
         {
-            return false;
+            $user = UserTable::query()
+                ->setSelect(['*'])
+                ->where('ID', $this->observedUserID)
+                ->fetchObject();
+
+            if ($user == null)
+            {
+                return null;
+            }
+
+            $roleID = (int)$user['WORK_POSITION'];
+            $role = RolesTable::query()
+                ->setSelect(['*'])
+                ->where('ID', $roleID)
+                ->fetchObject();
+
+            if ($role['ID'] == null)
+            {
+                return null;
+            }
+
+            $edFormats = UserEdFormatTable::query()
+                ->setSelect(['USER_ID', 'EDUCATION_FORMAT'])
+                ->where('USER_ID', $this->observedUserID)
+                ->fetchCollection();
+
+            $VKs = VkTable::query()
+                ->setSelect(['USER_ID', 'VK_PROFILE'])
+                ->where('USER_ID', $this->observedUserID)
+                ->fetchCollection();
+
+            $telegrams = TelegramTable::query()
+                ->setSelect(['USER_ID', 'TELEGRAM_USERNAME'])
+                ->where('USER_ID', $this->observedUserID)
+                ->fetchCollection();
+            $subjects = UserSubjectTable::query()
+                ->setSelect(['USER_ID', 'SUBJECT', 'PRICE'])
+                ->where('USER_ID', $this->observedUserID)
+                ->fetchCollection();
+
+            $description = UserDescriptionTable::query()
+                ->setSelect(['USER_ID', 'DESCRIPTION'])
+                ->where('USER_ID', $this->observedUserID)
+                ->fetchObject();
+
+            $city = LocationService::getCityNameByID((int)$user['WORK_CITY']);
+
+            $photo = (new ImagesService($this->observedUserID))->getProfileImage();
+            $feedbacks = [];
+
+
+            $observerRole = null;
+
+            if ($observerID !== 0)
+            {
+                $observerRoleID = UserTable::query()
+                    ->setSelect(['WORK_POSITION'])
+                    ->where('ID', $observerID)
+                    ->fetchObject();
+
+                $observerRoleID = (int)$observerRoleID['WORK_POSITION'];
+
+                $observerRole = RolesTable::query()
+                    ->setSelect(['*'])
+                    ->where('ID', $observerRoleID)
+                    ->fetchObject();
+
+                if ($observerRole['NAME'] !== 'tutor')
+                {
+                    $feedbacks = (new FeedbackService($observerID))->getByPage($this->observedUserID, 0);
+                }
+            }
+
         }
-
-        $role = UserRoleTable::query()
-            ->setSelect(['USER_ID', 'ROLE'])
-            ->where('USER_ID', $this->observedUserID)
-            ->fetchObject();
-
-        if ($role == null)
+        catch (\Exception $e)
         {
-            return false;
+            return null;
         }
-
-        $edFormats = UserEdFormatTable::query()
-            ->setSelect(['USER_ID', 'EDUCATION_FORMAT'])
-            ->where('USER_ID', $this->observedUserID)
-            ->fetchCollection();
-
-        $VKs = VkTable::query()
-            ->setSelect(['USER_ID', 'VK_PROFILE'])
-            ->where('USER_ID', $this->observedUserID)
-            ->fetchCollection();
-
-        $telegrams = TelegramTable::query()
-            ->setSelect(['USER_ID', 'TELEGRAM_USERNAME'])
-            ->where('USER_ID', $this->observedUserID)
-            ->fetchCollection();
-        $subjects = UserSubjectTable::query()
-            ->setSelect(['USER_ID', 'SUBJECT', 'PRICE'])
-            ->where('USER_ID', $this->observedUserID)
-            ->fetchCollection();
-
-        $description = UserDescriptionTable::query()
-            ->setSelect(['USER_ID', 'DESCRIPTION'])
-            ->where('USER_ID', $this->observedUserID)
-            ->fetchObject();
-
-        $city = LocationService::getCityNameByID((int)$user['WORK_CITY']);
-
-        $photo = (new ImagesService($this->observedUserID))->getProfileImage();
-        $feedbacks = [];
-
-        $observer = UserRoleTable::query()
-            ->setSelect(['USER_ID', 'ROLE'])
-            ->where('USER_ID', $observerID)
-            ->fetchObject();
-
-        if ($observer['ROLE']['NAME'] !== 'tutor' && $observerID !== 0)
-        {
-            $feedbacks = (new FeedbackService($observerID))->getByPage($this->observedUserID, 0);
-        }
-
 
         return [
             'photo' => $photo != null ? $photo['LINK'] : DEFAULT_PHOTO,
             'mainData' => $user,
-            'role' => $role->getRole(),
+            'role' => $role,
             'edFormats' => $edFormats,
             'city' => $city,
             'description' => $description['DESCRIPTION'],
@@ -261,8 +271,8 @@ class UserService
             'subjects' => $subjects,
             'feedbacks' => $feedbacks ?? [],
             'observer' => [
-                'ID' => $observer['USER_ID'],
-                'role' => $observer['ROLE'],
+                'ID' => $observerID,
+                'role' => $observerRole,
             ]
         ];
     }
@@ -559,14 +569,14 @@ class UserService
     public function deleteUser()
     {
         \CUser::Delete($this->observedUserID);
-        $roles = UserRoleTable::query()->setSelect(['*'])->where('USER_ID', $this->observedUserID)->fetchCollection();
-        foreach ($roles as $role)
-        {
-            UserRoleTable::delete([
-                'USER_ID' => $role['USER_ID'],
-                'ROLE_ID' => $role['ROLE_ID'],
-            ]);
-        }
+//        $roles = UserRoleTable::query()->setSelect(['*'])->where('USER_ID', $this->observedUserID)->fetchCollection();
+//        foreach ($roles as $role)
+//        {
+//            UserRoleTable::delete([
+//                'USER_ID' => $role['USER_ID'],
+//                'ROLE_ID' => $role['ROLE_ID'],
+//            ]);
+//        }
         $subjects = UserSubjectTable::query()->setSelect(['*'])->where('USER_ID', $this->observedUserID)->fetchCollection();
         foreach ($subjects as $subject)
         {

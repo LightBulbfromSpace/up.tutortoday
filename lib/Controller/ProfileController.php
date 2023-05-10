@@ -2,6 +2,7 @@
 
 namespace Up\Tutortoday\Controller;
 
+use Bitrix\Main\DB\Exception;
 use Bitrix\Main\Type\ParameterDictionary;
 use Up\Tutortoday\Model\FormObjects\FeedbackForm;
 use Up\Tutortoday\Model\FormObjects\UserForm;
@@ -62,10 +63,7 @@ class ProfileController
         {
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
-//        if(!$this->isOwnerOfProfile())
-//        {
-//            ShowMessage('permitted: not owner');
-//        }
+
         (new UserService($this->userID))->deleteUser();
 
         LocalRedirect('/');
@@ -82,8 +80,15 @@ class ProfileController
             return null;
         }
 
-        $start = date_timestamp_get(new \DateTime($post['timeFrom']));
-        $end = date_timestamp_get(new \DateTime($post['timeTo']));
+        try
+        {
+            $start = date_timestamp_get(new \DateTime($post['timeFrom']));
+            $end = date_timestamp_get(new \DateTime($post['timeTo']));
+        }
+        catch (\Exception $e)
+        {
+            return null;
+        }
 
         if (($end - $start) < 0)
         {
@@ -106,7 +111,7 @@ class ProfileController
         return DatetimeService::deleteTime($post['timeID']);
     }
 
-    public function getUserTimeByDayID(ParameterDictionary $post)
+    public function getUserTimeByDayID(ParameterDictionary $post) : array
     {
         if (!check_bitrix_sessid())
         {
@@ -125,11 +130,6 @@ class ProfileController
         {
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
-//        if (!$this->isOwnerOfProfile())
-//        {
-//            LocalRedirect("/profile/$this->userID/");
-//            return;
-//        }
 
         $user = new UserRegisterForm(getPostList());
 
@@ -168,7 +168,7 @@ class ProfileController
         (new EducationService([$this->userID]))->deleteUserSubject($post['subjectID']);
     }
 
-    public static function getAllSubjectsJSON()
+    public static function getAllSubjects() : array
     {
         $subjectsRaw = EducationService::getAllSubjects();
         $subjects = [];

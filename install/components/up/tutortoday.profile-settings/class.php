@@ -54,6 +54,10 @@ class TutorTodayProfileSettingsComponent extends CBitrixComponent {
     protected function fetchUserInfo(int $ID)
     {
         $this->arResult['user'] = (new UserService($ID))->getUserByID();
+        if ($this->arResult['user'] == null)
+        {
+            LocalRedirect('/404/');
+        }
     }
 
     protected function fetchWeekdays()

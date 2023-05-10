@@ -2,10 +2,11 @@
 
 namespace Up\Tutortoday\Services;
 
+use Bitrix\Main\UserTable;
 use Up\Tutortoday\Model\FormObjects\FeedbackForm;
 use Up\Tutortoday\Model\Tables\FeedbacksTable;
 use Up\Tutortoday\Model\Tables\ProfileImagesTable;
-use Up\Tutortoday\Model\Tables\UserRoleTable;
+use Up\Tutortoday\Model\Tables\RolesTable;
 
 class FeedbackService
 {
@@ -37,41 +38,63 @@ class FeedbackService
             ->count();
     }
 
-    public function getByPage(int $tutorID, int $page, int $tutorsPerPage = self::feedbacksByPage)
+    public function getByPage(int $tutorID, int $page, int $tutorsPerPage = self::feedbacksByPage) : ?array
     {
-        $role = UserRoleTable::query()
-            ->setSelect(['*', 'ROLE'])
-            ->where('USER_ID', $this->userID)
-            ->fetchObject();
-
-        if ($role['ROLE']['NAME'] === 'tutor')
+        if ($tutorID < 1 || $page < 0 || $tutorsPerPage < 1)
         {
             return null;
         }
 
-        $feedbacks = FeedbacksTable::query()
-            ->setSelect(['*', 'STUDENT'])
-            ->where('TUTOR_ID', $tutorID)
-            ->setOrder(['ID' => 'DESC'])
-            ->setOffset($page * $tutorsPerPage)
-            ->setLimit($tutorsPerPage)
-            ->fetchCollection();
-        $studentIDs = [];
+        try
+        {
+            $roleID = UserTable::query()
+                ->setSelect(['WORK_POSITION'])
+                ->where('ID', $this->userID)
+                ->fetchObject();
 
-        if ($feedbacks->count() === 0) {
+            $roleID = $roleID['WORK_POSITION'];
+            if ($roleID == null)
+            {
+                return null;
+            }
+
+            $role = RolesTable::query()
+                ->setSelect(['NAME'])
+                ->where('ID', $roleID)
+                ->fetchObject();
+
+            if ($role['NAME'] === 'tutor')
+            {
+                return null;
+            }
+
+            $feedbacks = FeedbacksTable::query()
+                ->setSelect(['*', 'STUDENT'])
+                ->where('TUTOR_ID', $tutorID)
+                ->setOrder(['ID' => 'DESC'])
+                ->setOffset($page * $tutorsPerPage)
+                ->setLimit($tutorsPerPage)
+                ->fetchCollection();
+            $studentIDs = [];
+
+            if ($feedbacks->count() === 0) {
+                return null;
+            }
+
+            foreach ($feedbacks as $feedback)
+            {
+                $studentIDs[] = $feedback['STUDENT']['ID'];
+            }
+
+            $studentPhotos = ProfileImagesTable::query()
+                ->setSelect(['USER_ID', 'LINK'])
+                ->whereIn('USER_ID', $studentIDs)
+                ->fetchCollection();
+        }
+        catch (\Exception $e)
+        {
             return null;
         }
-
-        foreach ($feedbacks as $feedback)
-        {
-            $studentIDs[] = $feedback['STUDENT']['ID'];
-        }
-
-        $studentPhotos = ProfileImagesTable::query()
-            ->setSelect(['USER_ID', 'LINK'])
-            ->whereIn('USER_ID', $studentIDs)
-            ->fetchCollection();
-
 
 
         $feedbacksArr = [];

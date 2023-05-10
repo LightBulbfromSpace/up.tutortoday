@@ -37,7 +37,7 @@ return function (RoutingConfigurator $routes) {
     });
 
     $routes->get('/profile/settings/allSubjects/', function () {
-        return ProfileController::getAllSubjectsJSON();
+        return ProfileController::getAllSubjects();
     });
 
     $routes->get('/logout/', function (){

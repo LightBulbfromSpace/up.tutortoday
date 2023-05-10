@@ -40,9 +40,10 @@ class TutorTodayProfileComponent extends CBitrixComponent {
     {
         global $USER;
         $user = (new UserService($ID))->getUserByID((int)$USER->GetID());
-        if ($user === false)
+        if ($user == null)
         {
             LocalRedirect('/404/');
+            return;
         }
 
         $this->arResult['user'] = $user;
