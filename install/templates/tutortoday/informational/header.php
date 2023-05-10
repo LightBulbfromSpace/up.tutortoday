@@ -33,14 +33,14 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 <?php $APPLICATION->ShowPanel(); ?>
 <header class="header">
     <div class="container header__container">
-        <a class="header__mainLink header__links-item link" href="/overview/" id="main-logo">TutorToday</a>
+        <a class="header__mainLink header__links-item link" href="/" id="main-logo">TutorToday</a>
         <div class="header__links" id="navbarNav">
             <?php if ($isAdmin): ?>
                 <a class="header__links-item link" id="adminPanel" href="/admin/">Admin Panel</a>
             <?php endif; ?>
             <a class="header__links-item link" id="myProfileButton" href="<?=$linkToProfile?>">My Profile</a>
             <a class="header__links-item link" href="/about/">About</a>
-            <a class="header__links-item link" href="#">Contacts</a>
+            <a class="header__links-item link hidden" href="#">Contacts</a>
             <a class="header__links-item link" id="registrationButton" href="/registration/">Registration</a>
         </div>
     </div>

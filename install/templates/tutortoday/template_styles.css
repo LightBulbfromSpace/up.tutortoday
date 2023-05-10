@@ -194,3 +194,7 @@ body::-webkit-scrollbar-thumb {
     border-radius: 20px;
     border: none;
 }
+
+.hidden {
+    display: none !important;
+}
