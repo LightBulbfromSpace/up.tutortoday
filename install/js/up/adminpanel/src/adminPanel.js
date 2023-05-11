@@ -414,6 +414,8 @@ export class AdminPanel
 					'hsl(348, 100%, 61%)', 'hsl(348, 100%, 70%)',
 					'Cancel', () => {
 						elemNameInput.replaceWith(elemName)
+						cancelButton.replaceWith(deleteButton)
+						confirmButton.replaceWith(editButton)
 					})
 
 				deleteButton.replaceWith(cancelButton)
