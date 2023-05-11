@@ -6,6 +6,7 @@ use Up\Tutortoday\Providers\DatetimeProvider;
 use Up\Tutortoday\Providers\EdFormatsProvider;
 use Up\Tutortoday\Providers\LocationProvider;
 use Up\Tutortoday\Providers\SubjectsProvider;
+use Up\Tutortoday\Providers\UserProvider;
 use Up\Tutortoday\Services\EdFormatsService;
 use Up\Tutortoday\Services\UserService;
 
@@ -53,7 +54,7 @@ class TutorTodayProfileSettingsComponent extends CBitrixComponent {
 
     protected function fetchUserInfo(int $ID)
     {
-        $this->arResult['user'] = (new UserService($ID))->getUserByID();
+        $this->arResult['user'] = (new UserProvider($ID))->getUserByID();
         if ($this->arResult['user'] == null)
         {
             LocalRedirect('/404/');

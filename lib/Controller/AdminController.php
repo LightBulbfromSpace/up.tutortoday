@@ -6,9 +6,11 @@ use Bitrix\Main\Type\ParameterDictionary;
 use Up\Tutortoday\Model\FormObjects\CityForm;
 use Up\Tutortoday\Model\FormObjects\EdFormatForm;
 use Up\Tutortoday\Model\FormObjects\SubjectForm;
+use Up\Tutortoday\Model\FormObjects\UserForm;
 use Up\Tutortoday\Providers\EdFormatsProvider;
 use Up\Tutortoday\Providers\LocationProvider;
 use Up\Tutortoday\Providers\SubjectsProvider;
+use Up\Tutortoday\Providers\UserProvider;
 use Up\Tutortoday\Services\EdFormatsService;
 use Up\Tutortoday\Services\ErrorService;
 use Up\Tutortoday\Services\LocationService;
@@ -26,7 +28,7 @@ class AdminController
 
     public function isAdmin() : bool
     {
-        $role = (new UserService($this->userID))->getUserRoleByID();
+        $role = (new UserProvider($this->userID))->getUserRoleByID();
         return $role['NAME'] === 'administrator';
     }
 
@@ -44,7 +46,7 @@ class AdminController
             return (new ErrorService('invalid_params'))->getLastError();
         }
 
-        $service = (new UserService($this->userID));
+        $service = (new UserProvider($this->userID));
         $service->setRoles(['student', 'tutor']);
         $service->setFetchAllAvailableUsers(true);
         $result = $service->getUsersByPage($offset, (int)$dict['itemsPerPage'], true);
@@ -370,6 +372,6 @@ class AdminController
         {
             return (new ErrorService('perm_denied'))->getLastError();
         }
-        return (new UserService($this->userID))->setBlockStatus((int)$dict['userID'], $dict['blocked']);
+        return (new UserService(new UserForm($this->userID)))->setBlockStatus((int)$dict['userID'], $dict['blocked']);
     }
 }

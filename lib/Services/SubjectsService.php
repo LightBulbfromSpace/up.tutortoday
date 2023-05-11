@@ -8,7 +8,7 @@ use Up\Tutortoday\Model\Tables\UserSubjectTable;
 
 class SubjectsService extends BaseService
 {
-    public function __construct($subject)
+    public function __construct(SubjectForm $subject)
     {
         parent::__construct(new SubjectTable(), $subject);
     }

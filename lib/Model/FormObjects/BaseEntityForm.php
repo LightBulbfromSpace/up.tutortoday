@@ -6,8 +6,8 @@ use Bitrix\Main\Type\ParameterDictionary;
 
 class BaseEntityForm
 {
-    private ?int $ID;
-    private ?string $name;
+    protected ?int $ID;
+    protected ?string $name;
 
     public function __construct(?int $ID = null, ?string $name = null)
     {

@@ -5,6 +5,7 @@ namespace Up\Tutortoday\Controller;
 use Bitrix\Main\Engine\Controller;
 use Up\Tutortoday\Model\FormObjects\UserForm;
 use Up\Tutortoday\Model\Validator;
+use Up\Tutortoday\Providers\UserProvider;
 use Up\Tutortoday\Services\UserService;
 use Bitrix\Main\PhoneNumber\Parser;
 
@@ -36,7 +37,8 @@ class AuthController extends Controller
 
         if ($result !== true)
         {
-            if ((new UserService(UserService::getUserIDbyLogin($post['login'])))->isBlocked())
+            $user = new UserForm(UserProvider::getUserIDbyLogin($post['login']));
+            if ((new UserService($user))->isBlocked())
             {
                 LocalRedirect("/login/?err=blocked");
                 return;
@@ -45,7 +47,7 @@ class AuthController extends Controller
             return;
         }
 
-        $userRole = (new UserService($USER->GetID()))->getUserRoleByID();
+        $userRole = (new UserProvider($USER->GetID()))->getUserRoleByID();
 
         if ($userRole['NAME'] === 'administrator')
         {
@@ -64,7 +66,21 @@ class AuthController extends Controller
         }
 
         $post = getPostList();
-        $userForm = new UserForm($post);
+
+        $roleID = !is_numeric($post['role']) ? null : (int)$post['role'];
+        $cityID = !is_numeric($post['city']) ? null : (int)$post['city'];
+
+        $userForm = new UserForm(
+            null,
+            $post['name'], $post['lastName'], $post['middleName'],
+            $roleID, $post['login'], null, $post['password'], $post['confirmPassword'],
+            $post['email'], $post['workingEmail'], $post['phoneNumber'],
+            $post['description'],
+            $cityID,
+            $post['edFormats'],
+            $post['subjects'], $post['subjectsPrices'],
+            $post['newSubjectsID'], $post['newSubjectsPrices']
+        );
 
         if (\CUser::GetByLogin($userForm->getLogin())->Fetch())
         {
@@ -113,7 +129,7 @@ class AuthController extends Controller
             LocalRedirect('/registration/?err=invalid_role');
         }
 
-        $ErrOrUserID = UserService::CreateUser($userForm);
+        $ErrOrUserID = (new UserService($userForm))->addNewEntity();
         if (!is_numeric($ErrOrUserID))
         {
             ShowMessage($ErrOrUserID);

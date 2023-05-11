@@ -4,6 +4,7 @@ namespace Up\Tutortoday\Controller;
 
 use Bitrix\Main\Type\ParameterDictionary;
 use Bitrix\Main\UserTable;
+use Up\Tutortoday\Providers\UserProvider;
 use Up\Tutortoday\Services\DatetimeService;
 use Up\Tutortoday\Services\FiltersService;
 use Up\Tutortoday\Providers\SearchProvider;
@@ -53,7 +54,7 @@ class MainPageController
 
     public function getTutorsByPageByUserPreferences(int $userID) : array
     {
-        $filters = (new UserService($userID))->getPreferences();
+        $filters = (new UserProvider($userID))->getPreferences();
 
         return $this->getTutorsByPageByFilters($filters);
     }
@@ -69,7 +70,7 @@ class MainPageController
         $foundUsersIDs = $searchService->generalSearch();
         $this->numberOfUsers = $searchService->getNumberOfUsers();
 
-        $userService = new UserService(0, $foundUsersIDs);
+        $userService = new UserProvider(0, $foundUsersIDs);
         $userService->setRoles(['tutor']);
         $userService->setFetchAllAvailableUsers(false);
         $userService->getOnlyUnblockedUsers(true);
@@ -90,7 +91,7 @@ class MainPageController
         $filter = new FiltersService($filters);
         $filteredUsersIDs = $filter->filterTutors();
         $this->numberOfUsers = $filter->getNumberOfFilteredUsers();
-        $userService = new UserService(0, $filteredUsersIDs);
+        $userService = new UserProvider(0, $filteredUsersIDs);
         $userService->setRoles(['tutor']);
         $userService->setFetchAllAvailableUsers(false);
         $userService->getOnlyUnblockedUsers(true);
@@ -102,7 +103,7 @@ class MainPageController
     }
     public function getTutorsByPage() : array
     {
-        $userService = new UserService();
+        $userService = new UserProvider();
         $userService->setRoles(['tutor']);
         $userService->setFetchAllAvailableUsers(true);
         $userService->getOnlyUnblockedUsers(true);

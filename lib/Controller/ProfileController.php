@@ -39,7 +39,7 @@ class ProfileController
             return (new ErrorService('empty_field'))->getLastError();
         }
 
-        return (new UserService($this->userID))
+        return (new UserService(new UserForm($this->userID)))
             ->UpdatePassword($post['oldPassword'], $post['newPassword'], $post['passwordConfirm']);
     }
 
@@ -66,7 +66,7 @@ class ProfileController
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
 
-        (new UserService($this->userID))->deleteUser();
+        (new UserService(new UserForm($this->userID)))->deleteEntity();
 
         LocalRedirect('/');
     }
@@ -142,7 +142,55 @@ class ProfileController
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
 
-        $user = new UserForm(getPostList());
+//        $this->login = $post['login'] ?? '';
+//        $this->name = trim($post['name']);
+//        $this->lastName = trim($post['lastName']);
+//        $this->middleName = trim($post['middleName']) ?? '';
+//        $this->oldPassword = trim($post['oldPassword']) ?? '';
+//        $this->password = trim($post['password']) ?? '';
+//        $this->confirmPassword = trim($post['confirmPassword']) ?? '';
+//        $this->email = trim($post['email']) ?? '';
+//        $this->workingEmail = trim($post['workingEmail']);
+//        $this->phoneNumber = trim($post['phoneNumber']);
+//        $this->edFormatsIDs = $post['edFormats'] ?? [];
+//        $this->description = $post['description'];
+//        $this->cityID = !is_numeric($post['city']) ? null : (int)$post['city'];
+//        $this->roleID = !is_numeric($post['role']) ? null : (int)$post['role'];
+//        $this->subjectsIDs = $post['subjects'] ?? [];
+//        foreach ($post['subjectsPrices'] as $ID => $subjectPrice)
+//        {
+//            $this->existingSubjectsPrices[] = [
+//                'ID' => $ID,
+//                'price' => $subjectPrice,
+//            ];
+//        }
+//        $this->newSubjects = [];
+//        if (isset($post['newSubjectsID']) && $post['newSubjectsID'] != null)
+//        {
+//            foreach ($post['newSubjectsID'] as $i => $subjectID)
+//            {
+//                $this->newSubjects[] = [
+//                    'ID' => (int)$subjectID,
+//                    'price' => $post['newSubjectsPrices'][$i]
+//                ];
+//            }
+//        }
+
+        $post = getPostList();
+
+        $cityID = !is_numeric($post['city']) ? null : (int)$post['city'];
+
+        $user = new UserForm(
+            $this->userID,
+            $post['name'], $post['lastName'], $post['middleName'],
+            null, null, null, null, null,
+            null, $post['workingEmail'], $post['phoneNumber'],
+            $post['description'],
+            $cityID,
+            $post['edFormats'],
+            $post['subjects'], $post['subjectsPrices'],
+            $post['newSubjectsID'], $post['newSubjectsPrices']
+        );
 
         $cities = $user->getCityID() == null ? [] : [$user->getCityID()];
         $newSubjectsIDs = [];
@@ -165,7 +213,7 @@ class ProfileController
             LocalRedirect("/profile/$this->userID/settings/");
             return;
         }
-        (new UserService($this->userID))->UpdateUser($user);
+        (new UserService($user))->editEntity();
 
         LocalRedirect("/profile/$this->userID/");
     }
@@ -176,7 +224,7 @@ class ProfileController
         {
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
-        (new UserService($this->userID))->deleteUserSubject($post['subjectID']);
+        (new UserService(new UserForm($this->userID)))->deleteUserSubject((int)$post['subjectID']);
     }
 
     public static function getAllSubjects() : array
@@ -213,7 +261,7 @@ class ProfileController
         {
             return (new ErrorService('invalid_csrf'))->getLastError();
         }
-        return (new UserService($this->userID))->saveProfilePhoto();
+        return (new UserService(new UserForm($this->userID)))->saveProfilePhoto();
     }
 
     public function getProfilePhoto()

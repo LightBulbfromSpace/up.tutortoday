@@ -3,6 +3,7 @@
 use Bitrix\Main\Localization\Loc;
 use Up\Tutortoday\Controller\ProfileController;
 use Up\Tutortoday\Providers\DatetimeProvider;
+use Up\Tutortoday\Providers\UserProvider;
 use Up\Tutortoday\Services\UserService;
 
 Loc::loadMessages(__FILE__);
@@ -37,7 +38,7 @@ class TutorTodayProfileComponent extends CBitrixComponent {
     protected function fetchUserInfo(int $ID)
     {
         global $USER;
-        $user = (new UserService($ID))->getUserByID((int)$USER->GetID());
+        $user = (new UserProvider($ID))->getUserByID((int)$USER->GetID());
         if ($user == null)
         {
             LocalRedirect('/404/');

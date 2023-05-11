@@ -70,7 +70,7 @@ function deleteSubject(subjID) {
     BX.ajax({
         url: '/profile/settings/deleteSubject/',
         data: {
-            ID: subjID,
+            subjectID: subjID,
             sessid: BX.bitrix_sessid(),
         },
         method: 'POST',
