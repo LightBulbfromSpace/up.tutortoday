@@ -116,6 +116,15 @@ class Validator
             return false;
         }
         $roles = UserRolesProvider::getAllRoles();
+        $forbiddenRoles = UserRolesProvider::getRolesIDsByName(['administrator']);
+
+        foreach ($forbiddenRoles as $forbiddenRole)
+        {
+            if ((int)$forbiddenRole['ID'] === $RoleID)
+            {
+                return false;
+            }
+        }
         foreach ($roles as $role)
         {
             if ((int)$role['ID'] === $RoleID)

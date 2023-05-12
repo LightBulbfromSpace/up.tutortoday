@@ -22,4 +22,17 @@ class UserRolesProvider
         return $role->fetchObject()->getID();
     }
 
+    public static function getRolesIDsByName(array $name = [])
+    {
+        $roles = RolesTable::query()
+            ->setSelect(['*'])
+            ->whereIn('NAME', $name)
+            ->fetchCollection();
+        if ($roles->count() === 0)
+        {
+            return [];
+        }
+
+        return $roles;
+    }
 }
