@@ -4,7 +4,7 @@ Clone repository to `${doc_root}/local/modules/up.tutortoday`
 
 Install module using admin panel
 
-Set `Main template` as your primary site template
+Set `tutortoday template` as your primary site template
 
 ## Setup modern Bitrix routing
 
@@ -31,6 +31,12 @@ Replace following lines in your `${doc_root}/.htaccess` file:
 
 +RewriteCond %{REQUEST_FILENAME} !/index.php$
 +RewriteRule ^(.*)$ /index.php [L]
+```
+
+Add the following strings in `local/php_interface/init.php`
+
+```
+\Bitrix\Main\Loader::includeModule('up.tutortoday');
 ```
 
 ## Symlinks for handy development
